@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Edit Image</h1>
+<img src="{{ image_url }}" alt="Selected Image">
+<!-- Add any other controls or information needed to edit the image -->
+
+<form action="{{ url_for('image_routes.save_image', list_id=list_id) }}" method="post">
+  <input type="hidden" name="image_url" value="{{ image_url }}">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name"><br><br>
+  <!-- You can add other fields similarly -->
+  <input type="submit" value="Save this image">
+</form>
+
+<script src="{{ url_for('static', filename='js/images.js') }}"></script>
+{% endblock %}

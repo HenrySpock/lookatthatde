@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ image_list.name }}</title>
+</head>
+<body>
+
+<h2>{{ image_list.name }}</h2>
+<p>{{ image_list.description }}</p>
+
+<ul>
+{% for image in image_list.images %}
+    <li>
+        <img src="{{ image.image_url }}" alt="{{ image.name }}" width="200px">
+        <p>Name: {{ image.name }}</p>
+        <p>Description: {{ image.description }}</p>
+        {% if image.year %}
+        <p>Year: {{ image.year }}</p>
+        {% endif %}
+        {% if image.manufacturer %}
+        <p>Manufacturer: {{ image.manufacturer }}</p>
+        {% endif %}
+    </li>
+{% endfor %}
+</ul>
+
+</body>
+</html>

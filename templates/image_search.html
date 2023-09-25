@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Add Image to {{ image_list.name }}</h1>
+<input type="hidden" id="list_id" value="{{ image_list.list_id }}">
+
+<!-- Search Bar -->
+<form id="searchForm">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="searchQuery" placeholder="Search for an image on Flickr">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+    </div>
+</form>
+
+<!-- Manual URL Input -->
+<form id="manualInputForm">
+    <div class="input-group mb-3">
+        <input type="url" class="form-control" id="manualImageUrl" placeholder="Or enter an image URL directly">
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">Submit URL</button>
+        </div>
+    </div>
+</form>
+
+<!-- Search Results -->
+<div id="searchResults">
+    {% if search_performed %}
+      {% if images and images|length > 0 %}
+          {% for image in images %}
+              <img src="{{ image.url }}" alt="{{ image.title }}" onclick="showSaveImagePopup('{{ image.url }}');">
+          {% endfor %}
+      {% else %}
+          No images found.
+      {% endif %}
+    {% endif %}
+  </div>
+
+<script>
+    console.log("Inline script is working");
+</script>
+<script src="{{ url_for('static', filename='js/image_search.js') }}"></script>
+{% endblock %}

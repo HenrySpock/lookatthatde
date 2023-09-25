@@ -1,0 +1,39 @@
+/* add_image popup */
+.popup-hidden {
+  display: none;
+}
+
+#imagePopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.popup-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.popup-close {
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 24px;
+  border: none;
+  background: none;
+}

@@ -1,0 +1,27 @@
+{% extends "base.html" %} 
+
+{% block content %}
+<div>
+    <h2>Welcome to LookAtThat!</h2>
+
+    <p>We're delighted to introduce you to <strong>LookAtThat</strong> - a dynamic and user-friendly platform tailored for parents, educators, tutors, and anyone keen on crafting visual aids with ease.</p>
+
+    <h3>What is LookAtThat?</h3>
+    <p>At its core, LookAtThat is an image curation application powered by the Flickr API. Picture this: You're looking to introduce someone to the diverse array of animals found in a zoo. With our platform, you can effortlessly compile lists of these magnificent creatures, complete with vivid images, and then dive into interactive slideshows or quizzes to enrich the learning experience.</p>
+
+    <h3>Come on in, the water's fine!</h3>
+    <p>Once you <a href="{{ url_for('user_routes.reg_log') }}">register</a> and <a href="{{ url_for('user_routes.reg_log') }}">log in</a>, you will have full access to LookAtThat.</p>
+
+    <p>We've got your back with some pre-crafted lists to get you started. Feel free to use them as they are or sprinkle your own flavor by editing them in your profile.</p>
+
+    <h3>Your Journey with Us</h3>
+    <p>Whether you're dropping by to discover new things for yourself or adding your own touch to the mix, LookAtThat welcomes you with open arms. We're always learning, just like you, and can't wait to see where this journey takes us together.</p>
+
+    <h3>Your Privacy Matters</h3>
+    <p>We value your privacy. Rest assured, your data remains untouched, unsold, and revered. We've built "LookAtThat" with utmost care, ensuring your data's sanctity. However, as our hosting is courtesy of Render.com, it's a good idea to skim through their <a href="https://www.render.com/tos">terms of service</a> for a comprehensive understanding of their data handling practices.</p>
+
+    <h3>Contact Us</h3>
+    <p>Do you have questions, comments, suggestions, or complaints? Don't hesitate to tell us!</p>
+    <a href="{{ url_for('user_routes.support') }}" class="btn btn-primary">Contact Support</a>
+</div>
+{% endblock %}

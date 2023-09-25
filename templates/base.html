@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+</head>
+
+
+<body> 
+
+<div class="wrapper">
+
+    <div class="main-content">
+    <p>Hello from base!</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flashed-messages">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <nav>
+        <div>
+            <a href="{{ url_for('home') }}">LOOK AT THAT!</a>
+
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('about') }}">About</a>
+
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('list_routes.go_to_lists') }}">Go To Lists</a>
+                <a href="{{ url_for('list_routes.create_list') }}">Create List</a>
+                <a href="{{ url_for('user_routes.user_profile') }}">Profile</a>
+                <a href="{{ url_for('user_routes.logout') }}">Logout</a>
+            {% else %}
+
+                <a href="{{ url_for('user_routes.reg_log') }}">Register or Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+    </div>
+
+<footer class="sticky-footer">
+    This product uses the Flickr API but is not endorsed or certified by SmugMug, Inc.
+</footer>
+
+</div>
+
+
+
+</body>
+
+
+</html>
+
+ 
