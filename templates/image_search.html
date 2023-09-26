@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+
 <h1>Add Image to {{ image_list.name }}</h1>
 <input type="hidden" id="list_id" value="{{ image_list.list_id }}">
 
@@ -15,7 +17,7 @@
 </form>
 
 <!-- Manual URL Input -->
-<form id="manualInputForm">
+<form id="manualInputForm" onsubmit="event.preventDefault(); openImageNameModal();">
     <div class="input-group mb-3">
         <input type="url" class="form-control" id="manualImageUrl" placeholder="Or enter an image URL directly">
         <div class="input-group-append">
@@ -23,6 +25,16 @@
         </div>
     </div>
 </form>
+
+<!-- Image Name Modal -->
+<div id="imageNameModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Provide a name for the image:</p>
+        <input type="text" id="imageName" placeholder="Image Name">
+        <button onclick="saveImageUrlWithName(event)">Save</button>
+    </div>
+</div>
 
 <!-- Search Results -->
 <div id="searchResults">
@@ -41,4 +53,5 @@
     console.log("Inline script is working");
 </script>
 <script src="{{ url_for('static', filename='js/image_search.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 {% endblock %}

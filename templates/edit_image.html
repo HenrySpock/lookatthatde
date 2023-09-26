@@ -15,3 +15,6 @@
 
 <script src="{{ url_for('static', filename='js/images.js') }}"></script>
 {% endblock %}
+
+custom_fields = CustomField.query.filter_by(list_id=list_id).all()
+return render_template('edit_image.html', image_url=selected_image_url, list_id=list_id, custom_fields=custom_fields)

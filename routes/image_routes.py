@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, render_template, session, flash, request, current_app
+from flask import Blueprint, redirect, url_for, render_template, session, flash, request, current_app, jsonify
 from flask_login import logout_user, login_user, current_user, login_required
 from forms import RegistrationForm, LoginForm, EditProfileForm, ChangePasswordForm, SupportForm
 from models import ImageList, Image, ListCategory, db
@@ -127,6 +127,20 @@ def image_response(list_id):
 #     image_url = request.args.get('image_url', '')
 #     return render_template('edit_image.html', image_url=image_url)
 
+# @image_routes.route('/edit_image/<int:list_id>', methods=['GET'])
+# def edit_image(list_id):
+#     selected_image_url = request.args.get('selected_image_url')
+    
+#     if not selected_image_url:
+#         # Handle the absence of an image URL
+#         flash("No image provided!")
+#         return redirect(url_for('image_routes.image_search', list_id=list_id))
+    
+#     # Rest of the code...
+    
+#     return render_template('edit_image.html', image_url=selected_image_url, list_id=list_id)
+
+# Adding field retrieval
 @image_routes.route('/edit_image/<int:list_id>', methods=['GET'])
 def edit_image(list_id):
     selected_image_url = request.args.get('selected_image_url')
@@ -136,22 +150,43 @@ def edit_image(list_id):
         flash("No image provided!")
         return redirect(url_for('image_routes.image_search', list_id=list_id))
     
-    # Rest of the code...
+    # Fetch custom fields from the database
+    # custom_fields = CustomField.query.filter_by(list_id=list_id).all()
+    # Removed from return:  custom_fields=custom_fields
+
+    return render_template('edit_image.html', image_url=selected_image_url, list_id=list_id,)
     
-    return render_template('edit_image.html', image_url=selected_image_url, list_id=list_id)
+# @image_routes.route('/save_image/<int:list_id>', methods=['POST'])
+# def save_image(list_id):
+#     image_url = request.form.get('image_url')
+#     name = request.form.get('name')
+#     # Grab other fields similarly...
+
+#     # Create a new Image instance and add it to the database
+#     new_image = Image(list_id=list_id, image_url=image_url, name=name)
+#     db.session.add(new_image)
+#     db.session.commit()
+
+#     flash("Image saved successfully!")
+    
+#     # Redirecting to list_details for the current list
+#     return redirect(url_for('list_routes.list_details', list_id=list_id))
 
 @image_routes.route('/save_image/<int:list_id>', methods=['POST'])
 def save_image(list_id):
-    image_url = request.form.get('image_url')
-    name = request.form.get('name')
-    # Grab other fields similarly...
+    data = request.json
+    image_url = data['imageUrl']
+    image_name = data['imageName']
 
-    # Create a new Image instance and add it to the database
-    new_image = Image(list_id=list_id, image_url=image_url, name=name)
-    db.session.add(new_image)
-    db.session.commit()
+    # Logic to save image_url and image_name to database
+    try:
+        new_image = Image(list_id=list_id, image_url=image_url, name=image_name)
+        db.session.add(new_image)
+        db.session.commit()
+    except Exception as e:
+        return jsonify(success=False, error=str(e)), 500
+
 
     flash("Image saved successfully!")
-    
-    # Redirecting to list_details for the current list
-    return redirect(url_for('list_routes.list_details', list_id=list_id))
+
+    return jsonify(success=True)

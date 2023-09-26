@@ -1,45 +1,39 @@
-<!-- templates/image_response.html -->
-
 {% extends "base.html" %}
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='/css/image_response.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+
+<input type="hidden" id="list_id" value="{{ list_id }}">
 
 <div class="container">
     <h2>Images from Flickr</h2>
+    <input type="hidden" id="selectedImageUrl">
     <div class="image-grid">
         {% for image in images %}
             <div class="image-container">
-                <img src="{{ image.url }}" alt="{{ image.title }}">
-                <p>You can change this image later if you wish.</p>
-                <button onclick="chooseImage('{{ image.url }}', {{ list_id }});">Choose This Image</button>
+                <img src="{{ image.url }}" alt="{{ image.title }}"> 
+                {#<button onclick="chooseImage('{{ image.url }}', {{ list_id }});">Choose This Image</button>#}
+                <button onclick="chooseImageFromList('{{ image.url }}', {{ list_id }});">Choose This Image</button>
+
             </div>
         {% endfor %}
     </div>
 
-<script src="{{ url_for('static', filename='js/image_response.js') }}"></script>    
+    <!-- Image Name Modal -->
+    <div id="imageNameModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Provide a name for the image:</p>
+            <input type="text" id="imageName" placeholder="Image Name">
+            {#<button onclick="saveImageUrlWithName(event)">Save</button>#}
+            <button onclick="saveSelectedImageUrlWithName(event)">Save</button>
+        </div>
+    </div>
+
+    <!-- <script src="{{ url_for('static', filename='js/image_response.js') }}"></script>     -->
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>    
 {% endblock %}
+
+
  
-{% for image in images %}
-    <div class="image-container">
-        <img src="{{ image.url }}" alt="{{ image.title }}">
-        <button onclick="chooseImage('{{ image.url }}', {{ list_id }});">Choose This Image</button>
-    </div>
-{% endfor %}
-
-
-{% for image in images %}
-    <div class="image-container">
-        <img src="{{ image.url }}" alt="{{ image.title }}">
-        <p>You can change this image later if you wish.</p>
-        <button class="select-image-btn" data-image-url="{{ image.url }}">Choose This Image</button>
-    </div>
-{% endfor %}
-
-{% for image in images %}
-<div data-list-id="{{ image.list_id }}">
-    <img src="{{ image.url }}" alt="{{ image.title }}" {# onclick="showSaveImagePopup('{{ image.url }}')" #} />
-    <p>{{ image.title }}</p>
-    <p><a href="{{ image.url }}" target="_blank">{{ image.url }}</a></p>
-</div>
-{% endfor %}

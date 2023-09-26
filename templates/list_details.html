@@ -9,6 +9,25 @@
 
 <h2>{{ image_list.name }}</h2>
 
+{% for image in images %}
+    <div class="image-entry">
+        <img src="{{ image.image_url }}" alt="{{ image.name }}">
+        <p><strong>Name:</strong> {{ image.name }}</p>
+        <p><strong>Description:</strong> {{ image.description }}</p>
+        <!-- ... Display other default fields similarly ... -->
+
+        <!-- Display custom fields -->
+        {% if image.custom_fields %}
+            {% for field, value in image.custom_fields.items() %}
+                <p><strong>{{ field }}:</strong> {{ value }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endfor %}
+
+
+{% endblock %}
+
 <div class="container">
     {% for image in images %}
         <img src="{{ image.get('image_url', '#') }}" alt="{{ image.get('name', 'No Name') }}">
@@ -20,8 +39,6 @@
     {% endfor %}
 
 </div>
-
-{% endblock %}
 
 {% for image in images %}
 <div class="card mb-3">

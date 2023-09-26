@@ -40,12 +40,13 @@ class Image(db.Model):
     list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id'), nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
     name = db.Column(db.String(80), nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    year = db.Column(db.String(50), nullable=True) 
-    num_pieces = db.Column(db.Integer, nullable=True)
-    cat_number = db.Column(db.String(100), nullable=True)
-    country_of_origin = db.Column(db.String(100), nullable=True)
-    manufacturer = db.Column(db.String(100), nullable=True) 
+    # description = db.Column(db.Text, nullable=True)
+    # year = db.Column(db.String(50), nullable=True) 
+    # num_pieces = db.Column(db.Integer, nullable=True)
+    # cat_number = db.Column(db.String(100), nullable=True)
+    # country_of_origin = db.Column(db.String(100), nullable=True)
+    # manufacturer = db.Column(db.String(100), nullable=True) 
+    # custom_fields = db.Column(db.JSON)
 
 class UserList(db.Model):
     user_list_id = db.Column(db.Integer, primary_key=True)
@@ -66,6 +67,11 @@ class Feedback(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user_email = db.Column(db.String(100), nullable=False)
     content = db.Column(db.String(250))
+
+class CustomField(db.Model):
+    field_id = db.Column(db.Integer, primary_key=True)
+    list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id'), nullable=False)
+    field_name = db.Column(db.String(255), nullable=False)
 
 # def seed_users():
 #     # Check if users already exist to avoid seeding multiple times
