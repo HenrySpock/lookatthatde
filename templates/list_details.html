@@ -7,25 +7,41 @@
     <a href="{{ url_for('image_routes.image_search', list_id=image_list.list_id) }}" class="btn btn-primary">Add Image</a>  <!-- Assuming the route to the 'add_image.html' page is 'add_image_route' -->
 </div>
 
+<button id="editFieldsButton" data-list-id="{{ list_id }}" class="btn btn-primary">Edit Fields</button>
+
 <h2>{{ image_list.name }}</h2>
 
 {% for image in images %}
     <div class="image-entry">
         <img src="{{ image.image_url }}" alt="{{ image.name }}">
-        <p><strong>Name:</strong> {{ image.name }}</p>
-        <p><strong>Description:</strong> {{ image.description }}</p>
-        <!-- ... Display other default fields similarly ... -->
+        <p><strong>Name:</strong> {{ image.name }}</p> 
+        
 
         <!-- Display custom fields -->
-        {% if image.custom_fields %}
+        {#{% if image.custom_fields %}
             {% for field, value in image.custom_fields.items() %}
                 <p><strong>{{ field }}:</strong> {{ value }}</p>
             {% endfor %}
         {% endif %}
+        #}
+
+        <!-- Display the user-defined fields for this image -->
+        {% for field in fields %}
+            <div class="field-container">
+                <strong>{{ field.name }}:</strong> 
+                <!-- Note: This assumes each Image has attributes matching the field names. Adjust accordingly. -->
+                {% if field.type == 'text' %}
+                    <span>{{ image[field.name] }}</span> 
+                {% elif field.type == 'number' %}
+                    <span>{{ image[field.name] }}</span>
+                {% endif %}
+            </div>
+        {% endfor %}
+        {#<button onclick="location.href='{{ url_for('image_routes.update_image', image_id=image.image_id) }}'">Update Image?</button>#}
     </div>
 {% endfor %}
 
-
+<script src="{{ url_for('static', filename='js/list_details.js') }}"></script>    
 {% endblock %}
 
 <div class="container">

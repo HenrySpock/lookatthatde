@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Edit Fields for List {{ list_id }}</h2>
+
+<form id="dynamicFieldsForm" method="post" action="{{ url_for('image_routes.edit_fields_post', list_id=list_id) }}">
+    <!-- Hidden input for list_id -->
+    <input type="hidden" name="list_id" value="{{ list_id }}">
+
+    <!-- Existing fields rendered here -->
+    {% for field in fields %}
+    <div class="field-container" data-field-id="{{ field.id }}">
+        <!-- Field Name -->
+        <input type="text" name="field_name_{{ field.id }}" value="{{ field.name }}" required>
+
+        <!-- Radio buttons for data type -->
+        <label><input type="radio" name="field_type_{{ field.id }}" value="text" {% if field.type == 'text' %} checked {% endif %}> Text</label>
+        <label><input type="radio" name="field_type_{{ field.id }}" value="number" {% if field.type == 'number' %} checked {% endif %}> Number</label>
+        
+        <!-- Delete button for the field -->
+        <button type="button" onclick="deleteField({{ field.id }})">Delete this Field?</button>
+    </div>
+    {% endfor %}
+
+    <!-- Container where new fields will be appended -->
+    <div id="fieldsContainer"></div>
+
+    <!-- Button to add a new field -->
+    <button type="button" id="addFieldBtn">Add Field?</button>
+    <input type="submit" value="Save Fields">
+</form>
+
+<script src="{{ url_for('static', filename='js/edit_fields.js') }}"></script>    
+
+{% endblock %}

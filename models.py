@@ -31,9 +31,12 @@ class ImageList(db.Model):
     name = db.Column(db.String(80), nullable=False)
     description = db.Column(db.Text, nullable=True)
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('list_category.category_id'), nullable=True)  # This is the new field
+    category_id = db.Column(db.Integer, db.ForeignKey('list_category.category_id'), nullable=True)  
     core_list = db.Column(db.Boolean, default=False)
     images = db.relationship('Image', backref='image_list', lazy=True, cascade="all, delete-orphan")
+    
+    # New relationship for fields
+    fields = db.relationship('Field', backref='image_list', lazy=True, cascade="all, delete-orphan")
 
 class Image(db.Model):
     image_id = db.Column(db.Integer, primary_key=True)
@@ -48,11 +51,11 @@ class Image(db.Model):
     # manufacturer = db.Column(db.String(100), nullable=True) 
     # custom_fields = db.Column(db.JSON)
 
-class UserList(db.Model):
-    user_list_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id'), nullable=False)
-    is_favorited = db.Column(db.Boolean, nullable=False)
+# class UserList(db.Model):
+#     user_list_id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+#     list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id'), nullable=False)
+#     is_favorited = db.Column(db.Boolean, nullable=False)
 
 class UserImage(db.Model):
     user_image_id = db.Column(db.Integer, primary_key=True)
@@ -68,10 +71,18 @@ class Feedback(db.Model):
     user_email = db.Column(db.String(100), nullable=False)
     content = db.Column(db.String(250))
 
-class CustomField(db.Model):
-    field_id = db.Column(db.Integer, primary_key=True)
-    list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id'), nullable=False)
-    field_name = db.Column(db.String(255), nullable=False)
+class Field(db.Model):
+    __tablename__ = 'fields'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    type = db.Column(db.String)  # either 'text' or 'number'
+    list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id'))
+     
+# class FieldData(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     field_id = db.Column(db.Integer, db.ForeignKey('field.id'), nullable=False)
+#     image_id = db.Column(db.Integer, db.ForeignKey('image.image_id'), nullable=False)
+#     value = db.Column(db.String(255), nullable=False)
 
 # def seed_users():
 #     # Check if users already exist to avoid seeding multiple times

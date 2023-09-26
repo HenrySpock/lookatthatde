@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, url_for, render_template, session, flash, request, current_app
 from flask_login import logout_user, login_user, current_user, login_required
 from forms import RegistrationForm, LoginForm, EditProfileForm, ChangePasswordForm, SupportForm
-from models import ImageList, Image, ListCategory, db
+from models import ImageList, Image, ListCategory, db, Field
 
 list_routes = Blueprint('list_routes', __name__)
 
@@ -45,6 +45,10 @@ def list_details(list_id):
     image_list = ImageList.query.get_or_404(list_id)
     image_records = Image.query.filter_by(list_id=list_id).all()
 
+    # Fetch the associated fields for this list
+    fields = Field.query.filter_by(list_id=list_id).all()
+    print('fields: ', fields)
+
     # Prepare a list to hold dictionaries for each image with only non-empty fields
     images = []
     for image in image_records:
@@ -55,7 +59,7 @@ def list_details(list_id):
                 image_dict[column.name] = value
         images.append(image_dict)
     
-    return render_template("list_details.html", image_list=image_list, images=images, list_id=list_id)
+    return render_template("list_details.html", image_list=image_list, images=images, list_id=list_id, fields=fields)
 
 #Create a List
 @list_routes.route('/create_list', methods=['GET', 'POST'])

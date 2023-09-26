@@ -1,8 +1,9 @@
 from flask import Blueprint, redirect, url_for, render_template, session, flash, request, current_app, jsonify
 from flask_login import logout_user, login_user, current_user, login_required
 from forms import RegistrationForm, LoginForm, EditProfileForm, ChangePasswordForm, SupportForm
-from models import ImageList, Image, ListCategory, db
+from models import ImageList, Image, ListCategory, db, Field
 import requests
+import re
 
 import os
 from dotenv import load_dotenv
@@ -41,6 +42,12 @@ def fetch_from_flickr(query):
 
 # Routes 
 image_routes = Blueprint('image_routes', __name__) 
+
+@image_routes.app_errorhandler(Exception)
+def handle_exception(e):
+    # Log the error for debugging
+    print(str(e))
+    return str(e), 500
 
 # # Add Image route
 # @image_routes.route('/image_search/<int:list_id>', methods=['GET'])
@@ -190,3 +197,138 @@ def save_image(list_id):
     flash("Image saved successfully!")
 
     return jsonify(success=True)
+
+@image_routes.route('/edit_fields/<int:list_id>', methods=['GET'])
+def edit_fields_get(list_id):
+    # Fetch the custom fields for the list
+    # fields = Field.query.filter_by(list_id=list_id).all()
+    fields = Field.query.filter_by(list_id=list_id).order_by(Field.name).all()
+
+    return render_template('edit_fields.html', list_id=list_id, fields=fields)
+
+# @image_routes.route('/edit_fields/<int:list_id>', methods=['POST'])
+# def edit_fields_post(list_id):
+#     print('request.form: ', request.form)
+#     field_names = request.form.getlist('field_names[]')
+#     field_types = request.form.getlist('field_types[]')
+    
+#     if len(field_names) != len(field_types):
+#         print("Mismatch between field names and field types count.")
+#         return "Error processing form", 400
+
+#     for name, field_type in zip(field_names, field_types):
+#         if name and field_type:  # Only save if both name and type are present
+#             new_field = Field(name=name, type=field_type, list_id=list_id)
+#             db.session.add(new_field)
+
+#     try:
+#         db.session.commit()
+#     except Exception as e:
+#         db.session.rollback()
+#         print("Error during database commit: ", str(e))
+#         return "Failed to update database", 500
+
+#     return redirect(url_for('list_routes.list_details', list_id=list_id))
+
+# @image_routes.route('/edit_fields/<int:list_id>', methods=['POST'])
+# def edit_fields_post(list_id):
+#     print('request.form: ', request.form)
+#     fields_data = {}
+
+#     # Iterate over all the keys in the form data
+#     for key in request.form.keys():
+#         match_name = re.match(r'field_name_(\d+)', key)
+#         match_type = re.match(r'field_type_(\d+)', key)
+
+#         if match_name:
+#             field_id = int(match_name.group(1))
+#             fields_data.setdefault(field_id, {})['name'] = request.form[key]
+
+#         elif match_type:
+#             field_id = int(match_type.group(1))
+#             fields_data.setdefault(field_id, {})['type'] = request.form[key]
+
+#     # Now, iterate over the extracted fields data and save to the database
+#     for field_id, field_data in fields_data.items():
+#         name = field_data.get('name')
+#         field_type = field_data.get('type')
+
+#         if name and field_type:  # Only process if both name and type are present
+#             existing_field = Field.query.filter_by(id=field_id, list_id=list_id).first()
+            
+#             if existing_field:  # Field exists, so update it
+#                 existing_field.name = name
+#                 existing_field.type = field_type
+#             else:  # Field does not exist, so create it
+#                 new_field = Field(name=name, type=field_type, list_id=list_id)
+#                 db.session.add(new_field)
+
+#     try:
+#         db.session.commit()
+#     except Exception as e:
+#         db.session.rollback()
+#         print("Error during database commit: ", str(e))
+#         return "Failed to update database", 500
+
+#     return redirect(url_for('list_routes.list_details', list_id=list_id))
+
+@image_routes.route('/edit_fields/<int:list_id>', methods=['POST'])
+def edit_fields_post(list_id):
+    print('request.form: ', request.form)
+    fields_data = {}
+
+    # Iterate over all the keys in the form data
+    for key in request.form.keys():
+        match_name = re.match(r'field_name_(\d+)', key)
+        match_type = re.match(r'field_type_(\d+)', key)
+
+        if match_name:
+            field_id = int(match_name.group(1))
+            fields_data.setdefault(field_id, {})['name'] = request.form[key]
+
+        elif match_type:
+            field_id = int(match_type.group(1))
+            fields_data.setdefault(field_id, {})['type'] = request.form[key]
+
+    # Now, iterate over the extracted fields data and save to the database
+    for field_id, field_data in fields_data.items():
+        name = field_data.get('name')
+        field_type = field_data.get('type')
+
+        # Check if the name is not blank and both name and type are present
+        if name and name.strip() and field_type:
+            existing_field = Field.query.filter_by(id=field_id, list_id=list_id).first()
+            
+            if existing_field:  # Field exists, so update it
+                existing_field.name = name
+                existing_field.type = field_type
+            else:  # Field does not exist, so create it
+                new_field = Field(name=name, type=field_type, list_id=list_id)
+                db.session.add(new_field)
+
+    # Handle new fields
+    new_field_names = request.form.getlist('field_names[]')
+    new_field_types = request.form.getlist('field_types[]')
+
+    for name, field_type in zip(new_field_names, new_field_types):
+        # Check if the name is not blank
+        if name and name.strip():
+            new_field = Field(name=name, type=field_type, list_id=list_id)
+            db.session.add(new_field)
+
+    # Handle deletion of fields
+    delete_field_ids = request.form.getlist('delete_field_ids[]')
+    print("IDs to delete:", delete_field_ids)
+    for delete_id in delete_field_ids:
+        field_to_delete = Field.query.get(delete_id)
+        if field_to_delete:
+            db.session.delete(field_to_delete)
+
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print("Error during database commit: ", str(e))
+        return "Failed to update database", 500
+
+    return redirect(url_for('list_routes.list_details', list_id=list_id))
