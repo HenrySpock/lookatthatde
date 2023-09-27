@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, url_for, render_template, session, flash, request, current_app, jsonify
 from flask_login import logout_user, login_user, current_user, login_required
 from forms import RegistrationForm, LoginForm, EditProfileForm, ChangePasswordForm, SupportForm
-from models import ImageList, Image, ListCategory, db, Field
+from models import ImageList, Image, ListCategory, db, Field, FieldData
 import requests
 import re
 
@@ -148,20 +148,43 @@ def image_response(list_id):
 #     return render_template('edit_image.html', image_url=selected_image_url, list_id=list_id)
 
 # Adding field retrieval
-@image_routes.route('/edit_image/<int:list_id>', methods=['GET'])
-def edit_image(list_id):
-    selected_image_url = request.args.get('selected_image_url')
+# @image_routes.route('/edit_image/<int:list_id>/<int:image_id>', methods=['GET'])
+# def edit_image(list_id, image_id):
+#     selected_image_url = request.args.get('selected_image_url')
     
-    if not selected_image_url:
-        # Handle the absence of an image URL
-        flash("No image provided!")
-        return redirect(url_for('image_routes.image_search', list_id=list_id))
+#     if not selected_image_url:
+#         # Handle the absence of an image URL
+#         flash("No image provided!")
+#         return redirect(url_for('image_routes.image_search', list_id=list_id))
     
-    # Fetch custom fields from the database
-    # custom_fields = CustomField.query.filter_by(list_id=list_id).all()
-    # Removed from return:  custom_fields=custom_fields
+#     # Get the image details using the provided URL
+#     image = Image.query.filter_by(image_url=selected_image_url).first()
+#     if not image:
+#         flash("Image not found!")
+#         return redirect(url_for('list_routes.list_details', list_id=list_id))
 
-    return render_template('edit_image.html', image_url=selected_image_url, list_id=list_id,)
+#     # Fetch the associated fields for this image list
+#     fields = Field.query.filter_by(list_id=list_id).all()
+
+#     # Fetch values of the fields for this image
+#     field_values = {data.field_id: data.value for data in FieldData.query.filter_by(image_id=image.image_id).all()}
+
+#     return render_template('edit_image.html', image=image, fields=fields, field_values=field_values, list_id=list_id, image_id=image_id)
+#     # return render_template('edit_image.html', image_url=selected_image_url, list_id=list_id,)
+
+@image_routes.route('/edit_image/<int:list_id>/<int:image_id>', methods=['GET'])
+def edit_image(list_id, image_id):
+    # Directly fetch the image using the image_id
+    image = Image.query.get_or_404(image_id)
+
+    # Fetch the associated fields for this image list
+    fields = Field.query.filter_by(list_id=list_id).all()
+
+    # Fetch values of the fields for this image
+    field_values = {data.field_id: data.value for data in FieldData.query.filter_by(image_id=image_id).all()}
+
+    return render_template('edit_image.html', image=image, fields=fields, field_values=field_values, list_id=list_id, image_id=image_id)
+
     
 # @image_routes.route('/save_image/<int:list_id>', methods=['POST'])
 # def save_image(list_id):
@@ -331,4 +354,80 @@ def edit_fields_post(list_id):
         print("Error during database commit: ", str(e))
         return "Failed to update database", 500
 
+    return redirect(url_for('list_routes.list_details', list_id=list_id))
+
+@image_routes.route('/update_image/<int:image_id>', methods=['GET', 'POST'])
+@login_required
+def update_image(image_id):
+    image = Image.query.get_or_404(image_id)
+    list_id = image.list_id
+
+    # Get user-defined fields for the list this image belongs to
+    fields = Field.query.filter_by(list_id=list_id).all()
+
+    # For a POST request, update the image and its field data
+    if request.method == 'POST':
+        # Update image attributes here, like name and image_url
+        image.name = request.form.get('name', image.name)
+        image.image_url = request.form.get('image_url', image.image_url)
+        
+        # Save or update field data
+        for field in fields:
+            value = request.form.get(f"field_{field.id}")
+            if value:
+                field_data = FieldData.query.filter_by(image_id=image_id, field_id=field.id).first()
+                if field_data:
+                    field_data.value = value
+                else:
+                    new_field_data = FieldData(field_id=field.id, image_id=image_id, value=value)
+                    db.session.add(new_field_data)
+        
+        try:
+            db.session.commit()
+            return redirect(url_for('list_routes.list_details', list_id=list_id))
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Error updating image: {str(e)}", "danger")
+            return render_template('update_image.html', image=image, fields=fields), 500
+
+    # For a GET request, just display the form with current data
+    return render_template('update_image.html', image=image, fields=fields)
+
+@image_routes.route('/save_edits/<int:list_id>/<int:image_id>', methods=['POST'])
+def save_edits(list_id, image_id):
+    # Fetch the image to be updated
+    image = Image.query.get_or_404(image_id)
+    if not image:
+        flash("Image not found!")
+        return redirect(url_for('list_routes.list_details', list_id=list_id))
+
+    # Update the image details
+    image.name = request.form.get('name', image.name)
+    image.image_url = request.form.get('image_url', image.image_url)
+
+    # Fetch all the associated fields for this image list
+    fields = Field.query.filter_by(list_id=list_id).all()
+
+    for field in fields:
+        field_name = field.name
+        field_value = request.form.get(field_name)
+        
+        # Check if the field data for this field and image already exists
+        existing_field_data = FieldData.query.filter_by(field_id=field.id, image_id=image_id).first()
+
+        if existing_field_data:
+            # Update the value if it already exists
+            existing_field_data.value = field_value
+        else:
+            # Or create a new field data entry if it doesn't exist
+            new_field_data = FieldData(field_id=field.id, image_id=image_id, value=field_value)
+            db.session.add(new_field_data)
+    
+    try:
+        db.session.commit()
+        flash("Image edits saved successfully!")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error saving edits: {str(e)}", "error")
+    
     return redirect(url_for('list_routes.list_details', list_id=list_id))

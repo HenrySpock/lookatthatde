@@ -3,13 +3,13 @@
 {% block content %}
 <h2>Edit Fields for List {{ list_id }}</h2>
 
-<form id="dynamicFieldsForm" method="post" action="{{ url_for('image_routes.edit_fields_post', list_id=list_id) }}">
+<form id="dynamicFieldsForm" method="post" action="{{ url_for('image_routes.edit_fields_get', list_id=list_id) }}">
     <!-- Hidden input for list_id -->
     <input type="hidden" name="list_id" value="{{ list_id }}">
 
     <!-- Existing fields rendered here -->
     {% for field in fields %}
-    <div class="field-container" data-field-id="{{ field.id }}">
+    <div class="field-container" data-field-id="{{ field.id }}"> 
         <!-- Field Name -->
         <input type="text" name="field_name_{{ field.id }}" value="{{ field.name }}" required>
 

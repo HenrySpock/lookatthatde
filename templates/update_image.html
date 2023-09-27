@@ -1,0 +1,16 @@
+<form method="post">
+  <!-- Image attributes -->
+  <input type="text" name="name" value="{{ image.name }}" required>
+  <input type="text" name="image_url" value="{{ image.image_url }}" required>
+
+  <!-- User-defined fields -->
+  {% for field in fields %}
+  <div>
+      <label for="field_{{ field.id }}">{{ field.name }}</label>
+      {% set field_value = image.field_data.filter_by(field_id=field.id).first() if image.field_data else None %}
+      <input type="{{ field.type }}" name="field_{{ field.id }}" value="{{ field_value.value if field_value else '' }}">
+  </div>
+  {% endfor %}
+
+  <input type="submit" value="Update Image">
+</form>

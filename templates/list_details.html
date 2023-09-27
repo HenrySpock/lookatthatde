@@ -37,31 +37,24 @@
                 {% endif %}
             </div>
         {% endfor %}
-        {#<button onclick="location.href='{{ url_for('image_routes.update_image', image_id=image.image_id) }}'">Update Image?</button>#}
+
+        <!-- Add/Edit Image Button -->
+        {# <button onclick="location.href='{{ url_for('image_routes.edit_image', list_id=list_id, selected_image_url=image.image_url) }}'">Edit this Image?</button> #}
+        <p>Image ID: {{ image.image_id }}</p>
+        {# <button onclick="location.href='{{ url_for('image_routes.edit_image', list_id=list_id, image_id=image.id, selected_image_url=image.image_url) }}'">Edit this Image?</button> #}
+        <button onclick="location.href='{{ url_for('image_routes.edit_image', list_id=list_id, image_id=image.image_id) }}?selected_image_url={{ image.image_url }}'">Edit this Image?</button>
+ 
+
     </div>
 {% endfor %}
 
 <script src="{{ url_for('static', filename='js/list_details.js') }}"></script>    
 {% endblock %}
 
-<div class="container">
-    {% for image in images %}
-        <img src="{{ image.get('image_url', '#') }}" alt="{{ image.get('name', 'No Name') }}">
-        {% for key, value in image.items() %}
-            {% if key not in ['image_url', 'name'] %}  <!-- Exclude fields you don't want to display as text -->
-                <p><strong>{{ key.replace('_', ' ').capitalize() }}:</strong> {{ value }}</p>
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
 
-</div>
 
-{% for image in images %}
-<div class="card mb-3">
-    <img src="{{ image.image_url }}" alt="{{ image.name }}" class="card-img-top" width="200">
-    <div class="card-body">
-        <h5 class="card-title">{{ image.name }}</h5>
-        <!-- Add more image fields here as needed -->
-    </div>
-</div>
-{% endfor %}
+
+
+
+
+ 

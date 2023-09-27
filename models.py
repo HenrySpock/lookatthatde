@@ -49,13 +49,7 @@ class Image(db.Model):
     # cat_number = db.Column(db.String(100), nullable=True)
     # country_of_origin = db.Column(db.String(100), nullable=True)
     # manufacturer = db.Column(db.String(100), nullable=True) 
-    # custom_fields = db.Column(db.JSON)
-
-# class UserList(db.Model):
-#     user_list_id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-#     list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id'), nullable=False)
-#     is_favorited = db.Column(db.Boolean, nullable=False)
+    # custom_fields = db.Column(db.JSON) 
 
 class UserImage(db.Model):
     user_image_id = db.Column(db.Integer, primary_key=True)
@@ -77,72 +71,10 @@ class Field(db.Model):
     name = db.Column(db.String)
     type = db.Column(db.String)  # either 'text' or 'number'
     list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id'))
-     
-# class FieldData(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     field_id = db.Column(db.Integer, db.ForeignKey('field.id'), nullable=False)
-#     image_id = db.Column(db.Integer, db.ForeignKey('image.image_id'), nullable=False)
-#     value = db.Column(db.String(255), nullable=False)
 
-# def seed_users():
-#     # Check if users already exist to avoid seeding multiple times
-#     existing_user = Users.query.first()
-#     if existing_user:
-#         print("Users already exist. Skipping seeding.")
-#         return
-
-#     # Create a regular user
-#     regular_user = Users(username='testuser', email='testuser@example.com', first_name="Testy", last_name="User")
-#     regular_user.set_password('testpassword')
-
-#     # Create an admin user
-#     admin_user = Users(username='adminuser', email='adminuser@example.com', is_admin=True, first_name="Adminy", last_name="Simp")
-#     admin_user.set_password('adminpassword')
-
-#     # Add and commit the users to the database
-#     db.session.add(regular_user)
-#     db.session.add(admin_user)
-#     db.session.commit()
-
-#     print("Test users seeded!")
-
-# def seed_images_and_list():
-#     # Check if any images/lists already exist to avoid seeding multiple times
-#     existing_list = ImageList.query.first()
-#     if existing_list:
-#         print("Image lists already exist. Skipping seeding.")
-#         return
-
-#     # Fetch the admin user by username
-#     admin_user = Users.query.filter_by(username='adminuser').first()
-#     if not admin_user:
-#         print("Admin user not found. Make sure to seed users first.")
-#         return
-
-#     # Create an ImageList and associate it with the admin user
-#     image_list = ImageList(
-#         name='Sample Image List', 
-#         description='This is a sample list of images.',
-#         creator_id=admin_user.id
-#     )
-
-#     # Add the ImageList to the session (not committed yet)
-#     db.session.add(image_list)
-    
-#     # Ensure that it's committed to get an ID for the foreign key relationships
-#     db.session.commit()
-
-#     # Now we'll create 10 images associated with this list
-#     for i in range(1, 11):
-#         image = Image(
-#             list_id=image_list.list_id,
-#             flickr_url=f'https://example.com/image{i}.jpg',  # Placeholder URLs
-#             name=f'Image {i}',
-#             description=f'Description for image {i}'
-#         )
-#         db.session.add(image)
-
-#     # Commit the session to save the images
-#     db.session.commit()
-
-#     print("Sample image list and images seeded!")
+class FieldData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    field_id = db.Column(db.Integer, db.ForeignKey('fields.id'), nullable=False)
+    image_id = db.Column(db.Integer, db.ForeignKey('image.image_id'), nullable=False)
+    value = db.Column(db.String(255), nullable=True)
+      

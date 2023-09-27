@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{# {% extends "base.html" %}
 
 {% block content %}
 <h1>Edit Image</h1>
 <img src="{{ image_url }}" alt="Selected Image">
 <!-- Add any other controls or information needed to edit the image -->
 
-<form action="{{ url_for('image_routes.save_image', list_id=list_id) }}" method="post">
+<form action="{{ url_for('image_routes.save_edits', list_id=list_id, image_id=image_id) }}" method="post">
   <input type="hidden" name="image_url" value="{{ image_url }}">
   <label for="name">Name:</label>
   <input type="text" id="name" name="name"><br><br>
@@ -15,6 +15,40 @@
 
 <script src="{{ url_for('static', filename='js/images.js') }}"></script>
 {% endblock %}
+#}
 
-custom_fields = CustomField.query.filter_by(list_id=list_id).all()
-return render_template('edit_image.html', image_url=selected_image_url, list_id=list_id, custom_fields=custom_fields)
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Edit Image</h1>
+<img src="{{ image.image_url }}" alt="Selected Image">
+
+{# <form action="{{ url_for('image_routes.save_edits', list_id=list_id) }}" method="post"> #}
+{# <form action="{{ url_for('image_routes.save_edits', list_id=list_id, image_id=image.id) }}" method="post" data-list-id="{{ list_id }}" data-image-id="{{ image.id }}"> #}
+<form action="{{ url_for('image_routes.save_edits', list_id=list_id, image_id=image.image_id) }}" method="post" data-list-id="{{ list_id }}" data-image-id="{{ image.image_id }}">
+
+
+  <input type="hidden" name="image_id" value="{{ image.image_id }}">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" value="{{ image.name }}"><br><br>
+  
+  <label for="image_url">Image URL:</label>
+  <input type="text" id="image_url" name="image_url" value="{{ image.image_url }}"><br><br>
+  
+  <!-- Display the user-defined fields for this image -->
+  {% for field in fields %}
+    <div class="field-container">
+      <label for="field_{{ field.id }}">{{ field.name }}:</label> 
+      {% if field.type == 'text' %}
+          <input type="text" id="field_{{ field.id }}" name="field_{{ field.id }}" value="{{ field_values.get(field.id, '') }}">
+      {% elif field.type == 'number' %}
+          <input type="number" id="field_{{ field.id }}" name="field_{{ field.id }}" value="{{ field_values.get(field.id, '') }}">
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  <input type="submit" value="Save this image">
+</form>
+
+<script src="{{ url_for('static', filename='js/edit_image.js') }}"></script>
+{% endblock %}

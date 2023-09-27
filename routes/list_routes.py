@@ -55,10 +55,10 @@ def list_details(list_id):
         image_dict = {}
         for column in image.__table__.columns:
             value = getattr(image, column.name)
-            if value and column.name not in ['list_id', 'image_id']:  # Exclude the fields list_id and image_id
+            if value and column.name not in ['list_id']:  # Exclude the fields list_id and image_id
                 image_dict[column.name] = value
         images.append(image_dict)
-    
+    print('images: ', images)
     return render_template("list_details.html", image_list=image_list, images=images, list_id=list_id, fields=fields)
 
 #Create a List
