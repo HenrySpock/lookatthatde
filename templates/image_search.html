@@ -3,6 +3,8 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
 
+<button onclick="location.href='{{ url_for('list_routes.list_details', list_id=list_id) }}'">Back to List Details</button>
+
 <h1>Add Image to {{ image_list.name }}</h1>
 <input type="hidden" id="list_id" value="{{ image_list.list_id }}">
 

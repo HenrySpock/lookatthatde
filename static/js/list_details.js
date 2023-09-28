@@ -17,3 +17,9 @@ document.querySelectorAll('.editImageButton').forEach(function(button) {
     window.location.href = url;
   });
 });
+
+// Handle "Add a category?" button 
+function showCategoryForm() {
+  const formDiv = document.getElementById("categoryForm");
+  formDiv.style.display = "block";
+}

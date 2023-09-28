@@ -395,6 +395,7 @@ def update_image(image_id):
 
 @image_routes.route('/save_edits/<int:list_id>/<int:image_id>', methods=['POST'])
 def save_edits(list_id, image_id):
+    print("save_edits form: ", request.form)
     # Fetch the image to be updated
     image = Image.query.get_or_404(image_id)
     if not image:
@@ -410,7 +411,8 @@ def save_edits(list_id, image_id):
 
     for field in fields:
         field_name = field.name
-        field_value = request.form.get(field_name)
+        # field_value = request.form.get(field_name)
+        field_value = request.form.get(f"field_{field.id}")
         
         # Check if the field data for this field and image already exists
         existing_field_data = FieldData.query.filter_by(field_id=field.id, image_id=image_id).first()
@@ -428,6 +430,8 @@ def save_edits(list_id, image_id):
         flash("Image edits saved successfully!")
     except Exception as e:
         db.session.rollback()
+        print(e)  # print full traceback for debugging
         flash(f"Error saving edits: {str(e)}", "error")
+
     
     return redirect(url_for('list_routes.list_details', list_id=list_id))
