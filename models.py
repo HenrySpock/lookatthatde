@@ -1,4 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey, Integer, String, Column
+from sqlalchemy.orm import relationship
 from flask_login import UserMixin
 import bcrypt
 
@@ -71,11 +73,21 @@ class Field(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     type = db.Column(db.String)  # either 'text' or 'number'
-    list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id'))
+    # list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id')) 
+    list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id', ondelete='CASCADE'))
 
+
+# class FieldData(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     field_id = db.Column(db.Integer, db.ForeignKey('fields.id'), nullable=False)
+#     image_id = db.Column(db.Integer, db.ForeignKey('image.image_id'), nullable=False)
+#     value = db.Column(db.String(255), nullable=True)
+#     image_id = Column(Integer, ForeignKey('images.id', ondelete='CASCADE'))
+      
 class FieldData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    field_id = db.Column(db.Integer, db.ForeignKey('fields.id'), nullable=False)
-    image_id = db.Column(db.Integer, db.ForeignKey('image.image_id'), nullable=False)
+    # field_id = db.Column(db.Integer, db.ForeignKey('fields.id'), nullable=False)
+    field_id = db.Column(db.Integer, db.ForeignKey('fields.id', ondelete='CASCADE'), nullable=False)  
+    image_id = db.Column(db.Integer, db.ForeignKey('image.image_id', ondelete='CASCADE'), nullable=False)
     value = db.Column(db.String(255), nullable=True)
-      
+  
