@@ -79,7 +79,7 @@
         <p>Image ID: {{ image.image_id }}</p>
         {# <button onclick="location.href='{{ url_for('image_routes.edit_image', list_id=list_id, image_id=image.id, selected_image_url=image.image_url) }}'">Edit this Image?</button> #}
         <button onclick="location.href='{{ url_for('image_routes.edit_image', list_id=list_id, image_id=image.image_id) }}?selected_image_url={{ image.image_url }}'">Edit this Image?</button>
- 
+        <button onclick="if(confirm('Are you sure you want to delete this image?')) { location.href='{{ url_for('image_routes.delete_image', list_id=list_id, image_id=image.image_id) }}' }">Delete This Image?</button>
 
     </div>
 {% endfor %}

@@ -50,6 +50,7 @@ class Image(db.Model):
     # country_of_origin = db.Column(db.String(100), nullable=True)
     # manufacturer = db.Column(db.String(100), nullable=True) 
     # custom_fields = db.Column(db.JSON) 
+    field_data = db.relationship('FieldData', backref='image', lazy=True, cascade="all, delete-orphan")
 
 class UserImage(db.Model):
     user_image_id = db.Column(db.Integer, primary_key=True)

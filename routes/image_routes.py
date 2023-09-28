@@ -435,3 +435,24 @@ def save_edits(list_id, image_id):
 
     
     return redirect(url_for('list_routes.list_details', list_id=list_id))
+
+# Delete an Image 
+@image_routes.route('/delete_image/<int:list_id>/<int:image_id>', methods=['GET'])
+@login_required
+def delete_image(list_id, image_id):
+    image = Image.query.get_or_404(image_id)
+
+    # Delete associated field data for the image
+    FieldData.query.filter_by(image_id=image_id).delete()
+
+    # Delete the image itself
+    db.session.delete(image)
+    
+    try:
+        db.session.commit()
+        flash('Image deleted successfully!')
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error deleting image: {str(e)}", "error")
+
+    return redirect(url_for('list_routes.list_details', list_id=list_id))
