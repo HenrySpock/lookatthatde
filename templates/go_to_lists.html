@@ -14,6 +14,34 @@
     <input type="radio" name="listType" value="allLists">All Lists
 </label>
 
+
+
+{% macro report_modal() %}
+<div id="reportModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeReportModal()">&times;</span>
+        <h2>Report Issue</h2> 
+        <form id="reportForm" action="{{ url_for('user_routes.report') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" id="reportListId" name="reportListId">  
+            <input type="hidden" id="reportCreatorId" name="reportCreatorId">
+
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" required>  {# Name field #}
+            
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" name="email" required>  {# Email field #}
+            
+            <label for="content">Please describe your issue:</label>
+            <textarea id="content" name="content" rows="4" cols="50" required></textarea>  {# Rename reportDescription to content #}
+            
+            <button type="submit" class="btn btn-primary">Submit Feedback</button>
+        </form>
+    </div>
+</div>
+{% endmacro %}
+
+
 <div data-group="yourLists">
   <h2>Your Lists</h2>
 
@@ -29,6 +57,7 @@
     {% endfor %}
   {% endif %}
 
+  {#
   <h3>Your Uncategorized Lists</h3>
   {% for image_list in your_lists %}
       
@@ -45,6 +74,18 @@
       {% endif %} 
  
   {% endfor %}
+  #}
+
+  <h3>Your Uncategorized Lists</h3>
+    {% for image_list in your_lists %}
+        {% if not image_list.category_id and image_list.images|length > 0 %}
+            <a href="{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}" class="list-card">
+                <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" width="100">
+                {{ image_list.name }}<br>
+            </a>
+            <button onclick="if(confirm('Are you sure you want to delete this list? It will also delete all associated images and their data.')) { location.href='{{ url_for('list_routes.delete_list', list_id=image_list.list_id) }}' }">Delete This List?</button>
+        {% endif %} 
+    {% endfor %}
 
   <h3>Your Categorized Lists</h3>
   {% for category in your_categories %}
@@ -140,8 +181,10 @@
             <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" width="100">
             {{ image_list.name }}<br>
           {% endif %}
-
+          
         </a>
+        <button class="btn btn-danger" onclick="openReportModal('{{ image_list.list_id }}', '{{ image_list.creator_id }}')">Report</button>
+        
       {% endif %}
   {% endfor %}
 
@@ -171,6 +214,7 @@
                                   <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" width="100">
                                   {{ image_list.name }}<br>
                               </a>
+                              <button class="btn btn-danger" onclick="openReportModal('{{ image_list.list_id }}', '{{ image_list.creator_id }}')">Report</button>
                           {% endif %}
                       {% endfor %}
                   </div>
@@ -181,6 +225,9 @@
   
 </div>
 
+{{ report_modal() }}
+
 <script src="{{ url_for('static', filename='js/lists.js') }}"></script>
+<script src="{{ url_for('static', filename='js/go_to_lists_modal.js') }}"></script>
 {% endblock %}
- 
+  

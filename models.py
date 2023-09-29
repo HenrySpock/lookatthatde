@@ -67,6 +67,9 @@ class Feedback(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user_email = db.Column(db.String(100), nullable=False)
     content = db.Column(db.String(250))
+    # For the /report route:
+    list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id'))
+    creator_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 class Field(db.Model):
     __tablename__ = 'fields'

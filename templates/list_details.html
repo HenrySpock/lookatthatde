@@ -2,10 +2,21 @@
 
 {% block content %}
 <h2>List details for:</h2>
-<h1>{{ image_list.name }}</h1>
+{#<h1>{{ image_list.name }}</h1>#}
 
 {% if image_list.category_id %}
+{#
     <h2>Category: {{ image_list.category.name }}</h2>
+#}
+
+    <h1 id="listNameDisplay">{{ image_list.name }}</h1>
+    <input type="text" id="listNameEdit" value="{{ image_list.name }}" style="display:none;">
+    <button id="editListNameButton" data-list-id="{{ image_list.list_id }}" onclick="toggleListNameEdit()">Edit List Name</button>
+    <button id="saveListNameButton" onclick="saveListName()" style="display:none;">Save List Name?</button>
+    <form id="updateListNameForm" method="post" action="{{ url_for('list_routes.update_list_name', list_id=image_list.list_id) }}">
+        <input type="hidden" name="new_name" value="">
+    </form>
+
     <form action="{{ url_for('list_routes.remove_category', list_id=image_list.list_id) }}" method="post">
         <input type="submit" class="btn btn-warning" value="Remove Category?">
     </form>
@@ -85,12 +96,4 @@
 {% endfor %}
 
 <script src="{{ url_for('static', filename='js/list_details.js') }}"></script>    
-{% endblock %}
-
-
-
- 
- 
- 
-
- 
+{% endblock %} 

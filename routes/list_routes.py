@@ -1,7 +1,8 @@
-from flask import Blueprint, redirect, url_for, render_template, session, flash, request, current_app
+from flask import Blueprint, redirect, url_for, render_template, session, flash, request, current_app, jsonify
 from flask_login import logout_user, login_user, current_user, login_required
 from forms import RegistrationForm, LoginForm, EditProfileForm, ChangePasswordForm, SupportForm
 from models import ImageList, Image, ListCategory, db, Field, FieldData
+from flask_cors import CORS
 
 list_routes = Blueprint('list_routes', __name__)
 
@@ -291,3 +292,27 @@ def delete_list(list_id):
         flash(f"Error deleting the list: {str(e)}", "error")
 
     return redirect(url_for('list_routes.go_to_lists'))
+
+#Update List name: 
+@list_routes.route('/update_list_name/<int:list_id>', methods=['POST'])
+def update_list_name(list_id):
+    print('Trying to save list name')
+    try:
+        # Get the new name from the form data
+        new_name = request.form.get('new_name')
+
+        # Fetch the list
+        image_list = ImageList.query.get(list_id)
+        if not image_list:
+            return jsonify(success=False, message="List not found"), 404
+
+        # Update the list name
+        image_list.name = new_name
+        db.session.commit()
+
+        return jsonify(success=True)
+
+    except Exception as e:
+        print(str(e))
+        return jsonify(success=False, message="An error occurred"), 500
+

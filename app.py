@@ -7,6 +7,7 @@ from flask_login import LoginManager, login_user, logout_user, current_user
 # from forms import RegistrationForm, LoginForm
 from flask_mail import Mail, Message
 from flask_cors import CORS
+from flask_wtf.csrf import CSRFProtect
 
 from routes.user_routes import user_routes, mail
 from routes.list_routes import list_routes
@@ -31,6 +32,8 @@ app.debug = True
 app.config['SECRET_KEY'] = 'IS_VERY_SECRET'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False  
+
+csrf = CSRFProtect(app)
 
 app.register_blueprint(user_routes, url_prefix='/user')
 app.register_blueprint(list_routes, url_prefix='/lists')

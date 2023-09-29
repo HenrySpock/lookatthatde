@@ -170,3 +170,69 @@ def support():
 
     return render_template('support.html', form=form)
 
+# For feedback from reports
+@user_routes.route('/report', methods=['POST'])
+def report():
+    form = SupportForm()
+
+    # Assuming the modal does not have fields for name and email, 
+    # we need to get these details from the logged-in user.
+    # This section is similar to the support route logic.
+    if current_user.is_authenticated:
+        form.name.data = current_user.username
+        form.email.data = current_user.email
+
+    # if form.validate_on_submit():
+    #     feedback = Feedback(
+    #         user_id=current_user.id if current_user.is_authenticated else None,
+    #         user_email=form.email.data,
+    #         content=form.content.data
+    #     )
+    if form.validate_on_submit():
+        feedback = Feedback(
+            user_id=current_user.id if current_user.is_authenticated else None,
+            user_email=form.email.data,
+            content=form.content.data,
+            list_id=request.form.get('reportListId'),
+            creator_id=request.form.get('reportCreatorId')
+        )
+    # rest of the code...
+
+        db.session.add(feedback)
+        db.session.commit()
+
+        try:
+            email_body = f"""
+            User:
+            {form.name.data}
+
+            Email:
+            {form.email.data}
+
+            Feedback:
+            {form.content.data}
+
+            Reported List ID:
+            {request.form.get('reportListId')}
+
+            Reported Creator ID:
+            {request.form.get('reportCreatorId')}
+            """
+            # Construct and send the email message:
+            msg = Message('New Report from ' + form.name.data, 
+                          sender=form.email.data, 
+                          recipients=[current_app.config['MAIL_USERNAME']])
+            msg.body = email_body
+            mail.send(msg)
+            flash('Your report has been sent!', 'success')
+        except Exception as e:
+            flash(f'There was an error sending the email: {e}', 'danger')
+            # You can also log the error for debugging
+
+        return redirect(url_for('list_routes.go_to_lists'))  # This should be the route you want to redirect to after the report submission.
+
+    # If the form validation fails or it's a GET request:
+    return redirect(url_for('list_routes.go_to_lists'))  # Redirect back to the current page or the desired route.
+
+
+
