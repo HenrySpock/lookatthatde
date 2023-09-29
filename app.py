@@ -46,6 +46,9 @@ toolbar = DebugToolbarExtension(app)
 
 API_KEY = "6cf94f30f65417266f15e2a31107b331"
 
+WTF_CSRF_CHECK_DEFAULT = True
+WTF_CSRF_HEADERS = ["X-CSRFToken", "X-CSRF-TOKEN"]
+
 # Mail settings
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465

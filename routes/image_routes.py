@@ -128,50 +128,6 @@ def image_response(list_id):
         flash("Please enter a valid search term or a valid image URL.")
         return redirect(url_for('image_routes.image_search', list_id=list_id))
 
-
-# @image_routes.route('/edit_image')
-# def edit_image():
-#     image_url = request.args.get('image_url', '')
-#     return render_template('edit_image.html', image_url=image_url)
-
-# @image_routes.route('/edit_image/<int:list_id>', methods=['GET'])
-# def edit_image(list_id):
-#     selected_image_url = request.args.get('selected_image_url')
-    
-#     if not selected_image_url:
-#         # Handle the absence of an image URL
-#         flash("No image provided!")
-#         return redirect(url_for('image_routes.image_search', list_id=list_id))
-    
-#     # Rest of the code...
-    
-#     return render_template('edit_image.html', image_url=selected_image_url, list_id=list_id)
-
-# Adding field retrieval
-# @image_routes.route('/edit_image/<int:list_id>/<int:image_id>', methods=['GET'])
-# def edit_image(list_id, image_id):
-#     selected_image_url = request.args.get('selected_image_url')
-    
-#     if not selected_image_url:
-#         # Handle the absence of an image URL
-#         flash("No image provided!")
-#         return redirect(url_for('image_routes.image_search', list_id=list_id))
-    
-#     # Get the image details using the provided URL
-#     image = Image.query.filter_by(image_url=selected_image_url).first()
-#     if not image:
-#         flash("Image not found!")
-#         return redirect(url_for('list_routes.list_details', list_id=list_id))
-
-#     # Fetch the associated fields for this image list
-#     fields = Field.query.filter_by(list_id=list_id).all()
-
-#     # Fetch values of the fields for this image
-#     field_values = {data.field_id: data.value for data in FieldData.query.filter_by(image_id=image.image_id).all()}
-
-#     return render_template('edit_image.html', image=image, fields=fields, field_values=field_values, list_id=list_id, image_id=image_id)
-#     # return render_template('edit_image.html', image_url=selected_image_url, list_id=list_id,)
-
 @image_routes.route('/edit_image/<int:list_id>/<int:image_id>', methods=['GET'])
 def edit_image(list_id, image_id):
     # Directly fetch the image using the image_id
@@ -184,23 +140,6 @@ def edit_image(list_id, image_id):
     field_values = {data.field_id: data.value for data in FieldData.query.filter_by(image_id=image_id).all()}
 
     return render_template('edit_image.html', image=image, fields=fields, field_values=field_values, list_id=list_id, image_id=image_id)
-
-    
-# @image_routes.route('/save_image/<int:list_id>', methods=['POST'])
-# def save_image(list_id):
-#     image_url = request.form.get('image_url')
-#     name = request.form.get('name')
-#     # Grab other fields similarly...
-
-#     # Create a new Image instance and add it to the database
-#     new_image = Image(list_id=list_id, image_url=image_url, name=name)
-#     db.session.add(new_image)
-#     db.session.commit()
-
-#     flash("Image saved successfully!")
-    
-#     # Redirecting to list_details for the current list
-#     return redirect(url_for('list_routes.list_details', list_id=list_id))
 
 @image_routes.route('/save_image/<int:list_id>', methods=['POST'])
 def save_image(list_id):

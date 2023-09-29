@@ -16,15 +16,17 @@ function openImageNameModal() {
 function saveImageUrlWithName(event) {
     event.preventDefault();  // Prevent the default form submission behavior
 
-    var imageUrl = document.getElementById('manualImageUrl').value;
-    var imageName = document.getElementById('imageName').value;
-
+    let imageUrl = document.getElementById('manualImageUrl').value;
+    let imageName = document.getElementById('imageName').value;
+    let csrfToken = document.querySelector("input[name='csrf_token']").value;
     // Assuming you have an API endpoint set up to save the image in your Flask app:
-    var listId = document.getElementById('list_id').value;
+    let listId = document.getElementById('list_id').value;
+
     fetch('/images/save_image/' + listId, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
         },
         body: JSON.stringify({
             imageUrl: imageUrl,
@@ -72,14 +74,28 @@ function chooseImageFromList(imageUrl, listId) {
 function saveSelectedImageUrlWithName(event) {
   event.preventDefault();
 
-  var imageUrl = document.getElementById('selectedImageUrl').value;
-  var imageName = document.getElementById('imageName').value;
-  var listId = document.getElementById('list_id').value;
+  console.log("Inside the saveSelectedImageUrlWithName function");
+  console.log(document.getElementById('selectedImageUrl'));
+  console.log("Value of selectedImageUrl:", document.getElementById('selectedImageUrl').value);
 
+  let imageUrl = document.getElementById('selectedImageUrl').value;
+  let imageName = document.getElementById('imageName').value;
+  let listId = document.getElementById('list_id').value;
+  console.log('imageUrl: ', imageUrl, 'imageName: ', imageName, 'listId: ', listId);
+
+  if(!imageUrl || !imageName || !listId) {
+    console.error("Missing data: ", { imageUrl, imageName, listId });
+    return;
+  }
+
+  console.log('CSRF token: ', document.getElementById('csrf_token').value);
+  let csrfToken = document.querySelector("input[name='csrf_token']").value;
+  console.log("Fetched CSRF Token:", csrfToken);
   fetch('/images/save_image/' + listId, {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-CSRFToken': document.getElementById('csrf_token').value
       },
       body: JSON.stringify({
           imageUrl: imageUrl,
