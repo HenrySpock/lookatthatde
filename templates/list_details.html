@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
 <h2>List details for:</h2>
 {#<h1>{{ image_list.name }}</h1>#}
 
@@ -47,12 +49,23 @@
 </div>
 
 <button id="editFieldsButton" data-list-id="{{ list_id }}" class="btn btn-primary">Edit Fields</button>
+ 
+<button id="reposition-btn">Reposition Images?</button>
+<button id="save-btn" style="display: none;">Save Position?</button>
+
 
 {% for image in images %}
     <div class="image-entry">
-        <img src="{{ image.image_url }}" alt="{{ image.name }}">
-        <p><strong>Name:</strong> {{ image.name }}</p> 
-        
+        {#<img src="{{ image.image_url }}" alt="{{ image.name }}">#}
+        <img src="{{ image.image_url }}" data-image-id="{{ image.image_id }}" data-position="{{ image.image_positions.position }}" />
+ 
+        <!-- Left Arrow for repositioning. Hidden for first image. -->
+        <i class="fas fa-arrow-left reposition-arrow"  style="display: none;" {% if loop.first %}style="display:none"{% endif %}></i>
+        <!-- Right Arrow for repositioning. Hidden for last image. -->
+        <i class="fas fa-arrow-right reposition-arrow"  style="display: none;" {% if loop.last %}style="display:none"{% endif %}></i>
+
+
+        <p><strong>Name:</strong> {{ image.name }}</p>         
 
         <!-- Display custom fields -->
         {#

@@ -18,11 +18,15 @@ def seed_users():
     regular_user2.set_password('testuser2')
 
     # Create an admin user
-    admin_user = Users(username='adminuser', email='adminuser@adminuser.com', is_admin=True, first_name="Adminy", last_name="Simp")
-    admin_user.set_password('adminuser')
+    admin_user1 = Users(username='admin1', email='admin1@admin1.com', is_admin=True, first_name="admin1", last_name="admin1")
+    admin_user1.set_password('admin1')
+    
+    # Create a second  admin user
+    admin_user2 = Users(username='admin2', email='admin2@admin2.com', is_admin=True, first_name="admin2", last_name="admin2")
+    admin_user2.set_password('admin2')
 
     # Add and commit the users to the database 
-    db.session.add_all([regular_user1, regular_user2, admin_user])
+    db.session.add_all([regular_user1, regular_user2, admin_user1, admin_user2])
     db.session.commit()
 
     print("Test users seeded!")

@@ -28,6 +28,24 @@ class ListCategory(db.Model):
     description = db.Column(db.Text, nullable=True)
     image_lists = db.relationship('ImageList', backref='category', lazy=True)
 
+# Here is where we are 
+class ImagePosition(db.Model):
+    __tablename__ = 'image_position'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    image_id = db.Column(db.Integer, db.ForeignKey('image.image_id', ondelete='CASCADE'), nullable=False)
+    list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id', ondelete='CASCADE'), nullable=False)
+    position = db.Column(db.Integer, nullable=False)
+
+    # Relationships
+    image = db.relationship('Image', backref='image_positions', lazy=True, uselist=False)
+    list = db.relationship('ImageList', backref='list_image_positions', lazy=True)
+
+    def __init__(self, image_id, list_id, position):
+        self.image_id = image_id
+        self.list_id = list_id
+        self.position = position
+        
 class ImageList(db.Model):
     list_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)

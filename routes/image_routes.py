@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, url_for, render_template, session, flash, request, current_app, jsonify
 from flask_login import logout_user, login_user, current_user, login_required
 from forms import RegistrationForm, LoginForm, EditProfileForm, ChangePasswordForm, SupportForm
-from models import ImageList, Image, ListCategory, db, Field, FieldData
+from models import ImageList, Image, ListCategory, db, Field, FieldData, ImagePosition
 import requests
 import re
 
@@ -141,24 +141,51 @@ def edit_image(list_id, image_id):
 
     return render_template('edit_image.html', image=image, fields=fields, field_values=field_values, list_id=list_id, image_id=image_id)
 
+# @image_routes.route('/save_image/<int:list_id>', methods=['POST'])
+# def save_image(list_id):
+#     data = request.json
+#     image_url = data['imageUrl']
+#     image_name = data['imageName']
+
+#     # Logic to save image_url and image_name to database
+#     try:
+#         new_image = Image(list_id=list_id, image_url=image_url, name=image_name)
+#         db.session.add(new_image)
+#         db.session.commit()
+#     except Exception as e:
+#         return jsonify(success=False, error=str(e)), 500
+
+
+#     flash("Image saved successfully!")
+
+#     return jsonify(success=True)
+
 @image_routes.route('/save_image/<int:list_id>', methods=['POST'])
 def save_image(list_id):
     data = request.json
     image_url = data['imageUrl']
     image_name = data['imageName']
 
-    # Logic to save image_url and image_name to database
+    # Determine the next position for the image in the list
+    last_position = db.session.query(db.func.max(ImagePosition.position)).filter_by(list_id=list_id).scalar()
+    next_position = (last_position or 0) + 1  # If no images, start with 1
+
     try:
         new_image = Image(list_id=list_id, image_url=image_url, name=image_name)
         db.session.add(new_image)
+        db.session.flush()  # Flush so that we can get new_image.image_id
+
+        new_image_position = ImagePosition(image_id=new_image.image_id, list_id=list_id, position=next_position)
+        db.session.add(new_image_position)
+
         db.session.commit()
     except Exception as e:
+        db.session.rollback()
         return jsonify(success=False, error=str(e)), 500
 
-
     flash("Image saved successfully!")
-
     return jsonify(success=True)
+
 
 @image_routes.route('/edit_fields/<int:list_id>', methods=['GET'])
 def edit_fields_get(list_id):
@@ -376,17 +403,54 @@ def save_edits(list_id, image_id):
     return redirect(url_for('list_routes.list_details', list_id=list_id))
 
 # Delete an Image 
+# @image_routes.route('/delete_image/<int:list_id>/<int:image_id>', methods=['GET'])
+# @login_required
+# def delete_image(list_id, image_id):
+#     image = Image.query.get_or_404(image_id)
+
+#     # Delete associated field data for the image
+#     FieldData.query.filter_by(image_id=image_id).delete()
+
+#     # Delete the image itself
+#     db.session.delete(image)
+    
+#     try:
+#         db.session.commit()
+#         flash('Image deleted successfully!')
+#     except Exception as e:
+#         db.session.rollback()
+#         flash(f"Error deleting image: {str(e)}", "error")
+
+#     return redirect(url_for('list_routes.list_details', list_id=list_id))
+
 @image_routes.route('/delete_image/<int:list_id>/<int:image_id>', methods=['GET'])
 @login_required
 def delete_image(list_id, image_id):
     image = Image.query.get_or_404(image_id)
+
+    # Fetch the associated ImagePosition
+    img_position = ImagePosition.query.filter_by(image_id=image_id).first()
+
+    if img_position:
+        # Find all subsequent ImagePositions for the same list
+        subsequent_positions = ImagePosition.query.filter(
+            ImagePosition.list_id == img_position.list_id,
+            ImagePosition.position > img_position.position
+        ).order_by(ImagePosition.position).all()
+
+        # Decrement their position value
+        for position in subsequent_positions:
+            position.position -= 1
+        
+        # Delete the ImagePosition for the image
+        db.session.delete(img_position)
 
     # Delete associated field data for the image
     FieldData.query.filter_by(image_id=image_id).delete()
 
     # Delete the image itself
     db.session.delete(image)
-    
+
     try:
         db.session.commit()
         flash('Image deleted successfully!')
@@ -395,3 +459,28 @@ def delete_image(list_id, image_id):
         flash(f"Error deleting image: {str(e)}", "error")
 
     return redirect(url_for('list_routes.list_details', list_id=list_id))
+
+# 1
+# Updating the image positions on list_details display. 
+@image_routes.route('/update_image_positions', methods=['POST'])
+def update_image_positions():
+    print('Attempting to update route.')
+    try:
+        data = request.json
+
+        if not isinstance(data, dict):
+            raise ValueError("Data should be a dictionary with image ID as keys and position as values.")
+
+        for image_id, position in data.items():
+            image_position = ImagePosition.query.filter_by(image_id=image_id).first()
+            if image_position:
+                image_position.position = position
+
+        db.session.commit()
+        return jsonify(success=True)
+
+    except ValueError as ve:
+        return jsonify(success=False, error=str(ve)), 400  # Bad request for invalid data format
+    except Exception as e:
+        db.session.rollback()
+        return jsonify(success=False, error=str(e)), 500

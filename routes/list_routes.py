@@ -1,8 +1,8 @@
 from flask import Blueprint, redirect, url_for, render_template, session, flash, request, current_app, jsonify
 from flask_login import logout_user, login_user, current_user, login_required
 from forms import RegistrationForm, LoginForm, EditProfileForm, ChangePasswordForm, SupportForm
-from models import ImageList, Image, ListCategory, db, Field, FieldData
-from flask_cors import CORS
+from models import ImageList, Image, ListCategory, db, Field, FieldData, ImagePosition
+from flask_cors import CORS 
 
 list_routes = Blueprint('list_routes', __name__)
 
@@ -57,6 +57,28 @@ def go_to_lists():
         has_new_lists=has_new_lists
     )
 
+# @list_routes.route("/list_details/<int:list_id>")
+# @login_required
+# def list_details(list_id):
+#     print('On list_details, list_id: ', list_id)
+#     image_list = ImageList.query.get_or_404(list_id)
+#     categories = ListCategory.query.all()
+
+#     # Fetch the images for this list
+#     images = Image.query.filter_by(list_id=list_id).all()
+    
+#     # Fetch the associated fields for this list
+#     fields = Field.query.filter_by(list_id=list_id).all()
+#     print('fields: ', fields)
+
+#     # Fetch field values for each image
+#     image_field_values = {}
+#     for image in images:
+#         image_field_values[image.image_id] = {data.field_id: data.value for data in FieldData.query.filter_by(image_id=image.image_id).all()}
+
+#     return render_template("list_details.html", image_list=image_list, images=images, list_id=list_id, fields=fields, categories=categories, image_field_values=image_field_values)
+
+# Updated list_details for ordering by image_position.
 @list_routes.route("/list_details/<int:list_id>")
 @login_required
 def list_details(list_id):
@@ -64,19 +86,27 @@ def list_details(list_id):
     image_list = ImageList.query.get_or_404(list_id)
     categories = ListCategory.query.all()
 
-    # Fetch the images for this list
-    images = Image.query.filter_by(list_id=list_id).all()
-    
+    # Fetch the ordered images for this list
+    ordered_images_query = db.session.query(
+        Image
+    ).join(
+        ImagePosition, ImagePosition.image_id == Image.image_id
+    ).filter(
+        ImagePosition.list_id == list_id
+    ).order_by(
+        ImagePosition.position
+    ).all()
+
     # Fetch the associated fields for this list
     fields = Field.query.filter_by(list_id=list_id).all()
     print('fields: ', fields)
 
     # Fetch field values for each image
     image_field_values = {}
-    for image in images:
+    for image in ordered_images_query:
         image_field_values[image.image_id] = {data.field_id: data.value for data in FieldData.query.filter_by(image_id=image.image_id).all()}
 
-    return render_template("list_details.html", image_list=image_list, images=images, list_id=list_id, fields=fields, categories=categories, image_field_values=image_field_values)
+    return render_template("list_details.html", image_list=image_list, images=ordered_images_query, list_id=list_id, fields=fields, categories=categories, image_field_values=image_field_values)
 
 @list_routes.route('/create_list', methods=['GET', 'POST'])
 @login_required
