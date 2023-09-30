@@ -90,6 +90,21 @@ function swapElements(elm1, elm2) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+  const imageEntry = document.querySelector('.image-entry');
+  const currentUserId = imageEntry.getAttribute('data-current-user-id');
+  const listCreatorId = imageEntry.getAttribute('data-creator-id');
+  
+  const repositionButton = document.getElementById('reposition-btn');
+
+  console.log("currentUserId:", currentUserId);
+  console.log("listCreatorId:", listCreatorId);
+
+  if (currentUserId === listCreatorId) {
+      repositionButton.style.display = ''; // Show the button
+  } else {
+      repositionButton.style.display = 'none'; // Hide the button
+  }
+
   // Initial positions
   let initialPositions = {};
 
@@ -186,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function() {
       });
   });
 
-  let repositionButton = document.getElementById('reposition-btn');
+  // let repositionButton = document.getElementById('reposition-btn');
   // let saveButton = document.getElementById('save-btn');
   // let arrows = document.querySelectorAll('.image-arrow');
   let arrows = document.querySelectorAll('.reposition-arrow');

@@ -55,7 +55,7 @@
 
 
 {% for image in images %}
-    <div class="image-entry">
+    <div class="image-entry" data-creator-id="{{ image_list.creator_id }}" data-current-user-id="{{ current_user.id }}">
         {#<img src="{{ image.image_url }}" alt="{{ image.name }}">#}
         <img src="{{ image.image_url }}" data-image-id="{{ image.image_id }}" data-position="{{ image.image_positions.position }}" />
  
