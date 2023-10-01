@@ -6,7 +6,15 @@
 <form method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     List Name: <input type="text" name="list_name"><br>
-    
+
+    {% if current_user.is_admin %}
+        <div class="form-group">
+            <label>Make a core list?</label>
+            <input type="radio" name="core_list" value="yes"> Yes
+            <input type="radio" name="core_list" value="no" checked> No
+        </div>
+    {% endif %}
+
     Category: 
     <select name="category_name">
         <option value="">-- Choose existing or enter new --</option>

@@ -1,0 +1,8 @@
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/full_image.css') }}"> 
+
+<div class="full-image">
+  <img src="{{ image.image_url }}" alt="{{ image.name }}" class="stretch-image">
+</div>
+<script src="{{ url_for('static', filename='js/full_image.js') }}"></script>   
+{% endblock %}

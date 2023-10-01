@@ -25,13 +25,4 @@ def fetch_images(api_key, search_query, num_images=10):
 
     response = requests.get(FLICKR_ENDPOINT, params=payload)
     return parse_flickr_response(response.json())
-
-    # response = requests.get(FLICKR_ENDPOINT, params=payload)
-    # data = response.json()
-
-    # image_urls = [
-    #     f"https://farm{photo['farm']}.staticflickr.com/{photo['server']}/{photo['id']}_{photo['secret']}.jpg"
-    #     for photo in data['photos']['photo']
-    # ]
-
-    # return image_urls
+ 

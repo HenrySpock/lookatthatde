@@ -63,13 +63,6 @@ class Image(db.Model):
     list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id'), nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
     name = db.Column(db.String(80), nullable=False)
-    # description = db.Column(db.Text, nullable=True)
-    # year = db.Column(db.String(50), nullable=True) 
-    # num_pieces = db.Column(db.Integer, nullable=True)
-    # cat_number = db.Column(db.String(100), nullable=True)
-    # country_of_origin = db.Column(db.String(100), nullable=True)
-    # manufacturer = db.Column(db.String(100), nullable=True) 
-    # custom_fields = db.Column(db.JSON) 
     field_data = db.relationship('FieldData', backref='image', lazy=True, cascade="all, delete-orphan")
 
 class UserImage(db.Model):
@@ -96,14 +89,6 @@ class Field(db.Model):
     type = db.Column(db.String)  # either 'text' or 'number'
     # list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id')) 
     list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id', ondelete='CASCADE'))
-
-
-# class FieldData(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     field_id = db.Column(db.Integer, db.ForeignKey('fields.id'), nullable=False)
-#     image_id = db.Column(db.Integer, db.ForeignKey('image.image_id'), nullable=False)
-#     value = db.Column(db.String(255), nullable=True)
-#     image_id = Column(Integer, ForeignKey('images.id', ondelete='CASCADE'))
       
 class FieldData(db.Model):
     id = db.Column(db.Integer, primary_key=True)

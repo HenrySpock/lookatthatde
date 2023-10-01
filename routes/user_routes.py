@@ -182,12 +182,6 @@ def report():
         form.name.data = current_user.username
         form.email.data = current_user.email
 
-    # if form.validate_on_submit():
-    #     feedback = Feedback(
-    #         user_id=current_user.id if current_user.is_authenticated else None,
-    #         user_email=form.email.data,
-    #         content=form.content.data
-    #     )
     if form.validate_on_submit():
         feedback = Feedback(
             user_id=current_user.id if current_user.is_authenticated else None,

@@ -2,8 +2,8 @@
 
 {% block content %} 
 {% if current_user.is_authenticated %}
-    <h1>Welcome from home, {{ current_user.username }}!</h1>
+    <h1>Welcome to LookAtThat, {{ current_user.username }}!</h1>
 {% else %}
-    <h1>Welcome from home!</h1>
+    <h1>Welcome to LookAtThat!</h1>
 {% endif %}
 {% endblock %}

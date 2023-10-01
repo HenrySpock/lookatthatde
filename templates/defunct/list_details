@@ -1,0 +1,53 @@
+{% for image in images %}
+    <div class="image-entry" data-creator-id="{{ image_list.creator_id }}">
+        {#<img src="{{ image.image_url }}" alt="{{ image.name }}">#}
+        <img src="{{ image.image_url }}" data-image-id="{{ image.image_id }}" data-position="{{ image.image_positions.position }}" />
+ 
+        <!-- Left Arrow for repositioning. Hidden for first image. -->
+        <i class="fas fa-arrow-left reposition-arrow"  style="display: none;" {% if loop.first %}style="display:none"{% endif %}></i>
+        <!-- Right Arrow for repositioning. Hidden for last image. -->
+        <i class="fas fa-arrow-right reposition-arrow"  style="display: none;" {% if loop.last %}style="display:none"{% endif %}></i>
+
+
+        <p><strong>Name:</strong> {{ image.name }}</p>         
+
+        <!-- Display custom fields -->
+        {#
+        {% if image.custom_fields %}
+            {% for field, value in image.custom_fields.items() %}
+                <p><strong>{{ field }}:</strong> {{ value }}</p>
+            {% endfor %}
+        {% endif %}
+        #}
+
+        <!-- Display the user-defined fields for this image -->
+        {#
+            {% for field in fields %}
+            <div class="field-container">
+                <strong>{{ field.name }}:</strong> 
+                <!-- Note: This assumes each Image has attributes matching the field names. Adjust accordingly. -->
+                {% if field.type == 'text' %}
+                    <span>{{ image[field.name] }}</span> 
+                {% elif field.type == 'number' %}
+                    <span>{{ image[field.name] }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        #}
+
+        
+        {% set field_values = image_field_values[image.image_id] %}
+        {% for field in fields %}
+            <p>{{ field.name }}: {{ field_values.get(field.id, '') }}</p>
+        {% endfor %}
+        
+
+        <!-- Add/Edit Image Button -->
+        {# <button onclick="location.href='{{ url_for('image_routes.edit_image', list_id=list_id, selected_image_url=image.image_url) }}'">Edit this Image?</button> #}
+        <p>Image ID: {{ image.image_id }}</p>
+        {# <button onclick="location.href='{{ url_for('image_routes.edit_image', list_id=list_id, image_id=image.id, selected_image_url=image.image_url) }}'">Edit this Image?</button> #}
+        <button onclick="location.href='{{ url_for('image_routes.edit_image', list_id=list_id, image_id=image.image_id) }}?selected_image_url={{ image.image_url }}'">Edit this Image?</button>
+        <button onclick="if(confirm('Are you sure you want to delete this image?')) { location.href='{{ url_for('image_routes.delete_image', list_id=list_id, image_id=image.image_id) }}' }">Delete This Image?</button>
+
+    </div>
+{% endfor %}

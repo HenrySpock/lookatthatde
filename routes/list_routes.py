@@ -57,28 +57,6 @@ def go_to_lists():
         has_new_lists=has_new_lists
     )
 
-# @list_routes.route("/list_details/<int:list_id>")
-# @login_required
-# def list_details(list_id):
-#     print('On list_details, list_id: ', list_id)
-#     image_list = ImageList.query.get_or_404(list_id)
-#     categories = ListCategory.query.all()
-
-#     # Fetch the images for this list
-#     images = Image.query.filter_by(list_id=list_id).all()
-    
-#     # Fetch the associated fields for this list
-#     fields = Field.query.filter_by(list_id=list_id).all()
-#     print('fields: ', fields)
-
-#     # Fetch field values for each image
-#     image_field_values = {}
-#     for image in images:
-#         image_field_values[image.image_id] = {data.field_id: data.value for data in FieldData.query.filter_by(image_id=image.image_id).all()}
-
-#     return render_template("list_details.html", image_list=image_list, images=images, list_id=list_id, fields=fields, categories=categories, image_field_values=image_field_values)
-
-# Updated list_details for ordering by image_position.
 @list_routes.route("/list_details/<int:list_id>")
 @login_required
 def list_details(list_id):
@@ -113,7 +91,11 @@ def list_details(list_id):
 def create_list():
     if request.method == 'POST':
         list_name = request.form.get('list_name')
-        
+
+        is_core_list = False
+        if 'core_list' in request.form:
+            is_core_list = request.form.get('core_list') == 'yes'
+
         category_name = request.form.get('category_name')  # assuming it's a dropdown with values or user input
         new_category_name = request.form.get('new_category')
 
@@ -128,7 +110,7 @@ def create_list():
             category_id = category.category_id
             print("Assigned Category ID:", category_id)
         
-        image_list = ImageList(name=list_name, category_id=category_id, creator_id=current_user.id)
+        image_list = ImageList(name=list_name, category_id=category_id, creator_id=current_user.id, core_list=is_core_list)
         db.session.add(image_list)
         try:
             db.session.commit()
@@ -181,27 +163,6 @@ def add_category_to_list(list_id):
 
     categories = Category.query.all()
     return render_template('list_details.html', categories=categories, image_list=image_list)  
-
-# @list_routes.route('/delete_list/<int:list_id>', methods=['GET', 'POST'])
-# @login_required
-# def delete_list(list_id):
-#     image_list = ImageList.query.get_or_404(list_id)
-
-#     # Check if the list belongs to the current user
-#     if image_list.creator_id != current_user.id:
-#         flash("You don't have permission to delete this list.", 'error')
-#         return redirect(url_for('list_routes.go_to_lists'))
-
-#     try:
-#         # Simply delete the list, the cascade options should handle related deletions
-#         db.session.delete(image_list)
-#         db.session.commit()
-#         flash("List deleted successfully!")
-#     except Exception as e:
-#         db.session.rollback()
-#         flash(f"Error deleting the list: {str(e)}", "error")
-
-#     return redirect(url_for('list_routes.go_to_lists'))
 
 @list_routes.route('/delete_list/<int:list_id>', methods=['GET', 'POST'])
 @login_required

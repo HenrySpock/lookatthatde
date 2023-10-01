@@ -21,7 +21,7 @@ def fetch_from_flickr(query):
         "text": query,
         "format": "json",
         "nojsoncallback": 1,  # To get a clean JSON response without the function wrapper
-        "per_page": 30,  # You can adjust this to get more or fewer images
+        "per_page": 32,  # You can adjust this to get more or fewer images
     }
 
     response = requests.get(FLICKR_API_URL, params=params)
@@ -49,14 +49,6 @@ def handle_exception(e):
     print(str(e))
     return str(e), 500
 
-# # Add Image route
-# @image_routes.route('/image_search/<int:list_id>', methods=['GET'])
-# def image_search(list_id):
-#     image_list = ImageList.query.get_or_404(list_id)
-#     print('On image_search, list_id: ', list_id)
-    
-#     return render_template('image_search.html', image_list=image_list, list_id=list_id, search_performed=False)
-
 @image_routes.route('/image_search/<int:list_id>', methods=['GET'])
 def image_search(list_id):
     image_list = ImageList.query.get_or_404(list_id)
@@ -69,38 +61,6 @@ def image_search(list_id):
         flash("Please enter a valid URL.")
         
     return render_template('image_search.html', image_list=image_list, list_id=list_id, search_performed=False)
-
-# @image_routes.route('/image_response')
-# def image_response(list_id):
-#     query = request.args.get('search_query')
-#     list_id = request.args.get('list_id')
-#     # image_list = ImageList.query.get_or_404(list_id)
-#     print('on image_response, list_id: ', list_id)
-#     print('on image_response, request.args: ', request.args)
-
-#     if not query or query.strip() == "":
-#         flash("Please enter a valid search term.")
-#         return redirect(url_for('image_routes.image_search', list_id=list_id))
-     
-#     images = fetch_from_flickr(query)
-#     return render_template('image_response.html', image_list=image_list, images=images, list_id=list_id)
-
-# @image_routes.route('/image_response/<int:list_id>', methods=['GET'])
-# def image_response(list_id):
-#     query = request.args.get('search_query')
-#     manual_image_url = request.args.get('manual_image_url')
-#     # You don't need the line below, as list_id is now part of the route itself
-#     # list_id = request.args.get('list_id')
-     
-#     print('on image_response, list_id: ', list_id)
-#     print('on image_response, request.args: ', request.args)
-
-#     if not query or query.strip() == "":
-#         flash("Please enter a valid search term.")
-#         return redirect(url_for('image_routes.image_search', list_id=list_id))
-     
-#     images = fetch_from_flickr(query)
-#     return render_template('image_response.html', images=images, list_id=list_id, search_performed=True)
 
 @image_routes.route('/image_response/<int:list_id>', methods=['GET'])
 def image_response(list_id):
@@ -141,25 +101,6 @@ def edit_image(list_id, image_id):
 
     return render_template('edit_image.html', image=image, fields=fields, field_values=field_values, list_id=list_id, image_id=image_id)
 
-# @image_routes.route('/save_image/<int:list_id>', methods=['POST'])
-# def save_image(list_id):
-#     data = request.json
-#     image_url = data['imageUrl']
-#     image_name = data['imageName']
-
-#     # Logic to save image_url and image_name to database
-#     try:
-#         new_image = Image(list_id=list_id, image_url=image_url, name=image_name)
-#         db.session.add(new_image)
-#         db.session.commit()
-#     except Exception as e:
-#         return jsonify(success=False, error=str(e)), 500
-
-
-#     flash("Image saved successfully!")
-
-#     return jsonify(success=True)
-
 @image_routes.route('/save_image/<int:list_id>', methods=['POST'])
 def save_image(list_id):
     data = request.json
@@ -194,72 +135,6 @@ def edit_fields_get(list_id):
     fields = Field.query.filter_by(list_id=list_id).order_by(Field.name).all()
 
     return render_template('edit_fields.html', list_id=list_id, fields=fields)
-
-# @image_routes.route('/edit_fields/<int:list_id>', methods=['POST'])
-# def edit_fields_post(list_id):
-#     print('request.form: ', request.form)
-#     field_names = request.form.getlist('field_names[]')
-#     field_types = request.form.getlist('field_types[]')
-    
-#     if len(field_names) != len(field_types):
-#         print("Mismatch between field names and field types count.")
-#         return "Error processing form", 400
-
-#     for name, field_type in zip(field_names, field_types):
-#         if name and field_type:  # Only save if both name and type are present
-#             new_field = Field(name=name, type=field_type, list_id=list_id)
-#             db.session.add(new_field)
-
-#     try:
-#         db.session.commit()
-#     except Exception as e:
-#         db.session.rollback()
-#         print("Error during database commit: ", str(e))
-#         return "Failed to update database", 500
-
-#     return redirect(url_for('list_routes.list_details', list_id=list_id))
-
-# @image_routes.route('/edit_fields/<int:list_id>', methods=['POST'])
-# def edit_fields_post(list_id):
-#     print('request.form: ', request.form)
-#     fields_data = {}
-
-#     # Iterate over all the keys in the form data
-#     for key in request.form.keys():
-#         match_name = re.match(r'field_name_(\d+)', key)
-#         match_type = re.match(r'field_type_(\d+)', key)
-
-#         if match_name:
-#             field_id = int(match_name.group(1))
-#             fields_data.setdefault(field_id, {})['name'] = request.form[key]
-
-#         elif match_type:
-#             field_id = int(match_type.group(1))
-#             fields_data.setdefault(field_id, {})['type'] = request.form[key]
-
-#     # Now, iterate over the extracted fields data and save to the database
-#     for field_id, field_data in fields_data.items():
-#         name = field_data.get('name')
-#         field_type = field_data.get('type')
-
-#         if name and field_type:  # Only process if both name and type are present
-#             existing_field = Field.query.filter_by(id=field_id, list_id=list_id).first()
-            
-#             if existing_field:  # Field exists, so update it
-#                 existing_field.name = name
-#                 existing_field.type = field_type
-#             else:  # Field does not exist, so create it
-#                 new_field = Field(name=name, type=field_type, list_id=list_id)
-#                 db.session.add(new_field)
-
-#     try:
-#         db.session.commit()
-#     except Exception as e:
-#         db.session.rollback()
-#         print("Error during database commit: ", str(e))
-#         return "Failed to update database", 500
-
-#     return redirect(url_for('list_routes.list_details', list_id=list_id))
 
 @image_routes.route('/edit_fields/<int:list_id>', methods=['POST'])
 def edit_fields_post(list_id):
@@ -318,8 +193,13 @@ def edit_fields_post(list_id):
     except Exception as e:
         db.session.rollback()
         print("Error during database commit: ", str(e))
-        return "Failed to update database", 500
+        # Return a failure response if there's an exception
+        # return jsonify({'success': False, 'message': 'Failed to update database'})
+        flash('Failed to update database!')
+        return redirect(url_for('list_routes.list_details', list_id=list_id))
 
+    # If everything goes well, return a success response
+    flash('Fields edited successfully!')
     return redirect(url_for('list_routes.list_details', list_id=list_id))
 
 @image_routes.route('/update_image/<int:image_id>', methods=['GET', 'POST'])
@@ -402,27 +282,6 @@ def save_edits(list_id, image_id):
     
     return redirect(url_for('list_routes.list_details', list_id=list_id))
 
-# Delete an Image 
-# @image_routes.route('/delete_image/<int:list_id>/<int:image_id>', methods=['GET'])
-# @login_required
-# def delete_image(list_id, image_id):
-#     image = Image.query.get_or_404(image_id)
-
-#     # Delete associated field data for the image
-#     FieldData.query.filter_by(image_id=image_id).delete()
-
-#     # Delete the image itself
-#     db.session.delete(image)
-    
-#     try:
-#         db.session.commit()
-#         flash('Image deleted successfully!')
-#     except Exception as e:
-#         db.session.rollback()
-#         flash(f"Error deleting image: {str(e)}", "error")
-
-#     return redirect(url_for('list_routes.list_details', list_id=list_id))
-
 @image_routes.route('/delete_image/<int:list_id>/<int:image_id>', methods=['GET'])
 @login_required
 def delete_image(list_id, image_id):
@@ -484,3 +343,13 @@ def update_image_positions():
     except Exception as e:
         db.session.rollback()
         return jsonify(success=False, error=str(e)), 500
+
+# View full image 
+@image_routes.route('/view_full_image/<int:image_id>')
+def view_full_image(image_id):
+    image = Image.query.get(image_id)
+    if not image:
+        flash('Image not found!')
+        return redirect(url_for('list_routes.list_details'))
+
+    return render_template('full_image.html', image=image)

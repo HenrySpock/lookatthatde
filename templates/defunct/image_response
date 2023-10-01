@@ -1,0 +1,38 @@
+{% extends base.html %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/image_response.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+
+<input type="hidden" id="list_id" value="{{ list_id }}">
+
+<div class="container">
+    <button onclick="location.href='{{ url_for('image_routes.image_search', list_id=list_id) }}'">Search Again?</button>
+
+    <h2>Images from Flickr</h2>
+    <input type="hidden" id="selectedImageUrl">
+    <div class="image-grid">
+        {% for image in images %}
+            <div class="image-container">
+                <img src="{{ image.url }}" alt="{{ image.title }}"> 
+                {#<button onclick="chooseImage('{{ image.url }}', {{ list_id }});">Choose This Image</button>#}
+                <button onclick="chooseImageFromList('{{ image.url }}', {{ list_id }});">Choose This Image</button>
+
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Image Name Modal -->
+    <div id="imageNameModal" class="modal">
+    <input type="hidden" id="csrf_token" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Provide a name for the image:</p>
+            <input type="text" id="imageName" placeholder="Image Name">
+            {#<button onclick="saveImageUrlWithName(event)">Save</button>#}
+            <button onclick="saveSelectedImageUrlWithName(event)">Save</button>
+        </div>
+    </div>
+
+    <!-- <script src="{{ url_for('static', filename='js/image_response.js') }}"></script>     -->
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>    
+{% endblock %} 

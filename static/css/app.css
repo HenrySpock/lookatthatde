@@ -1,17 +1,21 @@
 /* Set a minimum height for the main content to push the footer down */
 .main-content {
-  min-height: calc(100vh - 60px); /* Adjust the value (60px) to match your footer height */
-  padding-bottom: 60px; /* Match this value to your footer height */
-}
+  min-height: calc(100vh - 60px);  
+  padding-bottom: 60px;  
+  flex: 1;
+  padding: 20px;
+ 
+  text-align: center;
+  padding: 50px 0;
+  background: #f7f8fa; /* soft neutral background */
 
-/* Style your footer */
-.sticky-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: #f5f5f5; /* Adjust the background color as needed */
-  padding: 10px 0; /* Add padding to your footer as needed */
-  text-align: center; /* Center the content in the footer */
+}
+ 
+/* Heading enhancements */
+.main-content h1 {
+  font-size: 2.5em;
+  font-weight: 300;
+  margin-bottom: 20px;
 }
 
 /* image_response  */
@@ -21,10 +25,89 @@
   gap: 16px;
   justify-content: center;
 }
-.image-container img {
+
+.custom-container {
+  max-width: 90%;  /* or whatever width you desire, such as 1200px, etc. */
+  margin: 0 auto; /* center the container */
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* .image-container img {
   max-width: 100%;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 8px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+} */
+
+/* Making the image container square */
+.image-container {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* Gives the square aspect ratio */
 }
+
+/* Making the image maintain its aspect ratio and fit within its container */
+.contained-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; 
+}
+
+body, html {
+  height: 100%;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+.nbsfooter {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #f5f5f5; /* Adjust the background color as needed */
+  padding: 5px 0; /* Add padding to your footer as needed */
+  text-align: center; /* Center the content in the footer */
+  font-size: 12px; 
+}
+ 
+.reposition-arrow {
+  display: none;
+  cursor: pointer;
+  font-size: 1.5em; 
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.left-arrow {
+  left: -10px; 
+}
+
+.right-arrow {
+  right: -10px;
+}
+
+
+#editing-buttons > button, 
+#editing-buttons > form > input[type="submit"], 
+#editing-buttons > .mb-3 > a {
+    margin-right: 10px; /* Add spacing between buttons */
+}
+
+#editing-buttons > form {
+    display: inline-block; /* Display form inline so its child input doesn't break the row */
+    margin-right: 10px;
+}
+

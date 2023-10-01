@@ -6,37 +6,43 @@
 
 <input type="hidden" id="list_id" value="{{ list_id }}">
 
-<div class="container">
-    <button onclick="location.href='{{ url_for('image_routes.image_search', list_id=list_id) }}'">Search Again?</button>
+<div class="container mt-3">
+    <button class="btn btn-primary mb-3" onclick="location.href='{{ url_for('image_routes.image_search', list_id=list_id) }}'">Search Again?</button>
 
     <h2>Images from Flickr</h2>
     <input type="hidden" id="selectedImageUrl">
-    <div class="image-grid">
+    <div class="row">
         {% for image in images %}
-            <div class="image-container">
-                <img src="{{ image.url }}" alt="{{ image.title }}"> 
-                {#<button onclick="chooseImage('{{ image.url }}', {{ list_id }});">Choose This Image</button>#}
-                <button onclick="chooseImageFromList('{{ image.url }}', {{ list_id }});">Choose This Image</button>
+            <div class="col-md-3 col-sm-6 mb-4">
+                <div class="card">
+                    <div class="card-img-top image-container">
+                        <img src="{{ image.url }}" class="contained-img" alt="{{ image.title }}" onerror="this.src='/static/images/not_found.jpg'; this.alt=`Image Unavailable. It happens. We're sorry.`;">
 
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-primary btn-sm btn-block" onclick="chooseImageFromList('{{ image.url }}', {{ list_id }});">Choose This Image</button>
+                    </div>
+                </div>
             </div>
         {% endfor %}
     </div>
 
     <!-- Image Name Modal -->
     <div id="imageNameModal" class="modal">
-    <input type="hidden" id="csrf_token" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" id="csrf_token" name="csrf_token" value="{{ csrf_token() }}">
         <div class="modal-content">
             <span class="close">&times;</span>
             <p>Provide a name for the image:</p>
             <input type="text" id="imageName" placeholder="Image Name">
-            {#<button onclick="saveImageUrlWithName(event)">Save</button>#}
-            <button onclick="saveSelectedImageUrlWithName(event)">Save</button>
+            <button onclick="saveSelectedImageUrlWithName(event)" class="btn btn-primary mt-2">Save</button>
         </div>
     </div>
 
-    <!-- <script src="{{ url_for('static', filename='js/image_response.js') }}"></script>     -->
     <script src="{{ url_for('static', filename='js/modal.js') }}"></script>    
 {% endblock %}
+
+
+
 
 
  

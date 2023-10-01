@@ -100,3 +100,43 @@ function deleteField(fieldId) {
       fieldContainer.appendChild(hiddenInput);
   }
 }
+
+
+// function submitFieldsForm() {
+//   let form = document.getElementById('dynamicFieldsForm');
+//   let formData = new FormData(document.getElementById('dynamicFieldsForm'));
+
+// // Now, make the fetch POST request
+// fetch('/edit_fields/' + listId, {
+//   method: 'POST',
+//   headers: {
+//       'X-CSRFToken': csrfToken
+//   },
+//   body: formData
+// })
+// .then(response => response.json())
+// .then(data => {
+//   if (data.success) {
+//       // Show the success message as a flash message
+//       // Assuming you have some flash message mechanism in place (like a function named `showFlashMessage`)
+//       showFlashMessage(data.message, "success"); // if there's no such function, you can replace this with alert(data.message) or any other mechanism to show the message
+
+//       // Redirect to list_details
+//       window.location.href = `/list_details/${listId}`; // adjust the path if it's different
+//   } else {
+//       // Handle error
+//       alert(data.message || "An error occurred.");
+//   }
+// })
+// .catch(error => {
+//   // Handle fetch errors
+//   console.error("Fetch error: ", error);
+//   alert("An unexpected error occurred.");
+// });
+// }
+
+// // Attach the submitFieldsForm function to the form's submit event
+// document.getElementById('dynamicFieldsForm').addEventListener('submit', function(event) {
+//   event.preventDefault();
+//   submitFieldsForm();
+// });

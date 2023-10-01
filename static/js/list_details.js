@@ -96,13 +96,21 @@ document.addEventListener("DOMContentLoaded", function() {
   
   const repositionButton = document.getElementById('reposition-btn');
 
+  const editingButtons = document.getElementById('editing-buttons');
+
   console.log("currentUserId:", currentUserId);
   console.log("listCreatorId:", listCreatorId);
 
+  // if (currentUserId === listCreatorId) {
+  //     repositionButton.style.display = ''; // Show the button
+  // } else {
+  //     repositionButton.style.display = 'none'; // Hide the button
+  // }
+
   if (currentUserId === listCreatorId) {
-      repositionButton.style.display = ''; // Show the button
+      editingButtons.style.display = ''; // Show the buttons
   } else {
-      repositionButton.style.display = 'none'; // Hide the button
+      editingButtons.style.display = 'none'; // Hide the buttons
   }
 
   // Initial positions
