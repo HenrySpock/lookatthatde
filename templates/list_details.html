@@ -1,58 +1,54 @@
 {% extends "base.html" %}
 
-{% block content %}
-<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+{% block content %} 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/list_details.css') }}"> 
 
+<input type="hidden" id="csrfToken" value="{{ csrf_token() }}">
 
+<!-- HTML part -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5"> 
+    <div id="liveToast" class="toast d-none" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body alert-success"></div>
+    </div>
+ </div>
 
 <h2>List details for:</h2>
 <h1 id="listNameDisplay">{{ image_list.name }}</h1>
 {#<h1>{{ image_list.name }}</h1>#}
 
-<div id="editing-buttons" style="display: none;">
+<div style="display: flex; justify-content: center;">
 
-    {% if image_list.category_id %} 
+    <div id="editing-buttons" style="display: none;">
 
         <input type="text" id="listNameEdit" value="{{ image_list.name }}" style="display:none;">
-        <button id="editListNameButton" data-list-id="{{ image_list.list_id }}" class="btn btn-primary" onclick="toggleListNameEdit()">Edit List Name</button>
-        <button id="saveListNameButton" class="btn btn-primary" onclick="saveListName()" style="display:none;">Save List Name?</button>
+
+        <button id="editListNameButton" class="btn btn-primary btn-bl" data-edit-url="{{ url_for('list_routes.edit_list_name', list_id=image_list.list_id) }}" onclick="editListName()">Edit List Name</button>
+
+            <button id="categoryButton" 
+                data-list-id="{{ image_list.list_id }}" 
+                data-add-url="{{ url_for('list_routes.add_category_page', list_id=image_list.list_id) }}"
+                class="btn btn-primary" 
+                onclick="toggleCategory({{ image_list.list_id }})">
+                {% if image_list.category_id %}
+                    Remove Category?
+                {% else %}
+                    Add a Category?
+                {% endif %}
+            </button>
+
+
+        <div class="mb-3" style="display: inline-block;">
+            <a href="{{ url_for('image_routes.image_search', list_id=image_list.list_id) }}" class="btn btn-primary">Add Image</a>
+        </div>
+
+        <button id="editFieldsButton" data-list-id="{{ list_id }}" class="btn btn-primary">Edit Fields</button>
         
-        <form id="updateListNameForm" method="post" action="{{ url_for('list_routes.update_list_name', list_id=image_list.list_id) }}">
-            <input type="hidden" name="new_name" value="">
-            <input type="submit" class="btn btn-primary" value="Remove Category?">
-        </form>
-
-    {% else %}
-
-    <button class="btn btn-primary" onclick="showCategoryForm()">Add a Category?</button>
-
-    <div id="categoryForm" style="display: none;">
-        <h1>Add a Category</h1>
-
-        <form method="post" action="{{ url_for('list_routes.add_category_to_list', list_id=image_list.list_id) }}">
-            Category: 
-            <select name="category_name">
-                <option value="">-- Choose existing or enter new --</option>
-                {% for category in categories %}
-                    <option value="{{ category.name }}">{{ category.name }}</option>
-                {% endfor %}
-            </select>
-            Or enter new category: <input type="text" name="new_category"><br>
-            
-            <input type="submit" class="btn btn-primary" value="Add Category">
-        </form>
+        <button id="reposition-btn" class="btn btn-primary">Reposition Images?</button>
+        <button id="save-btn" class="btn btn-primary" style="display: none;">Save Position?</button>
     </div>
-
-    {% endif %}
-
-    <div class="mb-3" style="display: inline-block;">
-        <a href="{{ url_for('image_routes.image_search', list_id=image_list.list_id) }}" class="btn btn-primary">Add Image</a>
-    </div>
-
-    <button id="editFieldsButton" data-list-id="{{ list_id }}" class="btn btn-primary">Edit Fields</button>
-    
-    <button id="reposition-btn" class="btn btn-primary">Reposition Images?</button>
-    <button id="save-btn" class="btn btn-primary" style="display: none;">Save Position?</button>
+ 
+    <!-- "Slideshow" button -->
+    <button id="slideshow-button" data-list-id="{{ list_id }}" class="btn btn-primary" style="height: 33px;">Slideshow</button>
 </div>
 
 <div class="row"> 
@@ -88,5 +84,13 @@
     {% endfor %}
 </div>
 
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  
 <script src="{{ url_for('static', filename='js/list_details.js') }}"></script>    
 {% endblock %}  
+
+
+ 

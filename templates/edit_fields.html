@@ -1,39 +1,56 @@
 {% extends "base.html" %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/image_search.css') }}"> 
+{#<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">#}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/edit_fields.css') }}"> 
 
-<button onclick="location.href='{{ url_for('list_routes.list_details', list_id=list_id) }}'">Back to List Details</button>
+<div class="container mt-4">
+    <div class="row">
+        <div class="text-center">
 
-<h2>Edit Fields for List {{ list_id }}</h2>
+            <button class="btn btn-default btn-block mb-3 more-limited-width btn-primary" onclick="location.href='{{ url_for('list_routes.list_details', list_id=list_id) }}'">Cancel</button>
 
-<form id="dynamicFieldsForm" method="post" action="{{ url_for('image_routes.edit_fields_get', list_id=list_id) }}">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <!-- Hidden input for list_id -->
-    <input type="hidden" name="list_id" value="{{ list_id }}">
+            <h1 class="mb-4">Edit Fields for List {{ list_id }}</h1>
+            <input type="hidden" id="list_id" value="{{ list_id }}">
 
-    <!-- Existing fields rendered here -->
-    {% for field in fields %}
-    <div class="field-container" data-field-id="{{ field.id }}"> 
-        <!-- Field Name -->
-        <input type="text" name="field_name_{{ field.id }}" value="{{ field.name }}" required>
+            <form id="dynamicFieldsForm" method="post" action="{{ url_for('list_routes.edit_fields_post', list_id=list_id) }}">
+                <input type="hidden" name="csrf_token" id="csrfToken" value="{{ csrf_token() }}">
+                <input type="hidden" name="list_id" value="{{ list_id }}">
 
-        <!-- Radio buttons for data type -->
-        <label><input type="radio" name="field_type_{{ field.id }}" value="text" {% if field.type == 'text' %} checked {% endif %}> Text</label>
-        <label><input type="radio" name="field_type_{{ field.id }}" value="number" {% if field.type == 'number' %} checked {% endif %}> Number</label>
-        
-        <!-- Delete button for the field -->
-        <button type="button" onclick="deleteField({{ field.id }})">Delete this Field?</button>
+                <!-- Existing fields rendered here -->
+                {% for field in fields %}
+                <div class="field-container row mt-2" data-field-id="{{ field.id }}">
+                    <!-- Field Name Column (5 out of 12 grid columns) -->
+                    <div class="col-md-5">
+                        <input type="text" class="form-control limited-width" name="field_name_{{ field.id }}" value="{{ field.name }}" required>
+                    </div>
+                    
+                    <!-- Radio buttons for data type Column (4 out of 12 grid columns) -->
+                    <div class="col-md-2">
+                        <label class="radio-spacing"><input type="radio" name="field_type_{{ field.id }}" value="text" {% if field.type == 'text' %} checked {% endif %}> Text</label>
+                        <label><input type="radio" name="field_type_{{ field.id }}" value="number" {% if field.type == 'number' %} checked {% endif %}> Number</label>
+                    </div>
+                
+                    <!-- Delete button Column (3 out of 12 grid columns) -->
+                    <div class="col-md-5">
+                        <button type="button" class="btn btn-danger btn-block limited-width" onclick="deleteField({{ field.id }})">Delete This Field</button>
+                    </div>
+                </div>
+                {% endfor %}
+               
+
+                <!-- Container where new fields will be appended -->
+                <div id="fieldsContainer"></div>
+
+                <!-- Button to add a new field -->
+                <button type="button" class="btn btn-primary btn-block more-limited-width mt-2" id="addFieldBtn">Add Field</button>
+                <input type="submit" class="btn btn-success btn-block more-limited-width mt-2" value="Save Fields">
+            </form>
+
+        </div>
     </div>
-    {% endfor %}
+</div>
 
-    <!-- Container where new fields will be appended -->
-    <div id="fieldsContainer"></div>
-
-    <!-- Button to add a new field -->
-    <button type="button" id="addFieldBtn">Add Field?</button>
-    <input type="submit" value="Save Fields">
-</form>
-
-<script src="{{ url_for('static', filename='js/edit_fields.js') }}"></script>    
-
+<script src="{{ url_for('static', filename='js/edit_fields.js') }}"></script>
 {% endblock %}

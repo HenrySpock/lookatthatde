@@ -1,0 +1,9 @@
+.limited-width {
+  max-width: 50%; 
+  margin: 0 auto 10px;
+}
+
+.more-limited-width {
+  max-width: 25%; 
+  margin: 0 auto 10px;
+}

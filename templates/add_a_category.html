@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="categoryForm">
+    <input type="hidden" id="csrfToken" name="csrf_token" value="{{ csrf_token() }}">
+
+    <h1>Add a Category</h1>
+
+    <form id="addCategoryForm" method="post" action="{{ url_for('list_routes.add_category_to_list', list_id=image_list.list_id) }}">
+        Category: 
+        <select name="category_name">
+            <option value="">-- Choose existing or enter new --</option>
+            {% for category in categories %}
+                <option value="{{ category.name }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        Or enter new category: <input type="text" name="new_category"><br>
+        <button type="button" class="btn btn-primary" onclick="cancelCategoryForm()">Cancel</button>
+        <button type="submit" id="saveButton" class="btn btn-primary">Save Category?</button>
+    </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/edit_categories.js') }}"></script>    
+{% endblock %} 

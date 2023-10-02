@@ -22,7 +22,7 @@
         <span class="close" onclick="closeReportModal()">&times;</span>
         <h2>Report Issue</h2> 
         <form id="reportForm" action="{{ url_for('user_routes.report') }}" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="csrf_token" id="csrfToken" value="{{ csrf_token() }}">
             <input type="hidden" id="reportListId" name="reportListId">  
             <input type="hidden" id="reportCreatorId" name="reportCreatorId">
 

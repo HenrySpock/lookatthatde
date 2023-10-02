@@ -4,7 +4,7 @@
 <h1>Hello from create_list!</h1>
 
 <form method="post">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="csrf_token" id="csrfToken" value="{{ csrf_token() }}">
     List Name: <input type="text" name="list_name"><br>
 
     {% if current_user.is_admin %}

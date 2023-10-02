@@ -1,81 +1,22 @@
+// Handle 'Edit List Name' button 
+function editListName() {
+    const editButton = document.getElementById('editListNameButton');
+    const editUrl = editButton.getAttribute('data-edit-url');
+    window.location.href = editUrl;
+}
+
 // Handle 'Edit Fields' button 
 document.getElementById('editFieldsButton').addEventListener('click', function() {
-  var listId = this.getAttribute('data-list-id');
-  var url = '/images/edit_fields/' + listId;
-  console.log("Redirecting to:", url);
-  window.location.href = url;
-});
-
-// Handle 'Edit This Image' button 
-document.querySelectorAll('.editImageButton').forEach(function(button) {
-  button.addEventListener('click', function() {
-    var listId = this.getAttribute('data-list-id');
-    var imageId = this.getAttribute('data-image-id');
-    var imageUrl = this.getAttribute('data-image-url');
-    var url = '/images/edit_image/' + listId + '/' + imageId + '?selected_image_url=' + imageUrl;
-    console.log("Button clicked. Redirecting to:", url);
+    let listId = this.getAttribute('data-list-id');
+    console.log('list id for edit fields: ', listId);
+    let url = '/lists/edit_fields_get/' + listId;
+    console.log("Redirecting to:", url);
     window.location.href = url;
   });
-});
 
-// Handle "Add a category?" button 
-function showCategoryForm() {
-  const formDiv = document.getElementById("categoryForm");
-  formDiv.style.display = "block";
-}
 
-// Update List Name  
-    function toggleListNameEdit() {
-        let listNameDisplay = document.getElementById('listNameDisplay');
-        let listNameEdit = document.getElementById('listNameEdit');
-        let editButton = document.getElementById('editListNameButton');
-        let saveButton = document.getElementById('saveListNameButton');
 
-        listNameDisplay.style.display = 'none';
-        listNameEdit.style.display = 'block';
-        editButton.style.display = 'none';
-        saveButton.style.display = 'block';
-    }
-
-function saveListName() {
-  console.log('Editing')
-  var listNameEdit = document.getElementById('listNameEdit');
-  var newName = listNameEdit.value;
-  var form = document.getElementById('updateListNameForm'); // Add an ID to the form
-
-  // Set the input field value to the new name
-  form.querySelector('input[name="new_name"]').value = newName;
-
-  // Submit the form via AJAX
-  fetch(form.action, {
-      method: 'POST',
-      body: new FormData(form),
-  })
-  .then(response => response.json())
-  .then(data => {
-      if (data.success) {
-          // Update the displayed name on the page
-          document.getElementById('listNameDisplay').innerText = newName;
-          document.getElementById('listNameDisplay').style.display = 'block';
-
-          // Hide the input field and "Save List Name" button
-          listNameEdit.style.display = 'none';
-          document.getElementById('saveListNameButton').style.display = 'none';
-
-          // Show the "Edit List Name" button
-          document.getElementById('editListNameButton').style.display = 'block';
-      } else {
-          // Handle any error here, maybe display a message to the user.
-          console.error("Failed to update the list name.");
-      }
-  })
-  .catch(error => {
-      // This catch block will handle any error thrown in the above then blocks.
-      console.error("An error occurred:", error.message);
-  });
-}
-
-// ****
+// **************************
 // Positioning image with arrows.
 function swapElements(elm1, elm2) {
   console.log('swap called')
@@ -186,7 +127,8 @@ document.addEventListener("DOMContentLoaded", function() {
           return;
       }
 
-      let csrfToken = document.querySelector('input[name="csrf_token"]').value;
+    //   let csrfToken = document.querySelector('input[name="csrf_token"]').value;
+      const csrfToken = document.getElementById("csrfToken").value;
 
       fetch('/images/update_image_positions', {
           method: 'POST',
@@ -273,4 +215,160 @@ document.addEventListener("DOMContentLoaded", function() {
       repositionButton.style.display = '';
   });
 
+});
+
+
+// // Handle remove category button if it exists: 
+// document.addEventListener("DOMContentLoaded", function() {
+//     const removeCategoryButton = document.getElementById("removeCategory");
+
+//     if (removeCategoryButton) {
+//         removeCategoryButton.addEventListener('click', function() {
+//             const listId = removeCategoryButton.getAttribute("data-list-id");
+//             removeCategory(listId);
+//         });
+//     }
+// });
+
+// function removeCategory(listId) {
+//     const csrfToken = document.getElementById("csrfToken").value;
+//     console.log('csrf token: ', csrfToken);
+//     fetch(`/lists/remove_category/${listId}`, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             // Add CSRF token header if needed
+//             'X-CSRFToken': csrfToken,
+//         },
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         if (data.status === "success") {
+//             alert(data.message);
+//             removeCategoryButton.style.display = 'none';
+//             // Optionally, you can also show the "Add a Category?" button here.
+//         } else {
+//             alert(data.message);
+//         }
+//     })
+//     .catch(error => {
+//         console.error("Error:", error.message);
+//     });
+// }
+
+// function removeCategory(listId) {
+//     const csrfToken = document.getElementById("csrfToken").value;
+//     fetch(`/lists/remove_category/${listId}`, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'X-CSRFToken': csrfToken,
+//         },
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         if (data.status === "success") {
+//             alert(data.message);
+//             // Hide 'Remove Category?' button
+//             document.getElementById("removeCategory").style.display = 'none';
+//             // Show 'Add a Category?' button
+//             document.getElementById("addCategory").style.display = 'block';
+//         } else {
+//             alert(data.message);
+//         }
+//     })
+//     .catch(error => {
+//         console.error("Error:", error.message);
+//     });
+// }
+
+function toggleCategory(listId) {
+    const csrfToken = document.getElementById("csrfToken").value;
+    const button = document.getElementById("categoryButton");
+    const addCategoryUrl = button.getAttribute("data-add-url");
+
+    if (button.innerText === "Remove Category?") {
+        fetch(`/lists/remove_category/${listId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                // Change button to 'Add a Category?'
+                button.innerText = 'Add a Category?';
+                button.onclick = function() { location.href = addCategoryUrl; };
+                showToast(data.message);
+            } else {
+                // alert(data.message);
+                showToast("Error: " + data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error.message);
+        });
+    } else {
+        // If the button says 'Add a Category?', redirect to the add category page.
+        location.href = addCategoryUrl;
+    }
+}
+ 
+ 
+
+// // Showing toast for remove category not causing a redirect:
+// function showToast(message) {
+//     const toastEl = document.getElementById('liveToast');
+//     const toastBody = toastEl.querySelector('.toast-body');
+//     toastBody.textContent = message;
+//     const toast = new bootstrap.Toast(toastEl);
+//     toast.show();
+//  }
+ 
+ // Function to show the toast
+function showToast(message) {
+    const toast = document.getElementById("liveToast");
+    const toastBody = toast.querySelector(".toast-body");
+
+    // Set the toast message
+    toastBody.textContent = message;
+
+    // Show the toast by adding the "show" class
+    toast.classList.add("show");
+
+    // Check if the toast is displayed
+    if (toast.classList.contains("show")) {
+        // Add padding to the toast-body when it's displayed
+        toastBody.style.padding = "15px";
+    }
+
+    // Automatically hide the toast after a certain time
+    setTimeout(function () {
+        hideToast();
+    }, 5000); // Adjust the time as needed
+}
+
+// Function to hide the toast
+function hideToast() {
+    const toast = document.getElementById("liveToast");
+
+    // Hide the toast by removing the "show" class
+    toast.classList.remove("show");
+}
+
+
+// Going to the carousel
+// JavaScript function to navigate to the carousel page with list_id
+function goToCarousel(list_id) {
+    const url = `/lists/carousel/${list_id}`; // Construct the URL
+    window.location.href = url; // Redirect to the carousel page
+}
+
+// Add a click event listener to the slideshow button
+const slideshowButton = document.getElementById('slideshow-button');
+slideshowButton.addEventListener('click', function() {
+    const list_id = this.getAttribute('data-list-id');
+    goToCarousel(list_id); // Call the function with the list_id
 });

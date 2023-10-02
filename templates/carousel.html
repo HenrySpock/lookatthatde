@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}  
+<link rel="stylesheet" href="{{ url_for('static', filename='css/carousel.css') }}"> 
+
+<h1>HEY!</h1>
+
+<div class="container">
+
+  <!-- Start Slideshow Button -->
+  {#<a href="{{ url_for('list_routes.slideshow', list_id=list_id) }}" class="btn btn-primary">Start Slideshow</a>#}
+  {#<a href="{{ url_for('list_routes.slideshow', list_id=list_id) }}" id="startSlideshow" class="btn btn-primary">Start Slideshow</a>#}
+  {#<a id="startSlideshow" href="{{ url_for('list_routes.slideshow', list_id=list_id) }}" class="btn btn-primary" onclick="event.preventDefault(); startSlideshowAndNavigate();">Start Slideshow</a>#}
+  <a href="{{ url_for('list_routes.slideshow', list_id=list_id) }}" id="startSlideshow" class="btn btn-primary">Start Slideshow</a>
+
+  <!-- Slideshow container -->
+  <div class="slideshow-container">
+      {% for image in images %}
+      <!-- Slides -->
+      <div class="mySlides fade">
+          <img src="{{ image.image_url }}" style="width:100%">
+          <div class="text">{{ image.name }}</div>
+      </div>
+      {% endfor %}
+
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  
+<script src="{{ url_for('static', filename='js/carousel.js') }}"></script>    
+{% endblock %}  
+
+
+ 

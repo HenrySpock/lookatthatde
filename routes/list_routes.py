@@ -3,6 +3,7 @@ from flask_login import logout_user, login_user, current_user, login_required
 from forms import RegistrationForm, LoginForm, EditProfileForm, ChangePasswordForm, SupportForm
 from models import ImageList, Image, ListCategory, db, Field, FieldData, ImagePosition
 from flask_cors import CORS 
+import re
 
 list_routes = Blueprint('list_routes', __name__)
 
@@ -126,6 +127,22 @@ def create_list():
 # Category Routes:
 
 #Removing a category from a list
+# @list_routes.route("/remove_category/<int:list_id>", methods=["POST"])
+# @login_required
+# def remove_category(list_id):
+#     """ Remove category_id from a list """
+#     image_list = ImageList.query.get_or_404(list_id)
+    
+#     # Ensure that only the creator can remove the category
+#     if image_list.creator_id != current_user.id:
+#         flash('You do not have permission to modify this list.', 'danger')
+#         return redirect(url_for('list_routes.list_details', list_id=list_id))
+
+#     image_list.category_id = None  # remove the category
+#     db.session.commit()
+#     flash('Category removed successfully!', 'success')
+#     return redirect(url_for('list_routes.list_details', list_id=list_id))
+
 @list_routes.route("/remove_category/<int:list_id>", methods=["POST"])
 @login_required
 def remove_category(list_id):
@@ -134,20 +151,33 @@ def remove_category(list_id):
     
     # Ensure that only the creator can remove the category
     if image_list.creator_id != current_user.id:
-        flash('You do not have permission to modify this list.', 'danger')
-        return redirect(url_for('list_routes.list_details', list_id=list_id))
+        # flash('You do not have permission to modify this list.', 'danger') # You can uncomment this if you plan to use flash messages elsewhere.
+        return jsonify({"status": "error", "message": 'You do not have permission to modify this list.'})
 
     image_list.category_id = None  # remove the category
     db.session.commit()
-    flash('Category removed successfully!', 'success')
-    return redirect(url_for('list_routes.list_details', list_id=list_id))
+    # flash('Category removed successfully!', 'success') # You can uncomment this if you plan to use flash messages elsewhere.
+    return jsonify({"status": "success", "message": 'Category removed successfully!'})
+
+# Navigate to add_a_category page.
+@list_routes.route('/add_a_category/<list_id>', methods=['GET'])
+def add_category_page(list_id):
+    image_list = ImageList.query.get_or_404(list_id)  # This is a hypothetical function, replace with your actual function that retrieves the image list by ID.
+    print('from list details - image_list.list_id: ', image_list.list_id)
+    if not list_id or list_id == "undefined":
+    # Handle the error, maybe redirect to a 404 page or to the home page with an error message
+        return redirect(url_for('home'))
+    if not image_list:
+        abort(404)
+    categories = ListCategory.query.all()           # Again, replace with your actual function that retrieves all categories.
+    return render_template('add_a_category.html', image_list=image_list, categories=categories)
 
 #Adding a category to a list after creation:
 @list_routes.route('/<int:list_id>/add_category', methods=['GET', 'POST'])
 @login_required
 def add_category_to_list(list_id):
     image_list = ImageList.query.get_or_404(list_id)  # Assuming ImageList is your model for lists
-
+    print('from add_a_category - image_list.list_id: ', image_list.list_id)
     if request.method == 'POST':
         category_name = request.form.get('category_name')
         if category_name:
@@ -157,12 +187,17 @@ def add_category_to_list(list_id):
                 image_list.category_id = category.category_id # Linking the list to the category
                 db.session.commit()  # Save the changes. Ensure you've imported db from your app.
                 flash(f'Category "{category_name}" added to the list!', 'success')
-                return redirect(url_for('list_routes.list_details', list_id=list_id))
+            #     return redirect(url_for('list_routes.list_details', list_id=list_id))
+            # else:
+            #     flash(f'Error creating category "{category_name}".', 'danger')
+
+                return jsonify({ "status": "success", "message": f'Category "{category_name}" added to the list!', "redirect_url": url_for('list_routes.list_details', list_id=list_id) })
             else:
-                flash(f'Error creating category "{category_name}".', 'danger')
+                return jsonify({"status": "error", "message": f'Error creating category "{category_name}".'})
 
     categories = Category.query.all()
     return render_template('list_details.html', categories=categories, image_list=image_list)  
+
 
 @list_routes.route('/delete_list/<int:list_id>', methods=['GET', 'POST'])
 @login_required
@@ -185,6 +220,11 @@ def delete_list(list_id):
 
     return redirect(url_for('list_routes.go_to_lists'))
 
+#edit_list_name route:
+@list_routes.route('/edit_list_name/<int:list_id>', methods=['GET'])
+def edit_list_name(list_id):
+    # Your logic here (if any)
+    return render_template('edit_list_name.html', list_id=list_id)
 
 #Update List name: 
 @list_routes.route('/update_list_name/<int:list_id>', methods=['POST'])
@@ -192,7 +232,7 @@ def update_list_name(list_id):
     print('Trying to save list name')
     try:
         # Get the new name from the form data
-        new_name = request.form.get('new_name')
+        new_name = request.form.get('list_name')
 
         # Fetch the list
         image_list = ImageList.query.get(list_id)
@@ -209,3 +249,90 @@ def update_list_name(list_id):
         print(str(e))
         return jsonify(success=False, message="An error occurred"), 500
 
+# Handle editing fields. 
+@list_routes.route('/edit_fields_get/<int:list_id>', methods=['GET'])
+def edit_fields_get(list_id):
+    # Fetch the custom fields for the list
+    # fields = Field.query.filter_by(list_id=list_id).all()
+    fields = Field.query.filter_by(list_id=list_id).order_by(Field.name).all()
+
+    return render_template('edit_fields.html', list_id=list_id, fields=fields)
+
+@list_routes.route('/edit_fields/<int:list_id>', methods=['POST'])
+def edit_fields_post(list_id):
+    print('request.form: ', request.form)
+    fields_data = {}
+
+    # Iterate over all the keys in the form data
+    for key in request.form.keys():
+        match_name = re.match(r'field_name_(\d+)', key)
+        match_type = re.match(r'field_type_(\d+)', key)
+
+        if match_name:
+            field_id = int(match_name.group(1))
+            fields_data.setdefault(field_id, {})['name'] = request.form[key]
+
+        elif match_type:
+            field_id = int(match_type.group(1))
+            fields_data.setdefault(field_id, {})['type'] = request.form[key]
+
+    # Now, iterate over the extracted fields data and save to the database
+    for field_id, field_data in fields_data.items():
+        name = field_data.get('name')
+        field_type = field_data.get('type')
+
+        # Check if the name is not blank and both name and type are present
+        if name and name.strip() and field_type:
+            existing_field = Field.query.filter_by(id=field_id, list_id=list_id).first()
+            
+            if existing_field:  # Field exists, so update it
+                existing_field.name = name
+                existing_field.type = field_type
+            else:  # Field does not exist, so create it
+                new_field = Field(name=name, type=field_type, list_id=list_id)
+                db.session.add(new_field)
+
+    # Handle new fields
+    new_field_names = request.form.getlist('field_names[]')
+    new_field_types = request.form.getlist('field_types[]')
+
+    for name, field_type in zip(new_field_names, new_field_types):
+        # Check if the name is not blank
+        if name and name.strip():
+            new_field = Field(name=name, type=field_type, list_id=list_id)
+            db.session.add(new_field)
+
+    # Handle deletion of fields
+    delete_field_ids = request.form.getlist('delete_field_ids[]')
+    print("IDs to delete:", delete_field_ids)
+    for delete_id in delete_field_ids:
+        field_to_delete = Field.query.get(delete_id)
+        if field_to_delete:
+            db.session.delete(field_to_delete)
+
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print("Error during database commit: ", str(e))
+        # Return a failure response if there's an exception
+        # return jsonify({'success': False, 'message': 'Failed to update database'})
+        flash('Failed to update database!')
+        return redirect(url_for('list_routes.list_details', list_id=list_id))
+
+    # If everything goes well, return a success response
+    flash('Fields edited successfully!')
+    return redirect(url_for('list_routes.list_details', list_id=list_id))
+
+# Going to the slideshow
+@list_routes.route('/carousel/<int:list_id>')
+def carousel(list_id):
+    # Pass the list_id to the carousel.html template
+    return render_template('carousel.html', list_id=list_id)
+
+@list_routes.route('/slideshow/<int:list_id>')
+def slideshow(list_id):
+    # Fetch images based on list_id (you will need to write your SQLAlchemy query)
+    images = Image.query.filter_by(list_id=list_id).all()
+    print('images: ', images)
+    return render_template('carousel.html', images=images, list_id=list_id)
