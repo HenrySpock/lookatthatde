@@ -1,4 +1,5 @@
-{% extends "base.html" %}
+{#
+    {% extends "base.html" %}
 
 {% block content %}
 <h1>Hello from create_list!</h1>
@@ -28,5 +29,69 @@
 </form>
 
 {% endblock %}
+#}
 
- 
+
+
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3"></div>  <!-- This is a spacer -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Create a List</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <input type="hidden" name="csrf_token" id="csrfToken" value="{{ csrf_token() }}">
+
+                        <div class="form-div">
+                            <label class="form-label lead" for="list_name">List Name:</label>
+                            <input class="form-control" type="text" name="list_name">
+                        </div>
+
+                        {% if current_user.is_admin %}
+                            <div class="form-div">
+                                <label class="form-label lead">Make a core list?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="core_list" value="yes" id="yesCore">
+                                    <label class="form-check-label" for="yesCore">Yes</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="core_list" value="no" id="noCore" checked>
+                                    <label class="form-check-label" for="noCore">No</label>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="form-div">
+                            <label class="form-label lead" for="category_name">Category:</label>
+                            <select class="form-control" name="category_name">
+                                <option value="">-- Choose existing or enter new --</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.name }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-div">
+                            <label class="form-label lead" for="new_category">Or enter new category:</label>
+                            <input class="form-control" type="text" name="new_category">
+                        </div>
+
+                        <div class="mt-4">
+                            <input type="submit" value="Create" class="btn btn-primary">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3"></div>  <!-- This is another spacer -->
+    </div>
+</div>
+{% endblock %}

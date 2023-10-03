@@ -81,6 +81,7 @@ def user_profile():
 @user_routes.route('/profile/edit', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
+    print("At the start of edit_profile route")
     form = EditProfileForm()
     if form.validate_on_submit():
         print("Inside edit_profile route")

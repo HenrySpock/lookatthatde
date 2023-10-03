@@ -1,16 +1,41 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div>
-    <h2>Edit Profile</h2>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 
-    <form method="post">
-      {{ form.hidden_tag() }}
-      First Name: <input type="text" name="first_name" value="{{ current_user.first_name }}" required><br>
-      Last Name: <input type="text" name="last_name" value="{{ current_user.last_name }}" required><br>
-      Username: <input type="text" name="username" value="{{ current_user.username }}" required><br>
-      Email: <input type="email" name="email" value="{{ current_user.email }}" required><br>
-      <input type="submit" value="Update Profile" class="btn btn-warning">
-    </form>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Edit Profile</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {{ form.hidden_tag() }}
+                        <div class="form-div">
+                            <label class="form-label lead" for="first_name">First Name:</label>
+                            <input class="form-control" type="text" name="first_name" value="{{ current_user.first_name }}" required>
+                        </div>
+                        <div class="form-div">
+                            <label class="form-label lead" for="last_name">Last Name:</label>
+                            <input class="form-control" type="text" name="last_name" value="{{ current_user.last_name }}" required>
+                        </div>
+                        <div class="form-div">
+                            <label class="form-label lead" for="username">Username:</label>
+                            <input class="form-control" type="text" name="username" value="{{ current_user.username }}" required>
+                        </div>
+                        <div class="form-div">
+                            <label class="form-label lead" for="email">Email:</label>
+                            <input class="form-control" type="email" name="email" value="{{ current_user.email }}" required>
+                        </div>
+                        <input type="submit" value="Update Profile" class="btn btn-warning">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
 </div>
-{% endblock %} 
+{% endblock %}
