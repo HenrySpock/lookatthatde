@@ -31,7 +31,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kodai:ronan@localhost/look
 app.debug = True
 app.config['SECRET_KEY'] = 'IS_VERY_SECRET'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False  
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False   
 
 csrf = CSRFProtect(app)
 

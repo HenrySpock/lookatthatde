@@ -9,7 +9,7 @@ mail = Mail()
 user_routes = Blueprint('user_routes', __name__)
 
 # Register or Login a user: 
-@user_routes.route('/regLog', methods=['GET', 'POST'])
+@user_routes.route('/reg_log', methods=['GET', 'POST'])
 def reg_log():
     reg_form = RegistrationForm()
     login_form = LoginForm()
@@ -63,7 +63,7 @@ def reg_log():
     else:
         print("Form not validated:", reg_form.errors, login_form.errors)
 
-    return render_template('regLog.html', reg_form=reg_form, login_form=login_form)
+    return render_template('register_login.html', reg_form=reg_form, login_form=login_form)
 
 # Logout current user: 
 @user_routes.route('/logout')
@@ -75,7 +75,7 @@ def logout():
 @user_routes.route('/profile')
 @login_required
 def user_profile():
-    return render_template('user_profile.html', user=current_user)
+    return render_template('profile.html', user=current_user)
 
 # Update user's profile:
 @user_routes.route('/profile/edit', methods=['GET', 'POST'])
@@ -168,7 +168,7 @@ def support():
 
         return redirect(url_for('about'))
 
-    return render_template('support.html', form=form)
+    return render_template('contact_support.html', form=form)
 
 # For feedback from reports
 @user_routes.route('/report', methods=['POST'])
