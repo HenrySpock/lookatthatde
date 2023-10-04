@@ -33,19 +33,19 @@ class ImagePosition(db.Model):
     __tablename__ = 'image_position'
     
     id = db.Column(db.Integer, primary_key=True)
-    image_id = db.Column(db.Integer, db.ForeignKey('image.image_id', ondelete='CASCADE'), nullable=False)
+    # image_id = db.Column(db.Integer, db.ForeignKey('image.image_id', ondelete='CASCADE'), nullable=False)
+    image_id = db.Column(db.Integer, db.ForeignKey('image.image_id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
     list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id', ondelete='CASCADE'), nullable=False)
     position = db.Column(db.Integer, nullable=False)
 
-    # Relationships
-    image = db.relationship('Image', backref='image_positions', lazy=True, uselist=False)
+    # Relationships 
     list = db.relationship('ImageList', backref='list_image_positions', lazy=True)
 
     def __init__(self, image_id, list_id, position):
         self.image_id = image_id
         self.list_id = list_id
         self.position = position
-        
+         
 class ImageList(db.Model):
     list_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
@@ -63,8 +63,9 @@ class Image(db.Model):
     list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id'), nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
     name = db.Column(db.String(80), nullable=False)
-    field_data = db.relationship('FieldData', backref='image', lazy=True, cascade="all, delete-orphan")
-
+    field_data = db.relationship('FieldData', backref='image', lazy=True, cascade="all, delete-orphan") 
+    image_positions = db.relationship('ImagePosition', backref='image', cascade="all, delete-orphan")
+    
 class UserImage(db.Model):
     user_image_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

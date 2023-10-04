@@ -7,9 +7,9 @@
 
         <!-- Registration Form -->
         <div class="col-md-5"> <!-- Half width column for medium screens and up -->
-            <div class="card mb-4">
+            <div class="card ">
                 <div class="card-header">
-                    <h1 class="mb-4">Register</h1>
+                    <h1 class="">Register</h1>
                 </div>
                 <div class="card-body">
                     <form method="post">
@@ -17,7 +17,7 @@
                         <input type="hidden" name="form_type" value="register">
         
                         <div class="form-group">
-                            <label>{{ reg_form.first_name.label }}</label>
+                            <label>{{ reg_form.first_name.label(class="reg-text") }}</label>
                             <input type="text" name="{{ reg_form.first_name.name }}" id="reg_first_name" class="form-control">
                             {% for error in reg_form.first_name.errors %}
                                 <span class="text-danger">{{ error }}</span>
@@ -25,7 +25,7 @@
                         </div>
         
                         <div class="form-group">
-                            <label>{{ reg_form.last_name.label }}</label>
+                            <label>{{ reg_form.last_name.label(class="reg-text") }}</label>
                             <input type="text" name="{{ reg_form.last_name.name }}" id="reg_last_name" class="form-control">
                             {% for error in reg_form.last_name.errors %}
                                 <span class="text-danger">{{ error }}</span>
@@ -33,7 +33,7 @@
                         </div>
         
                         <div class="form-group">
-                            <label>{{ reg_form.username.label }}</label>
+                            <label>{{ reg_form.username.label(class="reg-text") }}</label>
                             <input type="text" name="{{ reg_form.username.name }}" id="reg_username" class="form-control">
                             {% for error in reg_form.username.errors %}
                                 <span class="text-danger">{{ error }}</span>
@@ -41,7 +41,7 @@
                         </div>
         
                         <div class="form-group">
-                            <label>{{ reg_form.email.label }}</label>
+                            <label>{{ reg_form.email.label(class="reg-text") }}</label>
                             <input type="email" name="{{ reg_form.email.name }}" id="reg_email" class="form-control">
                             {% for error in reg_form.email.errors %}
                                 <span class="text-danger">{{ error }}</span>
@@ -49,7 +49,7 @@
                         </div>
         
                         <div class="form-group">
-                            <label>{{ reg_form.password.label }}</label>
+                            <label>{{ reg_form.password.label(class="reg-text") }}</label>
                             <input type="password" name="{{ reg_form.password.name }}" id="reg_password" class="form-control">
                             {% for error in reg_form.password.errors %}
                                 <span class="text-danger">{{ error }}</span>
@@ -57,7 +57,7 @@
                         </div>
         
                         <div class="form-group">
-                            <label>{{ reg_form.confirm_password.label }}</label>
+                            <label>{{ reg_form.confirm_password.label(class="reg-text") }}</label>
                             <input type="password" name="{{ reg_form.confirm_password.name }}" id="reg_confirm_password" class="form-control">
                             {% for error in reg_form.confirm_password.errors %}
                                 <span class="text-danger">{{ error }}</span>
@@ -81,7 +81,7 @@
         <div class="col-md-5"> <!-- Half width column for medium screens and up -->
             <div class="card">
                 <div class="card-header">
-                    <h1 class="mb-4">Register and Login</h1>
+                    <h1 class="">Register and Login</h1>
                 </div>
                 <div class="card-body">
                     <form method="post"> 
@@ -89,7 +89,7 @@
                         <input type="hidden" name="form_type" value="login">
         
                         <div class="form-group">
-                            <label>{{ login_form.username_or_email.label }}</label>
+                            <label>{{ login_form.username_or_email.label(class="reg-text") }}</label>
                             <input type="text" name="{{ login_form.username_or_email.name }}" id="login_username_or_email" class="form-control">
                             {% for error in login_form.username_or_email.errors %}
                                 <span class="text-danger">{{ error }}</span>
@@ -97,7 +97,7 @@
                         </div>
         
                         <div class="form-group">
-                            <label>{{ login_form.password.label }}</label>
+                            <label>{{ login_form.password.label(class="reg-text") }}</label>
                             <input type="password" name="{{ login_form.password.name }}" id="login_password" class="form-control">
                             {% for error in login_form.password.errors %}
                                 <span class="text-danger">{{ error }}</span>

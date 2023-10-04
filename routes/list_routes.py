@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, url_for, render_template, session, flash, request, current_app, jsonify
 from flask_login import logout_user, login_user, current_user, login_required
-from forms import RegistrationForm, LoginForm, EditProfileForm, ChangePasswordForm, SupportForm
+from forms import CreateListForm, EditListNameForm
 from models import ImageList, Image, ListCategory, db, Field, FieldData, ImagePosition
 from flask_cors import CORS 
 import re
@@ -87,21 +87,61 @@ def list_details(list_id):
 
     return render_template("list_details.html", image_list=image_list, images=ordered_images_query, list_id=list_id, fields=fields, categories=categories, image_field_values=image_field_values)
 
+# @list_routes.route('/create_list', methods=['GET', 'POST'])
+# @login_required
+# def create_list():
+#     if request.method == 'POST':
+#         list_name = request.form.get('list_name')
+
+#         is_core_list = False
+#         if 'core_list' in request.form:
+#             is_core_list = request.form.get('core_list') == 'yes'
+
+#         category_name = request.form.get('category_name')  # assuming it's a dropdown with values or user input
+#         new_category_name = request.form.get('new_category')
+
+#         if new_category_name:  # Check if user has provided a new category
+#             category_name = new_category_name  # Override category_name with the new one
+
+#         category = create_or_get_category(category_name)
+
+#         # If category is None, don't set category_id, else set it to the returned category's ID
+#         category_id = None
+#         if category:
+#             category_id = category.category_id
+#             print("Assigned Category ID:", category_id)
+        
+#         image_list = ImageList(name=list_name, category_id=category_id, creator_id=current_user.id, core_list=is_core_list)
+#         db.session.add(image_list)
+#         try:
+#             db.session.commit()
+#         except Exception as e:
+#             print("Error committing to database:", e)
+
+#         flash('List created successfully!', 'success')
+#         return redirect(url_for('list_routes.go_to_lists'))
+    
+#     return render_template('create_list.html', categories=ListCategory.query.all())
+
 @list_routes.route('/create_list', methods=['GET', 'POST'])
 @login_required
 def create_list():
-    if request.method == 'POST':
-        list_name = request.form.get('list_name')
+    form = CreateListForm()  # instantiate the form
 
-        is_core_list = False
-        if 'core_list' in request.form:
-            is_core_list = request.form.get('core_list') == 'yes'
+    # Dynamically set the category_name choices while preserving the default choice
+    default_choice = [('', '-- No Category For Now --')]
+    dynamic_choices = [(c.name, c.name) for c in ListCategory.query.all()]
+    form.category_name.choices = default_choice + dynamic_choices
 
-        category_name = request.form.get('category_name')  # assuming it's a dropdown with values or user input
-        new_category_name = request.form.get('new_category')
+    if form.validate_on_submit():  # This replaces the check for request.method == 'POST'
 
-        if new_category_name:  # Check if user has provided a new category
-            category_name = new_category_name  # Override category_name with the new one
+        list_name = form.list_name.data
+        is_core_list = form.core_list.data == 'yes'
+        category_name = form.category_name.data
+
+        # Check if user has provided a new category
+        if form.new_category.data:
+            category_name = form.new_category.data
 
         category = create_or_get_category(category_name)
 
@@ -110,19 +150,18 @@ def create_list():
         if category:
             category_id = category.category_id
             print("Assigned Category ID:", category_id)
-        
+
         image_list = ImageList(name=list_name, category_id=category_id, creator_id=current_user.id, core_list=is_core_list)
         db.session.add(image_list)
         try:
             db.session.commit()
+            flash('List created successfully!', 'success')
+            return redirect(url_for('list_routes.go_to_lists'))
         except Exception as e:
             print("Error committing to database:", e)
+            flash('Error creating list.', 'danger')
 
-        flash('List created successfully!', 'success')
-        return redirect(url_for('list_routes.go_to_lists'))
-    
-    return render_template('create_list.html', categories=ListCategory.query.all())
-
+    return render_template('create_list.html', form=form)
 
 # Category Routes:
 
@@ -220,11 +259,29 @@ def delete_list(list_id):
 
     return redirect(url_for('list_routes.go_to_lists'))
 
-#edit_list_name route:
-@list_routes.route('/edit_list_name/<int:list_id>', methods=['GET'])
+# #edit_list_name route:
+# @list_routes.route('/edit_list_name/<int:list_id>', methods=['GET'])
+# def edit_list_name(list_id):
+#     # Your logic here (if any)
+#     return render_template('edit_list_name.html', list_id=list_id)
+
+@list_routes.route('/edit_list_name/<int:list_id>', methods=['GET', 'POST'])
 def edit_list_name(list_id):
-    # Your logic here (if any)
-    return render_template('edit_list_name.html', list_id=list_id)
+    # Retrieve the current list by its ID.
+    image_list = ImageList.query.get_or_404(list_id)
+    
+    # Instantiate the form and set the initial value.
+    form = EditListNameForm(list_name=image_list.name)
+
+    # Handle POST request.
+    if form.validate_on_submit():
+        image_list.name = form.list_name.data
+        db.session.commit()
+        return redirect(url_for('list_routes.list_details', list_id=list_id))
+
+    # Handle GET request.
+    form.list_name.data = image_list.name
+    return render_template('edit_list_name.html', form=form, list_id=list_id)
 
 #Update List name: 
 @list_routes.route('/update_list_name/<int:list_id>', methods=['POST'])
@@ -332,7 +389,16 @@ def carousel(list_id):
 
 @list_routes.route('/slideshow/<int:list_id>')
 def slideshow(list_id):
-    # Fetch images based on list_id (you will need to write your SQLAlchemy query)
-    images = Image.query.filter_by(list_id=list_id).all()
+    # Join Image and ImagePosition and filter by list_id.
+    # Then, order the images by their position in the ImagePosition table.
+    images = db.session.query(Image).join(
+        ImagePosition, Image.image_id == ImagePosition.image_id
+    ).filter(
+        ImagePosition.list_id == list_id
+    ).order_by(
+        ImagePosition.position
+    ).all()
+
     print('images: ', images)
     return render_template('carousel.html', images=images, list_id=list_id)
+

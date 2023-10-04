@@ -8,33 +8,32 @@
     <div class="row">
         <div class="text-center">
 
-            <button class="btn btn-default btn-block mb-3 btn-primary more-limited-width" onclick="location.href='{{ url_for('list_routes.list_details', list_id=list_id) }}'">Cancel</button>
-
             <h1 class="mb-4">Add Image to {{ image_list.name }}</h1>
             <input type="hidden" id="list_id" value="{{ image_list.list_id }}">
 
             <div class="text-center">
                 <!-- Search Bar -->
-                <form id="searchForm">
+                <form id="searchForm" class="limited-width">
                     <input type="hidden" name="csrf_token" id="csrfToken" value="{{ csrf_token() }}">
                     
                         <input type="text" class="form-control limited-width" id="searchQuery" placeholder="Search for an image on Flickr">
                         <div class="input-group-append">
-                            <button class="btn btn-primary btn-block more-limited-width" type="submit">Search</button>
+                            <button class="btn btn-primary btn-block limited-width" type="submit">Search</button>
                         </div>
                     
                 </form>
 
                 <!-- Manual URL Input -->
-                <form id="manualInputForm" onsubmit="event.preventDefault(); openImageNameModal();">
+                <form id="manualInputForm" onsubmit="event.preventDefault(); openImageNameModal();" class="limited-width">
                     <input type="hidden" name="csrf_token" id="csrfToken" value="{{ csrf_token() }}">
                     
                         <input type="url" class="form-control limited-width" id="manualImageUrl" placeholder="Enter an image URL directly">
                         <div class="input-group-append">
-                            <button class="btn btn-primary btn-block more-limited-width" type="submit">Submit URL</button>
+                            <button class="btn btn-primary btn-block limited-width" type="submit">Submit URL</button>
                         </div>
-                    
                 </form>
+
+                <button class="btn btn-default btn-block mb-3 btn-primary limited-width" onclick="location.href='{{ url_for('list_routes.list_details', list_id=list_id) }}'">Cancel</button>
 
                 <!-- Image Name Modal -->
                 <div id="imageNameModal" class="modal">
@@ -58,6 +57,7 @@
                         {% endif %}
                     {% endif %}
                 </div>
+                
             </div>
 
         </div>

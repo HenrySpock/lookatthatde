@@ -1,14 +1,14 @@
 from flask_wtf import FlaskForm 
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, HiddenField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, HiddenField, RadioField, SelectField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 from flask_login import current_user
-from models import Users
+from models import Users 
+
 
 class MessageForm(FlaskForm):
     """Form for adding/editing messages."""
 
     text = TextAreaField('text', validators=[DataRequired()])
-
 
 class RegistrationForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired(), Length(max=50)])
@@ -62,3 +62,16 @@ class SupportForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     content = TextAreaField('Briefly tell us what\'s on your mind:', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+class CreateListForm(FlaskForm):
+    # list_name = StringField('List Name:', validators=[DataRequired()])
+    list_name = StringField('List Name:', validators=[DataRequired(), Length(max=80)])
+    core_list = RadioField('Make a core list?', choices=[('yes', 'Yes'), ('no', 'No')], default='no')
+    # category_name = SelectField('Choose existing category')
+    category_name = SelectField('Choose existing category', choices=[('', '-- Choose existing or enter new --')])
+    new_category = StringField('Or enter new category')
+    submit = SubmitField('Create')
+
+class EditListNameForm(FlaskForm):
+    list_name = StringField('List Name', validators=[DataRequired(), Length(max=80)])
+    submit = SubmitField('Save List Name?')

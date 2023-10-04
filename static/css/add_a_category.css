@@ -1,0 +1,10 @@
+#addCategoryForm {
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+
+.limited-width{
+  width: 450px;
+}
+ 

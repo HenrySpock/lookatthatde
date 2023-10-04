@@ -1,15 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/image_search.css') }}"> 
-{#<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">#}
+{#<link rel="stylesheet" href="{{ url_for('static', filename='css/image_search.css') }}"> 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">#}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/edit_fields.css') }}"> 
 
 <div class="container mt-4">
     <div class="row">
         <div class="text-center">
-
-            <button class="btn btn-default btn-block mb-3 more-limited-width btn-primary" onclick="location.href='{{ url_for('list_routes.list_details', list_id=list_id) }}'">Cancel</button>
 
             <h1 class="mb-4">Edit Fields for List {{ list_id }}</h1>
             <input type="hidden" id="list_id" value="{{ list_id }}">
@@ -47,7 +45,9 @@
                 <button type="button" class="btn btn-primary btn-block more-limited-width mt-2" id="addFieldBtn">Add Field</button>
                 <input type="submit" class="btn btn-success btn-block more-limited-width mt-2" value="Save Fields">
             </form>
-
+            
+            <button class="btn btn-default btn-block mb-3 more-limited-width btn-primary" onclick="location.href='{{ url_for('list_routes.list_details', list_id=list_id) }}'">Cancel</button>
+        
         </div>
     </div>
 </div>

@@ -3,73 +3,57 @@ var slideIndex = 0;
 var slideInterval;
 var slides = document.getElementsByClassName("mySlides");
 
-// Function to show the slides
+// Function to cycle through the slides
 function showSlides() {
-  console.log("showSlides triggered");
-  for (var i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-  }
+    console.log("showSlides triggered");
+    
+    // Hide all slides
+    for (var i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+    }
 
-  if (slideIndex >= slides.length) {
-      slideIndex = 0; // Reset to the first slide
-  }
-
-  slides[slideIndex].style.display = "block";
-  slideIndex++;
+    // Display the next slide
+    if (slideIndex >= slides.length) {
+        slideIndex = 0; // Reset to the first slide if we've reached the end
+    }
+    slides[slideIndex].style.display = "block";
+    slideIndex++;
 }
 
-// Function to start the slideshow
-// function startSlideshow() { 
-//     console.log("Starting the slideshow.");
-//     slideInterval = setInterval(showSlides, 2000); // Change slide every 2 seconds
-// }
-
-// Function to start the slideshow
-function startSlideshow() { 
-  toggleNavbar()
-  document.body.classList.add('slideshow-active');
-  slideInterval = setInterval(showSlides, 2000); // Change slide every 2 seconds
+// Function to toggle display of specific elements
+function toggleDisplay() {
+    let elementsToToggle = ['.navbar', '#headerText', '#startSlideshow', '#list-details'];
+    elementsToToggle.forEach(selector => {
+        let element = document.querySelector(selector);
+        if (element) {
+            element.classList.toggle('hidden');
+        }
+    });
 }
 
-// Only run on the /slideshow/<id> page.
-// Adjust the condition as needed based on your URL structure.
+// Check if the current page is the slideshow page
 if (window.location.pathname.includes("/slideshow/")) {
-  document.addEventListener("DOMContentLoaded", function() {
-    startSlideshow();
-  });
+    // Once the page is fully loaded
+    document.addEventListener("DOMContentLoaded", function() {
+        toggleDisplay(); // Toggle visibility of navigation and controls
+        showSlides();    // Display the first slide
+        slideInterval = setInterval(showSlides, 2000); // Start the slideshow
+    });
 }
 
-// document.body.addEventListener('click', function() {
-//   console.log("Body clicked!");
-//   clearInterval(slideInterval);  // Stops the slideshow
-//   document.body.classList.remove('slideshow-active'); // Removes the fullscreen view
-// });
-
+// Add event listener for stopping the slideshow and redirecting back to the carousel
 document.body.addEventListener('click', function(event) {
-      console.log("Body clicked!");
-      clearInterval(slideInterval);  // Stops the slideshow
-      document.body.classList.remove('slideshow-active'); // Removes the fullscreen view
+    console.log("Body clicked!");
 
-      // Redirect to the carousel page.
-      list_id = document.getElementById('list_id').getAttribute('data-list-id');
-      window.location.href = "/lists/carousel/" + list_id; // Replace with your correct path
-      toggleNavbar()
+    clearInterval(slideInterval);  // Stop the slideshow
+
+    // Redirect to the carousel page
+    let list_id = document.getElementById('list_id').getAttribute('data-list-id');
+    window.location.href = "/lists/carousel/" + list_id;
+    
+    toggleDisplay(); // Toggle visibility of navigation and controls
 });
 
 
-// function toggleNavbar() {
-//   let navbar = document.querySelector('.navbar');
-//   if (navbar) {
-//     navbar.classList.toggle('hidden');
-//   }
-// }
 
-function toggleNavbar() {
-  let elementsToToggle = ['.navbar', '#headerText', '#startSlideshow']; // Array of selectors
-  elementsToToggle.forEach(selector => {
-    let element = document.querySelector(selector);
-    if (element) {
-      element.classList.toggle('hidden');
-    }
-  });
-}
+ 

@@ -1,10 +1,11 @@
-{% extends "base.html" %}
+{#
+    {% extends "base.html" %}
 
 {% block content %}
 <div id="categoryForm">
     <input type="hidden" id="csrfToken" name="csrf_token" value="{{ csrf_token() }}">
 
-    <h1>Add a Category</h1>
+    <h1>Add a Category</h1> 
 
     <form id="addCategoryForm" method="post" action="{{ url_for('list_routes.add_category_to_list', list_id=image_list.list_id) }}">
         Category: 
@@ -15,10 +16,58 @@
             {% endfor %}
         </select>
         Or enter new category: <input type="text" name="new_category"><br>
-        <button type="button" class="btn btn-primary" onclick="cancelCategoryForm()">Cancel</button>
-        <button type="submit" id="saveButton" class="btn btn-primary">Save Category?</button>
+        <button type="submit" id="saveButton" class="btn btn-primary" data-list-id="{{ list_id }}">Save Category?</button> 
     </form>
 </div>
+<a href="{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}" class="btn btn-primary">Cancel</a>
 
 <script src="{{ url_for('static', filename='js/edit_categories.js') }}"></script>    
 {% endblock %} 
+#}
+
+
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/add_a_category.css') }}">
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="text-center">
+
+            <h1 class="mb-4">Add a Category to {{ image_list.name }}</h1>
+            <input type="hidden" id="list_id" value="{{ image_list.list_id }}">
+            <input type="hidden" id="csrfToken" name="csrf_token" value="{{ csrf_token() }}">
+
+            <form id="addCategoryForm" class="limited-width" method="post" action="{{ url_for('list_routes.add_category_to_list', list_id=image_list.list_id) }}">
+                <!-- Dropdown for existing categories -->
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="lead" for="category_name">Choose Existing Category</label>
+                    </div>
+                    <select class="custom-select limited-width lead" id="category_name" name="category_name">
+                        <option selected>-- Choose Existing Category --</option>
+                        {% for category in categories %}
+                            <option value="{{ category.name }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Input for new category -->
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="lead" id="new_category_label">Or enter new category</span>
+                    </div>
+                    <input type="text" class="form-control" id="new_category" name="new_category" aria-describedby="new_category_label">
+                </div>
+
+                <button type="submit" id="saveButton" class="btn btn-primary btn-block limited-width" data-list-id="{{ list_id }}">Save Category?</button> 
+            </form>
+
+            <button class="btn btn-default btn-block mb-3 btn-primary limited-width" onclick="location.href='{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}'">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/edit_categories.js') }}"></script>    
+{% endblock %}

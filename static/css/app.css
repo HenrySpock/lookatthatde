@@ -1,3 +1,22 @@
+/* base.html */
+body, html {
+  height: 100%;
+}
+
+/* Check for this elsewhere  */
+.base-container {
+  max-width: 90%;  /* or whatever width you desire, such as 1200px, etc. */
+  margin: 0 auto; /* center the container */
+  padding-left: 15px;
+  padding-right: 15px;  
+}
+
+.bcwrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; 
+}
+
 /* Set a minimum height for the main content to push the footer down */
 .main-content {
   min-height: calc(100vh - 60px);  
@@ -7,10 +26,128 @@
  
   text-align: center;
   padding: 50px 0;
-  background: #f7f8fa; /* soft neutral background */
-
+  /* background: #f7f8fa;  */
+  background-color: rgba(245, 245, 245, 0.5);
+  
 }
- 
+
+.main-content::before {
+  /* Pseudo-element for the background image */
+  content: "";
+  background-image: url('/static/images/latbg1.jpg');
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  
+  z-index: -1;
+  /* Ensure the image doesn't repeat */
+  background-repeat: no-repeat;
+
+  /* Set the image to cover its container */
+  background-size: cover;
+  background-position: center center;
+
+  /* Set the opacity of the image */
+  opacity: 0.5; /* Adjust this value as needed */
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+.nbsfooter {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #f5f5f5; /* Adjust the background color as needed */
+  padding: 5px 0; /* Add padding to your footer as needed */
+  text-align: center; /* Center the content in the footer */
+  font-size: 12px; 
+}
+
+
+/* Button and input widths  */
+
+/* These need to be deleted later  */
+.more-limited-width {
+  max-width: 200px; 
+  margin: 10px auto 10px;
+}
+
+.explicit-mlw {
+  width: 200px;
+}
+/* These need to be deleted later  */
+
+
+.btn-small {
+  width: 200px; 
+}
+
+/* top and bottom */
+.add-stbmargin {
+margin: 15px auto 15px;
+}
+
+.add-ltbmargin {
+margin: 30px auto 30px;
+}
+
+/* left and right  */
+.add-slrmargin {
+  margin: auto 15px auto 15px;
+  }
+  
+.add-llrmargin {
+margin: auto 30px auto 30px;
+}
+
+/* reg_log  */
+.reg-text {
+  font-size: 20px;
+  font-weight: normal;
+}
+
+/* go_to_lists  */
+.truncate-text {
+  width: 387px;         /* Adjust as needed */
+  white-space: nowrap;  /* Prevents the text from wrapping */
+  overflow: hidden;     /* Hide overflow */
+  text-overflow: ellipsis;  /* Add the ellipsis when the text overflows */
+}
+
+.list-card {
+  padding: 4px 30px 2px 30px;
+  font-size: 20px; 
+}
+
+.force-lead {
+  padding: 4px 30px 2px 30px;
+  font-size: 20px; 
+}
+
+.category-card{
+  background-color: rgb(255, 255, 255, .2);
+}
+
+/* Radio buttons  */
+.form-div .form-check {
+  list-style-type: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.form-div {
+  margin-top: 15px;
+}
+
+.inline {
+  display: inline-block;
+}
+
+/* *** */
 /* Heading enhancements */
 .main-content h1 {
   font-size: 2.5em;
@@ -26,20 +163,7 @@
   justify-content: center;
 }
 
-.custom-container {
-  max-width: 90%;  /* or whatever width you desire, such as 1200px, etc. */
-  margin: 0 auto; /* center the container */
-  padding-left: 15px;
-  padding-right: 15px;
-}
 
-/* .image-container img {
-  max-width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 8px;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-} */
 
 /* Making the image container square */
 .image-container {
@@ -58,29 +182,11 @@
   object-fit: contain; 
 }
 
-body, html {
-  height: 100%;
-}
 
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
 
-.navbar {
-  margin-bottom: 20px;
-}
 
-.nbsfooter {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: #f5f5f5; /* Adjust the background color as needed */
-  padding: 5px 0; /* Add padding to your footer as needed */
-  text-align: center; /* Center the content in the footer */
-  font-size: 12px; 
-}
+
+
  
 .reposition-arrow {
   display: none;

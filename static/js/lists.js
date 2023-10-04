@@ -18,32 +18,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Display default grouping
     displayGroups();
- 
-// Handle category card clicks
-// const categoryCards = document.querySelectorAll('.category-card');
-// categoryCards.forEach(card => {
-//     card.addEventListener('click', function() {
-//         console.log('Category card clicked!');  // Debugging line
-//         const currentGroup = card.closest('[data-group]');
-        
-//         console.log('Looking for lists with data-category-id:', card.getAttribute('data-category-id'));
-//         // Collapse all the categories first
-//         const allListDivsInGroup = currentGroup.querySelectorAll('[data-lists-for]');
-//         allListDivsInGroup.forEach(div => {
-//             div.style.display = 'none';
-//         });
-        
-//         // Then expand the selected category
-//         const associatedListDiv = currentGroup.querySelector(`[data-lists-for="${card.getAttribute('data-category-id')}"]`);
-//         associatedListDiv.style.display = "block";
-
-//         if (associatedListDiv) {
-//             console.log('Associated lists found!');
-//         } else {
-//             console.log('No associated lists found.');
-//         }
-//     });        
-// });
 
 // Handle category card clicks
 const categoryCards = document.querySelectorAll('.category-card');

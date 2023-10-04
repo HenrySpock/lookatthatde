@@ -1,11 +1,14 @@
-{% extends "base.html" %}
+{#
+    {% extends "base.html" %}
 
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/edit_list_name.css') }}">
+
 <div class="container">
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
             <h2 class="text-center">Edit List Name</h2>
-            <form method="post" action="{{ url_for('list_routes.update_list_name', list_id=list_id) }}">
+            <form method="post" action="{{ url_for('list_routes.update_list_name', list_id=list_id) }}" class="form">
                 <!-- CSRF token field -->
                 <input type="hidden" name="csrf_token" id="csrfToken" value="{{ csrf_token() }}">
 
@@ -17,11 +20,48 @@
 
                 <!-- Save button -->
                 <button id="saveListNameButton" data-list-id="{{ list_id }}" class="btn btn-primary btn-block">Save List Name?</button>
-                <button id="cancelButton" type="button" class="btn btn-primary btn-block">Cancel</button>
+
             </form>
+            <button id="cancelButton" type="button" class="btn btn-primary btn-block">Cancel</button>
         </div>
     </div>
 </div>
 
 <script src="{{ url_for('static', filename='js/edit_list_name.js') }}"></script>
+{% endblock %}
+#}
+
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/edit_list_name.css') }}">
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <h2 class="text-center">Edit List Name</h2>
+            <form method="post">
+                {{ form.hidden_tag() }}
+
+                <div class="form-group">
+                    {{ form.list_name.label }}
+                    {{ form.list_name(class="form-control") }}
+                    {% if form.list_name.errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.list_name.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button id="saveListNameButton" data-list-id="{{ list_id }}" class="btn btn-primary btn-block add-stbmargin">{{ form.submit.label.text }}</button>
+
+            </form>
+            <a href="{{ url_for('list_routes.list_details', list_id=list_id) }}" class="btn btn-primary btn-block add-stbmargin">Cancel</a>
+        </div>
+    </div>
+</div>
+
+<!-- <script src="{{ url_for('static', filename='js/edit_list_name.js') }}"></script> -->
 {% endblock %}
