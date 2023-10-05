@@ -74,7 +74,7 @@
                         {{ image_list.name }}<br>
                     </a> 
                     <a class="col-md-2 list-card" href="{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}">
-                        <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="35">
+                        <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="35" class="sm-rounded-shadow">
                     </a> 
                     <a class="col-md-3 btn btn-danger list-card" href="#" onclick="if(confirm('Are you sure you want to delete this list? It will also delete all associated images and their data.')) { location.href='{{ url_for('list_routes.delete_list', list_id=image_list.list_id) }}' }">
                         Delete This List?
@@ -110,7 +110,7 @@
                                 {{ image_list.name }}<br>
                             </a> 
                             <a class="col-md-2 list-card" href="{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}">
-                                <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="35">
+                                <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="35" class="sm-rounded-shadow">
                             </a> 
                             <a class="col-md-3 btn btn-danger list-card" href="#" onclick="if(confirm('Are you sure you want to delete this list? It will also delete all associated images and their data.')) { location.href='{{ url_for('list_routes.delete_list', list_id=image_list.list_id) }}' }">
                                 Delete This List?
@@ -139,7 +139,7 @@
                                     {{ image_list.name }}<br>
                                 </a>   
                                 <a class="col-md-2 list-card" href="{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}">
-                                    <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="35">
+                                    <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="35" class="sm-rounded-shadow">
                                 </a> 
                                 <div class="col-md-5"></div>
                             </div>
@@ -167,10 +167,10 @@
                             </a>   
                             <a class="col-md-2 list-card" href="{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}">
                                 {% if image_list.images and image_list.images|length > 0 %}
-                                    <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="35"> 
+                                    <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="35" class="sm-rounded-shadow"> 
                                 {% else %}
                                     <!-- Placeholder for no image -->
-                                    <img src="{{ url_for('static', filename='images/not_found.jpg') }}" alt="No image available" height="35">
+                                    <img src="{{ url_for('static', filename='images/not_found.jpg') }}" alt="No image available" height="35" class="sm-rounded-shadow">
                                 {% endif %}
                             </a> 
                             <div class="col-md-5"></div>
@@ -200,7 +200,7 @@
                     </a>
                     <a href="{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}" class="list-card col-md-2">
                         {% if image_list.images|length > 0 %}
-                            <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="35">
+                            <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="35" class="sm-rounded-shadow">
                         {% endif %}            
                     </a>
 
@@ -245,7 +245,7 @@
                                             {{ image_list.name }}<br>
                                         </a>
                                         <a href="{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}" class="list-card col-md-2">
-                                            <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="35">
+                                            <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="35" class="sm-rounded-shadow">
                                         </a>
 
                                         <a href="#" class="btn btn-warning col-md-3 list-card" style="text-decoration: none;" onclick="openReportModal('{{ image_list.list_id }}', '{{ image_list.creator_id }}')">Report</a> 

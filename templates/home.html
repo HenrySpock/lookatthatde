@@ -14,10 +14,9 @@
              
             <!-- Only include lists that have images; image should act as an href -->
             {% if image_list.images|length > 0 %}
-            <a href="{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}" class="list-card col-md-2 add-stbmargin">
-                    <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="100">
-                           
-            </a>
+                <a href="{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}" class="list-card col-md-2 add-stbmargin">
+                    <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="100" class="rounded-shadow">                           
+                </a>
             {% endif %} 
           
     {% endfor %}

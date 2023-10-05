@@ -218,6 +218,16 @@ margin-bottom: 20px;
   min-width: 25%; 
 }
  
+.rounded-shadow {
+  border-radius: 8px; /* adjust as needed */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* adjust as needed */
+}
+
+.sm-rounded-shadow {
+  border-radius: 3px; /* adjust as needed */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* adjust as needed */
+}
+
 /* *** */
 /* Heading enhancements */
 .main-content h1 {

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %} 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}"> 
 <input type="hidden" id="csrfToken" value="{{ csrf_token() }}">
 
 <!-- HTML part -->
@@ -50,7 +51,7 @@
                 <!-- Image Container -->
                 <div class="card-img-top image-container">
                     <a href="{{ url_for('image_routes.view_full_image', image_id=image.image_id) }}">
-                        <img src="{{ image.image_url }}" class="contained-img" data-image-id="{{ image.image_id }}" data-position="{{ image.image_positions.position }}" alt="{{ image.name }}">
+                        <img src="{{ image.image_url }}" class="contained-img rounded-shadow" data-image-id="{{ image.image_id }}" data-position="{{ image.image_positions.position }}" alt="{{ image.name }}">
                     </a>
                     <!-- Left Arrow for repositioning. Hidden for first image. -->
                     <i class="fas fa-arrow-left reposition-arrow left-arrow" style="display: none;" {% if loop.first %}style="display:none"{% endif %}></i>
