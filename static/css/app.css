@@ -3,6 +3,10 @@ body, html {
   height: 100%;
 }
 
+body {
+  background-color: black;
+}
+
 /* Check for this elsewhere  */
 .base-container {
   max-width: 90%;  /* or whatever width you desire, such as 1200px, etc. */
@@ -27,30 +31,23 @@ body, html {
   text-align: center;
   padding: 50px 0;
   /* background: #f7f8fa;  */
-  background-color: rgba(245, 245, 245, 0.5);
-  
+  background-color: rgb(255, 255, 255, .7);
+  --random-bg: url('/static/images/latbg1.jpg'); /* default/fallback */
 }
 
 .main-content::before {
   /* Pseudo-element for the background image */
   content: "";
-  background-image: url('/static/images/latbg1.jpg');
+  /* background-image: url('/static/images/latbg1.jpg'); */
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
-  left: 0;
-  
-  z-index: -1;
-  /* Ensure the image doesn't repeat */
-  background-repeat: no-repeat;
-
-  /* Set the image to cover its container */
-  background-size: cover;
-  background-position: center center;
-
-  /* Set the opacity of the image */
-  opacity: 0.5; /* Adjust this value as needed */
+  left: 0; 
+  z-index: -1;  
+  background-size: cover; 
+  background-image: var(--random-bg);  
+  background-position: center center;  
 }
 
 .navbar {
@@ -71,6 +68,10 @@ body, html {
 /* Button and input widths  */
 
 /* These need to be deleted later  */
+.limited-width {
+  width: 450px;  
+}
+
 .more-limited-width {
   max-width: 200px; 
   margin: 10px auto 10px;
@@ -81,9 +82,9 @@ body, html {
 }
 /* These need to be deleted later  */
 
-
-.btn-small {
-  width: 200px; 
+.btn-tiny {  
+  margin: 0 5px;
+  width: 125px;
 }
 
 /* top and bottom */
@@ -104,6 +105,23 @@ margin: 30px auto 30px;
 margin: auto 30px auto 30px;
 }
 
+.imsmargin {
+  margin: 0 auto 10px;
+}
+
+.admin-del {
+  padding: 4px 22px 2px 22px;
+  font-size: 20px; 
+  width: 180px; 
+  font-size: 20px;
+  margin: 0 10px;
+}
+
+.btn-small {
+  margin: 15px;
+  width: 180px; 
+}
+
 /* reg_log  */
 .reg-text {
   font-size: 20px;
@@ -112,7 +130,7 @@ margin: auto 30px auto 30px;
 
 /* go_to_lists  */
 .truncate-text {
-  width: 387px;         /* Adjust as needed */
+  width: 341px;         /* Adjust as needed */
   white-space: nowrap;  /* Prevents the text from wrapping */
   overflow: hidden;     /* Hide overflow */
   text-overflow: ellipsis;  /* Add the ellipsis when the text overflows */
@@ -128,8 +146,22 @@ margin: auto 30px auto 30px;
   font-size: 20px; 
 }
 
+.force-lead-tiny { 
+  padding: 3px;
+  font-size: 20px; 
+}
+
+.small-lead {  
+  font-size: 16px; 
+}
+
 .category-card{
   background-color: rgb(255, 255, 255, .2);
+}
+
+#slideshow-button {
+padding-bottom: 28px;
+margin-bottom: 20px;
 }
 
 /* Radio buttons  */
@@ -147,6 +179,45 @@ margin: auto 30px auto 30px;
   display: inline-block;
 }
 
+.radio-spacing {
+  margin-right: 30px;
+}
+
+/* Slideshow  */
+#controlsLink {
+  z-index: 1;
+}
+
+#editing-buttons {
+  margin-bottom: 25px;
+}
+
+.card-fields {
+  text-align: left;
+  margin-top: 15px;
+}
+
+.images-container {
+  margin: 0 5px;
+}
+
+#addCategoryForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#category-form-display {
+  display: flex;
+  flex-direction: column; 
+  margin-left: 5%;
+}
+
+.profile-buttons {
+  margin: 0 10px;
+  min-width: 25%; 
+}
+ 
 /* *** */
 /* Heading enhancements */
 .main-content h1 {
@@ -181,12 +252,6 @@ margin: auto 30px auto 30px;
   height: 100%;
   object-fit: contain; 
 }
-
-
-
-
-
-
  
 .reposition-arrow {
   display: none;

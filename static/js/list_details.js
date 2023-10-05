@@ -151,23 +151,7 @@ document.addEventListener("DOMContentLoaded", function() {
       });
   });
 
-  // let repositionButton = document.getElementById('reposition-btn');
-  // let saveButton = document.getElementById('save-btn');
-  // let arrows = document.querySelectorAll('.image-arrow');
-  let arrows = document.querySelectorAll('.reposition-arrow');
-  // Click event for "Reposition images?" button
-  // repositionButton.addEventListener('click', function() {
-  //     // Hide "Reposition images?" button
-  //     repositionButton.style.display = 'none';
-      
-  //     // Show arrows
-  //     arrows.forEach(arrow => {
-  //         arrow.style.display = '';
-  //     });
-
-  //     // Show "Save Position?" button
-  //     saveButton.style.display = '';
-  // });
+  let arrows = document.querySelectorAll('.reposition-arrow'); 
 
   repositionButton.addEventListener('click', function() {
     // Hide "Reposition images?" button
@@ -217,71 +201,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
-
-// // Handle remove category button if it exists: 
-// document.addEventListener("DOMContentLoaded", function() {
-//     const removeCategoryButton = document.getElementById("removeCategory");
-
-//     if (removeCategoryButton) {
-//         removeCategoryButton.addEventListener('click', function() {
-//             const listId = removeCategoryButton.getAttribute("data-list-id");
-//             removeCategory(listId);
-//         });
-//     }
-// });
-
-// function removeCategory(listId) {
-//     const csrfToken = document.getElementById("csrfToken").value;
-//     console.log('csrf token: ', csrfToken);
-//     fetch(`/lists/remove_category/${listId}`, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             // Add CSRF token header if needed
-//             'X-CSRFToken': csrfToken,
-//         },
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         if (data.status === "success") {
-//             alert(data.message);
-//             removeCategoryButton.style.display = 'none';
-//             // Optionally, you can also show the "Add a Category?" button here.
-//         } else {
-//             alert(data.message);
-//         }
-//     })
-//     .catch(error => {
-//         console.error("Error:", error.message);
-//     });
-// }
-
-// function removeCategory(listId) {
-//     const csrfToken = document.getElementById("csrfToken").value;
-//     fetch(`/lists/remove_category/${listId}`, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-CSRFToken': csrfToken,
-//         },
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         if (data.status === "success") {
-//             alert(data.message);
-//             // Hide 'Remove Category?' button
-//             document.getElementById("removeCategory").style.display = 'none';
-//             // Show 'Add a Category?' button
-//             document.getElementById("addCategory").style.display = 'block';
-//         } else {
-//             alert(data.message);
-//         }
-//     })
-//     .catch(error => {
-//         console.error("Error:", error.message);
-//     });
-// }
-
 function toggleCategory(listId) {
     const csrfToken = document.getElementById("csrfToken").value;
     const button = document.getElementById("categoryButton");
@@ -316,18 +235,7 @@ function toggleCategory(listId) {
     }
 }
  
- 
-
-// // Showing toast for remove category not causing a redirect:
-// function showToast(message) {
-//     const toastEl = document.getElementById('liveToast');
-//     const toastBody = toastEl.querySelector('.toast-body');
-//     toastBody.textContent = message;
-//     const toast = new bootstrap.Toast(toastEl);
-//     toast.show();
-//  }
- 
- // Function to show the toast
+// Function to show the toast
 function showToast(message) {
     const toast = document.getElementById("liveToast");
     const toastBody = toast.querySelector(".toast-body");

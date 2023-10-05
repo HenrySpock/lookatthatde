@@ -87,42 +87,6 @@ def list_details(list_id):
 
     return render_template("list_details.html", image_list=image_list, images=ordered_images_query, list_id=list_id, fields=fields, categories=categories, image_field_values=image_field_values)
 
-# @list_routes.route('/create_list', methods=['GET', 'POST'])
-# @login_required
-# def create_list():
-#     if request.method == 'POST':
-#         list_name = request.form.get('list_name')
-
-#         is_core_list = False
-#         if 'core_list' in request.form:
-#             is_core_list = request.form.get('core_list') == 'yes'
-
-#         category_name = request.form.get('category_name')  # assuming it's a dropdown with values or user input
-#         new_category_name = request.form.get('new_category')
-
-#         if new_category_name:  # Check if user has provided a new category
-#             category_name = new_category_name  # Override category_name with the new one
-
-#         category = create_or_get_category(category_name)
-
-#         # If category is None, don't set category_id, else set it to the returned category's ID
-#         category_id = None
-#         if category:
-#             category_id = category.category_id
-#             print("Assigned Category ID:", category_id)
-        
-#         image_list = ImageList(name=list_name, category_id=category_id, creator_id=current_user.id, core_list=is_core_list)
-#         db.session.add(image_list)
-#         try:
-#             db.session.commit()
-#         except Exception as e:
-#             print("Error committing to database:", e)
-
-#         flash('List created successfully!', 'success')
-#         return redirect(url_for('list_routes.go_to_lists'))
-    
-#     return render_template('create_list.html', categories=ListCategory.query.all())
-
 @list_routes.route('/create_list', methods=['GET', 'POST'])
 @login_required
 def create_list():
@@ -163,24 +127,7 @@ def create_list():
 
     return render_template('create_list.html', form=form)
 
-# Category Routes:
-
-#Removing a category from a list
-# @list_routes.route("/remove_category/<int:list_id>", methods=["POST"])
-# @login_required
-# def remove_category(list_id):
-#     """ Remove category_id from a list """
-#     image_list = ImageList.query.get_or_404(list_id)
-    
-#     # Ensure that only the creator can remove the category
-#     if image_list.creator_id != current_user.id:
-#         flash('You do not have permission to modify this list.', 'danger')
-#         return redirect(url_for('list_routes.list_details', list_id=list_id))
-
-#     image_list.category_id = None  # remove the category
-#     db.session.commit()
-#     flash('Category removed successfully!', 'success')
-#     return redirect(url_for('list_routes.list_details', list_id=list_id))
+# Category Routes: 
 
 @list_routes.route("/remove_category/<int:list_id>", methods=["POST"])
 @login_required

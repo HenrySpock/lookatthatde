@@ -8,13 +8,12 @@
   <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <!-- Main Custom Css File  -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}"> 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
-
     <div class="base-container bcwrapper">
         <div class=" main-content">            
             <nav class="navbar navbar-inverse">
@@ -62,6 +61,8 @@
             <span class="text-muted">This product uses the Flickr API but is not endorsed or certified by SmugMug, Inc.</span>
         </div>
     </footer>
+
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
 </body>
 
 </html>

@@ -1,4 +1,3 @@
- 
 function openReportModal(listId, creatorId) {
   console.log("List ID passed to openReportModal:", listId);
   console.log("Type of listId:", typeof listId);
@@ -11,15 +10,15 @@ function openReportModal(listId, creatorId) {
   // Set the list ID and creator ID in hidden input fields
   document.getElementById('reportListId').value = listId;
   document.getElementById('reportCreatorId').value = creatorId;
-  
+
   // Display the modal
-  var modal = document.getElementById('reportModal');
+  let modal = document.getElementById('reportModal');
   modal.style.display = "block";
 }
 
 // Close the modal function
 function closeReportModal() {
-  var modal = document.getElementById('reportModal');
+  let modal = document.getElementById('reportModal');
   modal.style.display = "none";
 }
 
@@ -31,7 +30,7 @@ document.addEventListener('keydown', function(event) {
 });
 
 // Close the modal when clicking outside
-var modal = document.getElementById('reportModal');
+let modal = document.getElementById('reportModal');
 window.onclick = function(event) {
   if (event.target == modal) {
     closeReportModal();

@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey, Integer, String, Column
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin
-import bcrypt
+import bcrypt 
 
 db = SQLAlchemy()
 

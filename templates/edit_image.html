@@ -1,32 +1,14 @@
-{# {% extends "base.html" %}
+{#
+  {% extends "base.html" %}
 
 {% block content %}
-<h1>Edit Image</h1>
-<img src="{{ image_url }}" alt="Selected Image">
-<!-- Add any other controls or information needed to edit the image -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 
-<form action="{{ url_for('image_routes.save_edits', list_id=list_id, image_id=image_id) }}" method="post">
-  <input type="hidden" name="image_url" value="{{ image_url }}">
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name"><br><br>
-  <!-- You can add other fields similarly -->
-  <input type="submit" value="Save this image">
-</form>
-
-<script src="{{ url_for('static', filename='js/images.js') }}"></script>
-{% endblock %}
-#}
-
-{% extends "base.html" %}
-
-{% block content %}
 <h1>Edit Image</h1>
 <img src="{{ image.image_url }}" alt="Selected Image">
 
-{# <form action="{{ url_for('image_routes.save_edits', list_id=list_id) }}" method="post"> #}
-{# <form action="{{ url_for('image_routes.save_edits', list_id=list_id, image_id=image.id) }}" method="post" data-list-id="{{ list_id }}" data-image-id="{{ image.id }}"> #}
 <form action="{{ url_for('image_routes.save_edits', list_id=list_id, image_id=image.image_id) }}" method="post" data-list-id="{{ list_id }}" data-image-id="{{ image.image_id }}">
-
+  <input type="hidden" id="csrfToken" name="csrf_token" value="{{ csrf_token() }}">
 
   <input type="hidden" name="image_id" value="{{ image.image_id }}">
   <label for="name">Name:</label>
@@ -53,3 +35,52 @@
 
 {% endblock %}
 <script src="{{ url_for('static', filename='js/edit_image.js') }}"></script>
+#}
+
+
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <h2 class="text-center">Edit Image</h2>
+            <img src="{{ image.image_url }}" alt="Selected Image" class="img-responsive center-block mb-3"> <!-- making the image responsive and centered -->
+
+            <form action="{{ url_for('image_routes.save_edits', list_id=list_id, image_id=image.image_id) }}" method="post" data-list-id="{{ list_id }}" data-image-id="{{ image.image_id }}">
+                <input type="hidden" id="csrfToken" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="image_id" value="{{ image.image_id }}">
+
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" value="{{ image.name }}" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="image_url">Image URL:</label>
+                    <input type="text" id="image_url" name="image_url" value="{{ image.image_url }}" class="form-control">
+                </div>
+
+                <!-- Display the user-defined fields for this image -->
+                {% for field in fields %}
+                    <div class="form-group field-container">
+                        <label for="field_{{ field.id }}">{{ field.name }}:</label>
+                        {% if field.type == 'text' %}
+                            <input type="text" id="field_{{ field.id }}" name="field_{{ field.id }}" value="{{ field_values.get(field.id, '') }}" class="form-control">
+                        {% elif field.type == 'number' %}
+                            <input type="number" id="field_{{ field.id }}" name="field_{{ field.id }}" value="{{ field_values.get(field.id, '') }}" class="form-control">
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <input type="submit" value="Save this image" class="btn btn-primary btn-block add-stbmargin">
+            </form>
+            
+            <a href="{{ url_for('list_routes.list_details', list_id=list_id) }}" class="btn btn-default btn-block add-stbmargin">Cancel</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %} 

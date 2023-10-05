@@ -1,34 +1,41 @@
 {% extends "base.html" %}
 
 {% block content %}  
-<link rel="stylesheet" href="{{ url_for('static', filename='css/carousel.css') }}"> 
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/carousel.css') }}"> 
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/app.css') }}"> 
 <div id="list_id" data-list-id="{{ list_id }}"></div>
 
-<h1 id="headerText">HEY!</h1>
+<!-- Start Slideshow Button -->
+<a href="{{ url_for('list_routes.list_details', list_id=list_id) }}" id="list-details" class="btn btn-primary add-slrmargin btn-small controls">Back to List Details</a>
+<a href="{{ url_for('list_routes.slideshow', list_id=list_id) }}" id="startSlideshow" class="btn btn-primary add-slrmargin btn-small controls">Start Slideshow</a>
 
-<div class="container">
+<h1 id="headerText" class="lead">Welcome to the slideshow page. After you click 'Start Slideshow', the images in your list will cycle through. You can click anywhere on the page to come back here once the slideshow has begun.</h1>
+ 
 
-  <!-- Start Slideshow Button -->
-  <a href="{{ url_for('list_routes.list_details', list_id=list_id) }}" id="list-details" class="btn btn-primary">Back to List Details</a>
-  <a href="{{ url_for('list_routes.slideshow', list_id=list_id) }}" id="startSlideshow" class="btn btn-primary">Start Slideshow</a>
+  
 
-  <!-- Slideshow container -->
-  <div class="slideshow-container">
-      {% for image in images %}
-      <!-- Slides -->
-      <div class="mySlides fade">
-          
-              {#<img src="{{ image.image_url }}">#}
-              {#<img src="{{ image.image_url }}" onload="console.log('Image loaded')" onerror="console.log('Image failed to load')">#}
-              <img src="{{ image.image_url }}" style="opacity:1; z-index:9999; position:relative;">
-
-          
-      </div>
-      {% endfor %}
-  </div>
-
-
+<!-- Slideshow container -->
+<div class="row">
+    <div class="col-md-1">
+            <label for="slideshowSpeed" id="slideshowSpeedLabel" class="hidden">Choose Speed</label>
+            <select id="slideshowSpeed" class="form-control hidden">
+                {% for num in range(1, 21) %}
+                    <option value="{{ num * 1000 }}">{{ num }}</option>
+                {% endfor %}
+            </select>
+    </div>
+    <div class="slideshow-container col-md-10">
+        {% for image in images %}
+        <!-- Slides -->
+            <div class="mySlides fade">
+            <img src="{{ image.image_url }}" style="opacity:1; z-index:9999; position:relative;">
+            </div>
+        {% endfor %}
+        </div> 
+    <div class="col-md-1"></div>
 </div>
+
+ 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>

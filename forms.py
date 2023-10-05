@@ -75,3 +75,4 @@ class CreateListForm(FlaskForm):
 class EditListNameForm(FlaskForm):
     list_name = StringField('List Name', validators=[DataRequired(), Length(max=80)])
     submit = SubmitField('Save List Name?')
+ 

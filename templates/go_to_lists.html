@@ -2,6 +2,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='/css/modal.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/app.css') }}">
 
 <h2>Lists</h2>
 
@@ -26,21 +27,21 @@
             <input type="hidden" id="reportCreatorId" name="reportCreatorId">
 
             <label for="name">Your Name:</label>
-            <input type="text" id="name" name="name" required>  {# Name field #}
+            <input type="text" id="name" name="name" required>  
             
             <label for="email">Your Email:</label>
-            <input type="email" id="email" name="email" required>  {# Email field #}
+            <input type="email" id="email" name="email" required>  
             
             <label for="content">Please describe your issue:</label>
-            <textarea id="content" name="content" rows="4" cols="50" required></textarea>  {# Rename reportDescription to content #}
+            <textarea id="content" name="content" rows="4" cols="50" required></textarea>  
             
             <button type="submit" class="btn btn-primary">Submit Feedback</button>
         </form>
     </div>
 </div>
 {% endmacro %}
-
-
+ 
+<!-- Your Lists  -->
 <div data-group="yourLists">
     <h2>Your Lists</h2>
 
@@ -48,20 +49,21 @@
     <h3>Your New Lists</h3>
     {% for image_list in your_lists %}
         {% if image_list.images|length == 0 %}
-            <div class="row">
-                <div class="listbox-display">
+            
+                <div class="listbox-display row">
                     <div class="col-md-2"></div>
                     <a href="{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}" class="list-card btn btn-primary col-md-3 truncate-text">
                         {{ image_list.name }}<br>
                     </a>
                     <div class="col-md-2"></div>
-                    <a href="#" class="btn btn-danger col-md-3" onclick="if(confirm('Are you sure you want to delete this list? It will also delete all associated images and their data.')) { location.href='{{ url_for('list_routes.delete_list', list_id=image_list.list_id) }}' }">Delete This List?</a>
+                    <a href="#" class="list-card btn btn-danger col-md-3" onclick="if(confirm('Are you sure you want to delete this list? It will also delete all associated images and their data.')) { location.href='{{ url_for('list_routes.delete_list', list_id=image_list.list_id) }}' }">Delete This List?</a>
                     <div class="col-md-2"></div>
                 </div>
-            </div>
+            
         {% endif %}
         {% endfor %}
     {% endif %}
+
 
     <h3>Your Uncategorized Lists</h3>
         {% for image_list in your_lists %}
@@ -84,7 +86,7 @@
 
     <h3>Your Categorized Lists</h3>
     {% for category in your_categories %}
-        {# Create a flag to determine if the category contains any lists with images #}
+        
         {% set display_category = namespace(found=false) %}
         {% for image_list in category.image_lists %}
             {% if image_list.creator_id == current_user.id and image_list.images|length > 0 %}
@@ -92,7 +94,7 @@
             {% endif %}
         {% endfor %}
 
-        {# Display the category if it has lists with images #}
+        
         {% if display_category.found %}
             <div class="card category-card mb-3" data-category-id="your-{{ category.category_id }}">
                 <div class="card-body">
@@ -123,7 +125,7 @@
 </div>
 
 
-    <!-- Our Lists -->
+<!-- Our Lists -->
 <div data-group="ourLists">
     <h2>Our Lists</h2>
 
@@ -164,7 +166,12 @@
                                 {{ image_list.name }}<br>
                             </a>   
                             <a class="col-md-2 list-card" href="{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}">
-                                <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="35">
+                                {% if image_list.images and image_list.images|length > 0 %}
+                                    <img src="{{ image_list.images[0].image_url }}" alt="{{ image_list.images[0].name }}" height="35"> 
+                                {% else %}
+                                    <!-- Placeholder for no image -->
+                                    <img src="{{ url_for('static', filename='images/not_found.jpg') }}" alt="No image available" height="35">
+                                {% endif %}
                             </a> 
                             <div class="col-md-5"></div>
                         </div>
@@ -175,14 +182,15 @@
         {% endif %}
     {% endfor %}
 </div>
-    
-    <!-- All Lists -->
+
+
+<!-- All Lists -->
 <div data-group="allLists">
     <h2>All Lists</h2>
 
     <h3>All Uncategorized Lists</h3>
     {% for image_list in all_lists %}
-        {% if not image_list.category_id %} 
+        {% if not image_list.category_id and image_list.images|length > 0 %}
             <div class="row">
                 <div class="col-md-2"></div>
                     <a href="{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}" class="list-card col-md-3 btn btn-primary truncate-text">
@@ -201,25 +209,25 @@
                     {% if current_user.is_admin %}
                     <a href="{{ url_for('list_routes.delete_list', list_id=image_list.list_id) }}" 
                         onclick="return confirm('Are you sure you want to delete this list? It will also delete all associated images and their data.');" 
-                        class="btn btn-danger list-card">
+                        class="btn btn-danger col-md-2 admin-del">
                         Admin Deletion
                     </a>         
                     {% endif %}
             </div>
         {% endif %}
-    {% endfor %} 
+    {% endfor %}  
 
     <h3>All Categorized Lists</h3>
     {% for category in all_categories %}
         {% if category.name != "Uncategorized" %}
-            {# Create a flag to determine if the category contains any lists with images #}
+            
             {% set display_category = namespace(found=false) %}
             {% for image_list in all_lists %}
                 {% if image_list.category_id == category.category_id and image_list.images|length > 0 %}
                     {% set display_category.found = true %}
                 {% endif %}
             {% endfor %}
-                {# Display the category if it has lists with images #}
+              
             {% if display_category.found %}
                 <div>
                     <div class="card category-card mb-3" data-category-id="your-{{ category.category_id }}">
@@ -245,7 +253,7 @@
                                         {% if current_user.is_admin %}
                                         <a href="{{ url_for('list_routes.delete_list', list_id=image_list.list_id) }}" 
                                             onclick="return confirm('Are you sure you want to delete this list? It will also delete all associated images and their data.');" 
-                                            class="btn btn-danger list-card">
+                                            class="btn btn-danger col-md-2 admin-del">
                                             Admin Deletion
                                         </a>         
                                         {% endif %}
@@ -257,7 +265,8 @@
             {% endif %}
         {% endif %}
     {% endfor %}
-</div> 
+
+</div>  
 
 {{ report_modal() }}
 

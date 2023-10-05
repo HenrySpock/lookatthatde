@@ -28,6 +28,7 @@ logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kodai:ronan@localhost/lookatthat'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kodai:ronan@localhost/lookatthat_test'
 app.debug = True
 app.config['SECRET_KEY'] = 'IS_VERY_SECRET'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -74,50 +75,19 @@ migrate = Migrate(app, db)
 def load_user(user_id):
     return Users.query.get(int(user_id))
 
-# ADMIN ROUTES 
 @app.route('/testSession')
 def test_session():
     return str(dict(session))
 
-# *** 
 @app.route('/')
-def home():
-    return render_template('home.html', current_user=current_user) 
+def home(): 
+    all_lists = ImageList.query.order_by(ImageList.list_id.desc()).all()
+    return render_template('home.html', all_lists=all_lists, current_user=current_user)
 
 @app.route('/about')
 def about():
     return render_template('about.html')
-
-# @app.route('/ourLists')
-# def our_lists():
-#     return render_template('ourLists.html')
-
-# @app.route('/yourLists')
-# def your_lists():
-#     return render_template('yourLists.html')
-
-# @app.route('/listDetails')
-# def list_details():
-#     return render_template('listDetails.html')
-
-# @app.route('/pictureDetails')
-# def picture_details():
-#     return render_template('pictureDetails.html')
-
-# @app.route('/base')   
-# def base():
-#     return render_template('base.html')
-
-# @app.route('/allLists')
-# def allLists():
-#     image_lists = ImageList.query.all()
-#     return render_template('allLists.html', image_lists=image_lists)
-
-# @app.route('/singleList/<int:list_id>')
-# def singleList(list_id):
-#     image_list = ImageList.query.get_or_404(list_id)
-#     return render_template('singleList.html', image_list=image_list)
-
+    
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
  

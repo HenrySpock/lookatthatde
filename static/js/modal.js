@@ -1,8 +1,8 @@
 // Get the modal
-var modal = document.getElementById('imageNameModal');
+let modal = document.getElementById('imageNameModal');
 
 // When the user clicks on <span> (x), close the modal
-var span = document.getElementsByClassName("close")[0];
+let span = document.getElementsByClassName("close")[0];
 span.onclick = function() {
     modal.style.display = "none";
 }
