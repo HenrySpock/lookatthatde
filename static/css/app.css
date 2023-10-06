@@ -325,3 +325,18 @@ margin: auto 30px auto 30px;
     margin-right: 10px;
 }
 
+.smallBreak { 
+  display: block;
+  margin-bottom: 4px;    
+}
+
+.about-container { 
+}
+
+.documentation-wrapper {
+  width: 80%;
+  margin: auto;
+}
+.documentation-container { 
+  text-align: left;
+}
