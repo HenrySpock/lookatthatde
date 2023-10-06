@@ -18,8 +18,7 @@ function saveImageUrlWithName(event) {
 
     let imageUrl = document.getElementById('manualImageUrl').value;
     let imageName = document.getElementById('imageName').value;
-    let csrfToken = document.querySelector("input[name='csrf_token']").value;
-    // Assuming you have an API endpoint set up to save the image in your Flask app:
+    let csrfToken = document.querySelector("input[name='csrf_token']").value; 
     let listId = document.getElementById('list_id').value;
 
     fetch('/images/save_image/' + listId, {
@@ -53,10 +52,7 @@ window.onclick = function(event) {
     }
 }
 
-function chooseImage(imageUrl, listId) {
-  // Assuming you want to do something with the imageUrl and listId 
-  // Maybe set them in some hidden fields or global variables for later use
-  // For this example, I'll just console.log them
+function chooseImage(imageUrl, listId) { 
   console.log(imageUrl, listId);
   
   // Open the modal

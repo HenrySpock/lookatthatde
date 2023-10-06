@@ -20,21 +20,21 @@
                 <div class="container-fluid">
                     <ul class="nav navbar-nav"> 
                         <li class="{{ 'active' if request.endpoint == 'home' else '' }}"><a class="navbar-brand" href="{{ url_for('home') }}">LOOK AT THAT!</a></li>
-                        <li class="{{ 'active' if request.endpoint == 'about' else '' }}"><a href="{{ url_for('about') }}">About</a></li>
+                        <li class="{{ 'active' if request.endpoint == 'about' else '' }}"><a class="small-lead" href="{{ url_for('about') }}">About</a></li>
                         <li class="{{ 'active' if request.endpoint == 'user_routes.support' else '' }}"><a href="{{ url_for('user_routes.support') }}">Contact Support</a></li>
                         {% if current_user.is_authenticated %}
-                        <li class="{{ 'active' if request.endpoint == 'list_routes.create_list' else '' }}"><a href="{{ url_for('list_routes.create_list') }}">Create List</a></li>
-                        <li class="{{ 'active' if request.endpoint == 'list_routes.go_to_lists' else '' }}"><a href="{{ url_for('list_routes.go_to_lists') }}">Go To Lists</a></li>
+                        <li class="{{ 'active' if request.endpoint == 'list_routes.create_list' else '' }}"><a class="small-lead" href="{{ url_for('list_routes.create_list') }}">Create List</a></li>
+                        <li class="{{ 'active' if request.endpoint == 'list_routes.go_to_lists' else '' }}"><a class="small-lead" href="{{ url_for('list_routes.go_to_lists') }}">Go To Lists</a></li>
                         {% endif %}
                     </ul>
                     {% if current_user.is_authenticated %}
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="{{ 'active' if request.endpoint == 'user_routes.user_profile' else '' }}"><a href="{{ url_for('user_routes.user_profile') }}">Profile</a></li>
-                        <li class="{{ 'active' if request.endpoint == 'user_routes.logout' else '' }}"><a href="{{ url_for('user_routes.logout') }}">Logout</a></li>
+                        <li class="{{ 'active' if request.endpoint == 'user_routes.user_profile' else '' }}"><a class="small-lead" href="{{ url_for('user_routes.user_profile') }}">Profile</a></li>
+                        <li class="{{ 'active' if request.endpoint == 'user_routes.logout' else '' }}"><a class="small-lead" href="{{ url_for('user_routes.logout') }}">Logout</a></li>
                     </ul>
                     {% else %}
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="{{ 'active' if request.endpoint == 'user_routes.reg_log' else '' }}"><a href="{{ url_for('user_routes.reg_log') }}">Register or Login</a></li>
+                        <li class="{{ 'active' if request.endpoint == 'user_routes.reg_log' else '' }}"><a class="small-lead" href="{{ url_for('user_routes.reg_log') }}">Register or Login</a></li>
                     </ul>
                     {% endif %}
                 </div>

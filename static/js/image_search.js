@@ -1,5 +1,4 @@
-console.log("Script Loaded");
-// alert("List ID: " + list_id);
+console.log("Script Loaded"); 
 
 document.addEventListener('DOMContentLoaded', function() {
   console.log("DOMContentLoaded fired");

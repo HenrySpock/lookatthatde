@@ -1,4 +1,5 @@
-const backgroundImages = [
+ // An array holding the paths to background images.
+ const backgroundImages = [
   '/static/images/latbg1.jpg',
   '/static/images/latbg2.jpg',
   '/static/images/latbg3.jpg', 
@@ -24,10 +25,15 @@ const backgroundImages = [
   '/static/images/latbg23.jpg', 
 ];
 
+// Event listener to execute when the document is fully loaded.
 document.addEventListener('DOMContentLoaded', function() {
+  // Randomly select an image path from the `backgroundImages` array.
   const randomImage = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
+  // Apply the randomly selected image as a background to the element with class `main-content`.
   document.querySelector('.main-content').style.setProperty('--random-bg', `url('${randomImage}')`);
 });
+
+ 
 
  
  

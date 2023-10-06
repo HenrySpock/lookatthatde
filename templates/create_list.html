@@ -47,7 +47,7 @@
                                 {{ form.category_name.choices.append((category.name, category.name)) }}
                             {% endfor %}
                             {{ form.category_name.label(class="lead") }}<br>
-                            {{ form.category_name(class="form-control") }}
+                            {{ form.category_name(class="form-control small-lead") }}
                         </div>
                     
                         <div class="form-div">
@@ -56,7 +56,7 @@
                         </div>
                     
                         <div class="mt-4">
-                            {{ form.submit(class="btn btn-primary btn-small add-stbmargin") }}
+                            {{ form.submit(class="btn btn-primary btn-small add-stbmargin small-lead") }}
                         </div>
                     </form>
                 </div>

@@ -28,6 +28,79 @@
         is courtesy of Render.com, it's a good idea to skim through their <a href="https://www.render.com/tos">terms of service</a> 
         for a comprehensive understanding of their data handling practices.</p>
     <hr> 
+ 
+    <!-- Check if the user is logged in -->
+    {% if current_user.is_authenticated %}
+    <p>
+    DOCUMENTATION
+    Combing through the website:
+
+    Not logged in:
+    LOOK AT THAT! takes you to the home page.
+    About is where you are now, providing a description of how the website works to anticipate as many questions as possible.
+    Contact Support is where you can send feedback, whether or not you are a registered user.
+    Register or Login is where you register and subsequently login, if you wish to use the site.
+
+    Logged in as user:
+    About page has user section for how to use website.
+    Create List: Creating list will redirect to list details for that list specifically. It will currently show up in the 'Your New Lists' section until images are added.
+    
+    List Details:
+    If you are the list creator, you will have editing buttons. If not, you will only see the slideshow button. The 'All Lists' radio button has functionality for reporting a list.
+    List Details Editing Buttons:
+    
+    Add a Category:
+    If your list currently does not have a category, this button takes you to a page where you can add a category by choosing from a dropdown or enteringg a new category. Then there are buttons for saving the category or canceling back to list details. If the list does have a category, then the Remove Category button will be showing. If you use either the add or remove category button, then the opposite one will show.
+    
+    Edit List Name:
+    This takes you to a page where you can input a new name, then save it or cancel back to the list details page.
+    
+    Edit Fields:
+    This button takes you to a page for editing the fields you want for describing the images in your list. Note that you don't add the actual information for images here, you do that on the Edit Image buttons located under each image on the List Details page.
+    
+    Add Image:
+    This takes you to a page where you can either search for images or input your own url of choosing. Note, you cannot upload photos with this app. However, you could for instance get your own Flickr account (or some other image hosting account) and then use pictures from that account in your lists if you want to use specific pictures of things you can't find on Flickr. Note that the heart of this site is teaching and learning interaction with children, so act accordingly.
+    
+    Reposition Images:
+    This button brings up positioning arrows on every image. If you click Reposition Images, the button is replaced by a save Images button. There is no cancel, but if you hit the button by mistake or decide you don't want to change anything, just click Save Position.
+    
+    Slideshow: This page has buttons for returning to the List Details page for the current list or Start Slideshow.
+    Slideshow functionality:
+    1. Setting the speed - changing the number in this dropdown automatically sets the speed of the slideshow to that number of seconds.
+    2. Clicking the left or right arrow key will stop the slideshow and move through the images as the user desires, clicking the enter key will restart the movement of the slideshow.
+    3. Clicking the image or the white space around it will stop the slideshow and return to the Slideshow page.
+
+    Hide Fields: This button lets you hide all the associated information for images on the page if you just want to see the images. If you click Hide Fields, it is replaced with Show Fields so you can turn them back on if you like.
+    
+    The images themselves: 
+    Images are displayed on cards so they display more consistently on the page, as images uploaded to flicker could be at any given aspect ratio. If you are the list creator, you will see buttons under every image for Edit and Delete. The Edit button takes you to the page where you can add specific information to each of your fields for the image. Note that you can even replace the image url if you wish.
+
+    Go To Lists: Goes to the 'Lists' page where a user can select between their lists, the lists provided by the website, and all lists by all users to browse.
+    Profile: Displays the user's profile data and has buttons for Edit Profile, Change Password and Delete Profile.
+    Logout
+    </p>
+    <hr>
+    {% endif %}
+
+    <!-- Check if the user is logged in and is an admin -->
+    {% if current_user.is_authenticated and current_user.is_admin %}
+    <p>
+    Logged in as Admin:
+    About page has user section for how to use website plus an admin section for the admin differences.
+    Create List:
+    Admins will have a radio select option for creating a 'core list', which will show up on the 'Our Lists' section of the Lists page (go_to_lists.)
+    List Details:
+    Admins will see 'Delete' functionality on all images, and an 'Admin Delete' button on the 'All Lists' page.
+    Images: 
+    Admins can delete any given image.
+    </p>
+    {% endif %}
+
+
+  
+
+
+
 
 </div>
 {% endblock %}

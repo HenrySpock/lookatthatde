@@ -1,21 +1,3 @@
-{#
-    {% extends "base.html" %}
-
-{% block content %}
-<div>
-    <h2>Contact Support</h2>
-    <form method="post">
-        {{ form.hidden_tag() }}
-        Name: {{ form.name }}<br>
-        Email: {{ form.email }}<br>
-        {{ form.content.label }}<br>
-        {{ form.content }}<br>
-        {{ form.submit(class="btn btn-primary") }}
-    </form>
-</div>
-{% endblock %}
-#}
-
 {% extends "base.html" %}
 
 {% block content %}
@@ -35,22 +17,22 @@
                         {{ form.hidden_tag() }}
 
                         <div class="form-group">
-                            <label>{{ form.name.label(class="lead") }}</label>
-                            {{ form.name(class="form-control") }}
+                            <label>{{ form.name.label(class="small-lead") }}</label>
+                            {{ form.name(class="form-control small-lead") }}
                         </div>
 
                         <div class="form-group">
-                            <label>{{ form.email.label(class="lead") }}</label>
-                            {{ form.email(class="form-control") }}
+                            <label>{{ form.email.label(class="small-lead") }}</label>
+                            {{ form.email(class="form-control small-lead") }}
                         </div>
 
                         <div class="form-group">
-                            <label>{{ form.content.label(class="lead") }}</label>
+                            <label>{{ form.content.label(class="small-lead") }}</label>
                             {{ form.content(class="form-control", rows=5) }} 
                         </div>
 
                         <div class="form-group">
-                            {{ form.submit(class="btn btn-primary btn-small") }}
+                            {{ form.submit(class="btn btn-primary btn-small small-lead") }}
                         </div>
                     </form>
                 </div>

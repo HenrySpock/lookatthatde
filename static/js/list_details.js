@@ -14,8 +14,6 @@ document.getElementById('editFieldsButton').addEventListener('click', function()
     window.location.href = url;
   });
 
-
-
 // **************************
 // Positioning image with arrows.
 function swapElements(elm1, elm2) {
@@ -30,30 +28,27 @@ function swapElements(elm1, elm2) {
   parent1.insertBefore(elm2, next1);
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+ document.addEventListener("DOMContentLoaded", function() {
   const imageEntry = document.querySelector('.image-entry');
   const currentUserId = imageEntry.getAttribute('data-current-user-id');
   const listCreatorId = imageEntry.getAttribute('data-creator-id');
   
   const repositionButton = document.getElementById('reposition-btn');
 
-  const editingButtons = document.getElementById('editing-buttons');
+  const showHideEdit = document.getElementsByClassName('show-hide-edit');
 
   console.log("currentUserId:", currentUserId);
   console.log("listCreatorId:", listCreatorId);
 
-  // if (currentUserId === listCreatorId) {
-  //     repositionButton.style.display = ''; // Show the button
-  // } else {
-  //     repositionButton.style.display = 'none'; // Hide the button
-  // }
-
-  if (currentUserId === listCreatorId) {
-      editingButtons.style.display = ''; // Show the buttons
-  } else {
-      editingButtons.style.display = 'none'; // Hide the buttons
+  // Loop through each button in the collection
+  for(let button of showHideEdit) {
+      if (currentUserId === listCreatorId) {
+          button.style.display = ''; // Show the button
+      } else {
+          button.style.display = 'none'; // Hide the button
+      }
   }
-
+  
   // Initial positions
   let initialPositions = {};
 
@@ -76,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
           let currentPosition = parseInt(imageElement.getAttribute('data-position'));
           console.log('Current Position:', currentPosition);
 
-          // Additional logic to move the image one place to the right
+          // Additional logic to move the image one place to the left
           let previousImage = document.querySelector(`img[data-position="${currentPosition - 1}"]`);
           console.log('Previous Image:', previousImage);
           if (previousImage) {
@@ -101,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
           let nextImage = document.querySelector(`img[data-position="${currentPosition + 1}"]`);
           console.log('Next Image:', nextImage);
           if (nextImage) {
-              console.log('Attempting to swap with previous image');
+              console.log('Attempting to swap with next image');
               swapElements(nextImage, imageElement);
               nextImage.setAttribute('data-position', currentPosition);
               imageElement.setAttribute('data-position', currentPosition + 1);
@@ -182,11 +177,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Modify your existing saveButton event listener
   saveButton.addEventListener('click', function() {
-      
-      // ... [rest of your saving logic] ...
-
+    
       // Once saving is done:
-      
       // Hide arrows
       arrows.forEach(arrow => {
           arrow.style.display = 'none';
@@ -221,8 +213,7 @@ function toggleCategory(listId) {
                 button.innerText = 'Add a Category?';
                 button.onclick = function() { location.href = addCategoryUrl; };
                 showToast(data.message);
-            } else {
-                // alert(data.message);
+            } else { 
                 showToast("Error: " + data.message);
             }
         })
@@ -280,3 +271,28 @@ slideshowButton.addEventListener('click', function() {
     const list_id = this.getAttribute('data-list-id');
     goToCarousel(list_id); // Call the function with the list_id
 });
+
+// Handle Add Image button:
+function redirectTo(url) {
+    window.location.href = url;
+}
+
+
+
+let areFieldsHidden = false;
+function toggleFields() {
+    console.log("Toggle fields function triggered");
+    const button = document.getElementById('toggleFieldsButton');
+    const fields = document.querySelectorAll('.card-fields');
+
+    if (areFieldsHidden) {
+        fields.forEach(field => field.style.display = '');
+        button.textContent = "Hide Fields";
+        areFieldsHidden = false;
+    } else {
+        fields.forEach(field => field.style.display = 'none');
+        button.textContent = "Show Fields";
+        areFieldsHidden = true;
+    }
+}
+

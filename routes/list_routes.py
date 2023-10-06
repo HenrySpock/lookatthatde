@@ -1,3 +1,12 @@
+"""
+list_routes.py
+
+This module contains routes related to image list functionalities, including
+creating, editing, deleting lists, managing fields associated with lists,
+and viewing the slideshow of images in a list.
+"""
+
+# Necessary imports for Flask, Flask-WTF forms, database operations, and other utilities.
 from flask import Blueprint, redirect, url_for, render_template, session, flash, request, current_app, jsonify
 from flask_login import logout_user, login_user, current_user, login_required
 from forms import CreateListForm, EditListNameForm
@@ -5,8 +14,10 @@ from models import ImageList, Image, ListCategory, db, Field, FieldData, ImagePo
 from flask_cors import CORS 
 import re
 
+# Blueprint definition for list routes
 list_routes = Blueprint('list_routes', __name__)
 
+# Function to either create a new category or fetch it if it already exists.
 def create_or_get_category(category_name):
     """Function to create or fetch an existing category."""
     if not category_name:
@@ -25,6 +36,7 @@ def create_or_get_category(category_name):
 
     return category
 
+# Route to navigate to a user's lists
 @list_routes.route("/go_to_lists")
 @login_required
 def go_to_lists():
@@ -58,6 +70,7 @@ def go_to_lists():
         has_new_lists=has_new_lists
     )
 
+# Route to view details of a particular list.
 @list_routes.route("/list_details/<int:list_id>")
 @login_required
 def list_details(list_id):
@@ -87,6 +100,7 @@ def list_details(list_id):
 
     return render_template("list_details.html", image_list=image_list, images=ordered_images_query, list_id=list_id, fields=fields, categories=categories, image_field_values=image_field_values)
 
+# Route to create a new image list.
 @list_routes.route('/create_list', methods=['GET', 'POST'])
 @login_required
 def create_list():
@@ -128,7 +142,7 @@ def create_list():
     return render_template('create_list.html', form=form)
 
 # Category Routes: 
-
+# Route to remove a category from a list.
 @list_routes.route("/remove_category/<int:list_id>", methods=["POST"])
 @login_required
 def remove_category(list_id):
@@ -137,15 +151,15 @@ def remove_category(list_id):
     
     # Ensure that only the creator can remove the category
     if image_list.creator_id != current_user.id:
-        # flash('You do not have permission to modify this list.', 'danger') # You can uncomment this if you plan to use flash messages elsewhere.
+        # flash('You do not have permission to modify this list.', 'danger') 
         return jsonify({"status": "error", "message": 'You do not have permission to modify this list.'})
 
     image_list.category_id = None  # remove the category
     db.session.commit()
-    # flash('Category removed successfully!', 'success') # You can uncomment this if you plan to use flash messages elsewhere.
+    # flash('Category removed successfully!', 'success') 
     return jsonify({"status": "success", "message": 'Category removed successfully!'})
 
-# Navigate to add_a_category page.
+# Route to navigate to a page for adding a new category to a list.
 @list_routes.route('/add_a_category/<list_id>', methods=['GET'])
 def add_category_page(list_id):
     image_list = ImageList.query.get_or_404(list_id)  # This is a hypothetical function, replace with your actual function that retrieves the image list by ID.
@@ -158,7 +172,7 @@ def add_category_page(list_id):
     categories = ListCategory.query.all()           # Again, replace with your actual function that retrieves all categories.
     return render_template('add_a_category.html', image_list=image_list, categories=categories)
 
-#Adding a category to a list after creation:
+# Route to add a new category to an existing list.
 @list_routes.route('/<int:list_id>/add_category', methods=['GET', 'POST'])
 @login_required
 def add_category_to_list(list_id):
@@ -184,7 +198,7 @@ def add_category_to_list(list_id):
     categories = Category.query.all()
     return render_template('list_details.html', categories=categories, image_list=image_list)  
 
-
+# Route to delete a specific image list.
 @list_routes.route('/delete_list/<int:list_id>', methods=['GET', 'POST'])
 @login_required
 def delete_list(list_id):
@@ -206,12 +220,7 @@ def delete_list(list_id):
 
     return redirect(url_for('list_routes.go_to_lists'))
 
-# #edit_list_name route:
-# @list_routes.route('/edit_list_name/<int:list_id>', methods=['GET'])
-# def edit_list_name(list_id):
-#     # Your logic here (if any)
-#     return render_template('edit_list_name.html', list_id=list_id)
-
+# Route to navigate to a page for editing the name of a list.
 @list_routes.route('/edit_list_name/<int:list_id>', methods=['GET', 'POST'])
 def edit_list_name(list_id):
     # Retrieve the current list by its ID.
@@ -230,7 +239,7 @@ def edit_list_name(list_id):
     form.list_name.data = image_list.name
     return render_template('edit_list_name.html', form=form, list_id=list_id)
 
-#Update List name: 
+# Route to update the name of a list.
 @list_routes.route('/update_list_name/<int:list_id>', methods=['POST'])
 def update_list_name(list_id):
     print('Trying to save list name')
@@ -253,7 +262,7 @@ def update_list_name(list_id):
         print(str(e))
         return jsonify(success=False, message="An error occurred"), 500
 
-# Handle editing fields. 
+# Route to navigate to a page for editing fields associated with a list.
 @list_routes.route('/edit_fields_get/<int:list_id>', methods=['GET'])
 def edit_fields_get(list_id):
     # Fetch the custom fields for the list
@@ -262,6 +271,7 @@ def edit_fields_get(list_id):
 
     return render_template('edit_fields.html', list_id=list_id, fields=fields)
 
+# Route to save changes to fields associated with a list.
 @list_routes.route('/edit_fields/<int:list_id>', methods=['POST'])
 def edit_fields_post(list_id):
     print('request.form: ', request.form)
@@ -328,12 +338,13 @@ def edit_fields_post(list_id):
     flash('Fields edited successfully!')
     return redirect(url_for('list_routes.list_details', list_id=list_id))
 
-# Going to the slideshow
+# Route to navigate to a carousel/slideshow for a list.
 @list_routes.route('/carousel/<int:list_id>')
 def carousel(list_id):
     # Pass the list_id to the carousel.html template
     return render_template('carousel.html', list_id=list_id)
 
+# Route to initiate the slideshow for a list.
 @list_routes.route('/slideshow/<int:list_id>')
 def slideshow(list_id):
     # Join Image and ImagePosition and filter by list_id.

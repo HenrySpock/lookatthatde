@@ -4,12 +4,12 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
-            <h2 class="text-center">Edit List Name</h2>
+            <h2 class="text-center lead">Edit List Name</h2>
             <form method="post">
                 {{ form.hidden_tag() }}
 
                 <div class="form-group">
-                    {{ form.list_name(class="form-control") }}
+                    {{ form.list_name(class="form-control small-lead") }}
                     {% if form.list_name.errors %}
                         <div class="alert alert-danger">
                             {% for error in form.list_name.errors %}
@@ -19,10 +19,10 @@
                     {% endif %}
                 </div>
 
-                <button id="saveListNameButton" data-list-id="{{ list_id }}" class="btn btn-primary btn-block add-stbmargin">{{ form.submit.label.text }}</button>
+                <button id="saveListNameButton" data-list-id="{{ list_id }}" class="btn btn-primary btn-block add-stbmargin small-lead">{{ form.submit.label.text }}</button>
 
             </form>
-            <a href="{{ url_for('list_routes.list_details', list_id=list_id) }}" class="btn btn-primary btn-block add-stbmargin">Cancel</a>
+            <a href="{{ url_for('list_routes.list_details', list_id=list_id) }}" class="btn btn-primary btn-block add-stbmargin small-lead">Cancel</a>
         </div>
     </div>
 </div>

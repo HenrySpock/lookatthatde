@@ -1,14 +1,24 @@
+#user_routes.py
+
+# This module contains routes related to user management, authentication, and 
+# feedback functionalities. This includes user registration, login, logout, 
+# profile viewing and editing, password management, as well as feedback and 
+# reporting features. 
+
+# Necessary imports for Flask, Flask-WTF forms, database operations, and mailing utilities.
 from flask import Blueprint, redirect, url_for, render_template, session, flash, request, current_app
 from flask_login import logout_user, login_user, current_user, login_required
 from forms import RegistrationForm, LoginForm, EditProfileForm, ChangePasswordForm, SupportForm
 from models import Users, db, Feedback
 from flask_mail import Mail, Message
 
+# Initialize Flask-Mail
 mail = Mail()
 
+# Blueprint definition for user routes
 user_routes = Blueprint('user_routes', __name__)
 
-# Register or Login a user: 
+# Route for user registration and login 
 @user_routes.route('/reg_log', methods=['GET', 'POST'])
 def reg_log():
     reg_form = RegistrationForm()
@@ -65,19 +75,19 @@ def reg_log():
 
     return render_template('register_login.html', reg_form=reg_form, login_form=login_form)
 
-# Logout current user: 
+# Route to log out a user 
 @user_routes.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('home'))
 
-# Show the current user's profile:  
+# Route to display the user's profile 
 @user_routes.route('/profile')
 @login_required
 def user_profile():
     return render_template('profile.html', user=current_user)
 
-# Update user's profile:
+# Route to edit a user's profile 
 @user_routes.route('/profile/edit', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -101,7 +111,7 @@ def edit_profile():
         print("Form validation errors:", form.errors)
     return render_template('edit_profile.html', form=form)
 
-# Change Password 
+# Route to change the user's password 
 @user_routes.route('/profile/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
@@ -116,7 +126,7 @@ def change_password():
             flash('Incorrect current password.', 'danger')
     return render_template('change_password.html', form=form)
 
-# Delete user's profile:
+# Route to delete a user's profile 
 @user_routes.route('/profile/delete', methods=['POST'])
 @login_required
 def delete_profile():
@@ -126,6 +136,7 @@ def delete_profile():
     logout_user()
     return redirect(url_for('home'))
 
+# Route for users to contact support regardless of login status
 @user_routes.route('/support', methods=['GET', 'POST'])
 def support():
     form = SupportForm()
@@ -164,14 +175,13 @@ def support():
             mail.send(msg)
             flash('Your feedback has been sent!', 'success')
         except Exception as e:
-            flash(f'There was an error sending the email: {e}', 'danger')
-            # You can also log the error for debugging
+            flash(f'There was an error sending the email: {e}', 'danger') 
 
         return redirect(url_for('about'))
 
     return render_template('contact_support.html', form=form)
 
-# For feedback from reports
+# Route for users to report a possibly inappropriate list for review.
 @user_routes.route('/report', methods=['POST'])
 def report():
     form = SupportForm()
@@ -190,8 +200,7 @@ def report():
             content=form.content.data,
             list_id=request.form.get('reportListId'),
             creator_id=request.form.get('reportCreatorId')
-        )
-    # rest of the code...
+        ) 
 
         db.session.add(feedback)
         db.session.commit()
@@ -221,13 +230,12 @@ def report():
             mail.send(msg)
             flash('Your report has been sent!', 'success')
         except Exception as e:
-            flash(f'There was an error sending the email: {e}', 'danger')
-            # You can also log the error for debugging
+            flash(f'There was an error sending the email: {e}', 'danger') 
 
-        return redirect(url_for('list_routes.go_to_lists'))  # This should be the route you want to redirect to after the report submission.
+        return redirect(url_for('list_routes.go_to_lists'))  
 
     # If the form validation fails or it's a GET request:
-    return redirect(url_for('list_routes.go_to_lists'))  # Redirect back to the current page or the desired route.
+    return redirect(url_for('list_routes.go_to_lists'))  
 
 
 

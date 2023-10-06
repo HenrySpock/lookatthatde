@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
-{% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% block content %} 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 
 <div class="container mt-5">
     <div class="row">
@@ -15,22 +15,22 @@
                     <form method="post">
                         {{ form.hidden_tag() }}
                         <div class="form-div">
-                            <label class="form-label lead" for="first_name">First Name:</label>
-                            <input class="form-control" type="text" name="first_name" value="{{ current_user.first_name }}" required>
+                            <label class="form-label small-lead" for="first_name">First Name:</label>
+                            <input class="form-control small-lead" type="text" name="first_name" value="{{ current_user.first_name }}" required>
                         </div>
                         <div class="form-div">
-                            <label class="form-label lead" for="last_name">Last Name:</label>
-                            <input class="form-control" type="text" name="last_name" value="{{ current_user.last_name }}" required>
+                            <label class="form-label small-lead" for="last_name">Last Name:</label>
+                            <input class="form-control small-lead" type="text" name="last_name" value="{{ current_user.last_name }}" required>
                         </div>
                         <div class="form-div">
-                            <label class="form-label lead" for="username">Username:</label>
-                            <input class="form-control" type="text" name="username" value="{{ current_user.username }}" required>
+                            <label class="form-label small-lead" for="username">Username:</label>
+                            <input class="form-control small-lead" type="text" name="username" value="{{ current_user.username }}" required>
                         </div>
                         <div class="form-div">
-                            <label class="form-label lead" for="email">Email:</label>
-                            <input class="form-control" type="email" name="email" value="{{ current_user.email }}" required>
+                            <label class="form-label small-lead" for="email">Email:</label>
+                            <input class="form-control small-lead" type="email" name="email" value="{{ current_user.email }}" required>
                         </div>
-                        <input type="submit" value="Update Profile" class="btn btn-warning">
+                        <input type="submit" value="Update Profile" class="btn btn-warning small-lead add-ltbmargin">
                     </form>
                 </div>
             </div>

@@ -19,18 +19,18 @@
                 <div class="field-container row mt-2" data-field-id="{{ field.id }}">
                     <!-- Field Name Column (5 out of 12 grid columns) -->
                     <div class="col-md-5">
-                        <input type="text" class="form-control limited-width" name="field_name_{{ field.id }}" value="{{ field.name }}" required>
+                        <input type="text" class="form-control limited-width small-lead" name="field_name_{{ field.id }}" value="{{ field.name }}" required>
                     </div>
                     
                     <!-- Radio buttons for data type Column (4 out of 12 grid columns) -->
                     <div class="col-md-2">
-                        <label class="radio-spacing"><input type="radio" name="field_type_{{ field.id }}" value="text" {% if field.type == 'text' %} checked {% endif %}> Text</label>
-                        <label><input type="radio" name="field_type_{{ field.id }}" value="number" {% if field.type == 'number' %} checked {% endif %}> Number</label>
+                        <label class="radio-spacing add-stbmargin"><input type="radio" name="field_type_{{ field.id }}" value="text" {% if field.type == 'text' %} checked {% endif %}> Text</label>
+                        <label><input class="small-lead" type="radio" name="field_type_{{ field.id }}" value="number" {% if field.type == 'number' %} checked {% endif %}> Number</label>
                     </div>
                 
                     <!-- Delete button Column (3 out of 12 grid columns) -->
                     <div class="col-md-5">
-                        <button type="button" class="btn btn-danger btn-block limited-width" onclick="deleteField({{ field.id }})">Delete This Field</button>
+                        <button type="button" class="btn btn-danger btn-block limited-width small-lead" onclick="deleteField({{ field.id }})">Delete This Field</button>
                     </div>
                 </div>
                 {% endfor %}
@@ -40,11 +40,11 @@
                 <div id="fieldsContainer"></div>
 
                 <!-- Button to add a new field -->
-                <button type="button" class="btn btn-primary btn-block more-limited-width mt-2" id="addFieldBtn">Add Field</button>
-                <input type="submit" class="btn btn-success btn-block more-limited-width mt-2" value="Save Fields">
+                <button type="button" class="btn btn-primary btn-block more-limited-width mt-2 small-lead" id="addFieldBtn">Add Field</button>
+                <input type="submit" class="btn btn-success btn-block more-limited-width mt-2 small-lead" value="Save Fields">
             </form>
             
-            <button class="btn btn-default btn-block mb-3 more-limited-width btn-primary" onclick="location.href='{{ url_for('list_routes.list_details', list_id=list_id) }}'">Cancel</button>
+            <button class="btn btn-default btn-block mb-3 more-limited-width btn-primary small-lead" onclick="location.href='{{ url_for('list_routes.list_details', list_id=list_id) }}'">Cancel</button>
         
         </div>
     </div>

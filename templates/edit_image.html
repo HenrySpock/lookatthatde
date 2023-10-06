@@ -54,12 +54,12 @@
                 <input type="hidden" name="image_id" value="{{ image.image_id }}">
 
                 <div class="form-group">
-                    <label for="name">Name:</label>
+                    <label for="name" class="add-stbmargin small-lead">Name:</label>
                     <input type="text" id="name" name="name" value="{{ image.name }}" class="form-control">
                 </div>
 
                 <div class="form-group">
-                    <label for="image_url">Image URL:</label>
+                    <label for="image_url" class="small-lead">Image URL:</label>
                     <input type="text" id="image_url" name="image_url" value="{{ image.image_url }}" class="form-control">
                 </div>
 
@@ -75,10 +75,10 @@
                     </div>
                 {% endfor %}
 
-                <input type="submit" value="Save this image" class="btn btn-primary btn-block add-stbmargin">
+                <input type="submit" value="Save this image" class="btn btn-primary btn-block add-stbmargin small-lead">
             </form>
             
-            <a href="{{ url_for('list_routes.list_details', list_id=list_id) }}" class="btn btn-default btn-block add-stbmargin">Cancel</a>
+            <a href="{{ url_for('list_routes.list_details', list_id=list_id) }}" class="btn btn-default btn-primary btn-block add-stbmargin small-lead">Cancel</a>
         </div>
     </div>
 </div>

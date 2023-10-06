@@ -26,7 +26,7 @@ document.getElementById('addFieldBtn').addEventListener('click', function() {
   typeCol.appendChild(radioText);
   let textLabel = document.createElement('label');
   textLabel.innerHTML = " Text";
-  textLabel.className = "radio-spacing"; // apply the styling
+  textLabel.className = "radio-spacing small-lead add-ttbmargin"; // apply the styling
   textLabel.insertBefore(radioText, textLabel.firstChild);
   typeCol.appendChild(textLabel);
 
@@ -37,6 +37,7 @@ document.getElementById('addFieldBtn').addEventListener('click', function() {
   typeCol.appendChild(radioNumber);
   let numberLabel = document.createElement('label');
   numberLabel.innerHTML = " Number";
+  numberLabel.className = "small-lead add-ttbmargin";
   numberLabel.insertBefore(radioNumber, numberLabel.firstChild);
   typeCol.appendChild(numberLabel);
 
@@ -48,7 +49,7 @@ document.getElementById('addFieldBtn').addEventListener('click', function() {
   let deleteBtn = document.createElement('button');
   deleteBtn.innerText = "Delete this Field?";
   deleteBtn.type = "button";
-  deleteBtn.className = "btn btn-danger btn-block limited-width";  // add the Bootstrap class
+  deleteBtn.className = "btn btn-danger btn-block limited-width small-lead";  // add the Bootstrap class
   deleteBtn.onclick = function() {
       fieldGroup.remove();
   };
@@ -64,7 +65,7 @@ document.getElementById('addFieldBtn').addEventListener('click', function() {
 
 
 function deleteField(fieldId) {
-  // var fieldContainer = document.querySelector('.field-container[data-id="' + fieldId + '"]');
+  // let fieldContainer = document.querySelector('.field-container[data-id="' + fieldId + '"]');
   let fieldContainer = document.querySelector('.field-container[data-field-id="' + fieldId + '"]');
   if (fieldContainer) {
       // Instead of removing, hide it and mark it for deletion

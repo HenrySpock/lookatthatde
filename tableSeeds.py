@@ -1,3 +1,4 @@
+# This is the seeding info used by seed.py, but moving forward dblookatthatbackup.sql will be used directly after database backups to reinitialzie. 
 from app import db
 from models import Users, ImageList, Image, ListCategory
 

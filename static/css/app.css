@@ -9,7 +9,7 @@ body {
 
 /* Check for this elsewhere  */
 .base-container {
-  max-width: 90%;  /* or whatever width you desire, such as 1200px, etc. */
+  max-width: 90%;   
   margin: 0 auto; /* center the container */
   padding-left: 15px;
   padding-right: 15px;  
@@ -72,8 +72,9 @@ body {
   width: 450px;  
 }
 
-.more-limited-width {
+.more-limited-width { 
   max-width: 200px; 
+  min-width: 160px;
   margin: 10px auto 10px;
 }
 
@@ -88,6 +89,10 @@ body {
 }
 
 /* top and bottom */
+.add-ttbmargin {
+  margin: 6px auto 6px;
+}
+
 .add-stbmargin {
 margin: 15px auto 15px;
 }
@@ -100,6 +105,10 @@ margin: 30px auto 30px;
 .add-slrmargin {
   margin: auto 15px auto 15px;
   }
+
+.add-tlrmargin {
+  margin: auto 6px auto 6px;
+  }
   
 .add-llrmargin {
 margin: auto 30px auto 30px;
@@ -107,6 +116,10 @@ margin: auto 30px auto 30px;
 
 .imsmargin {
   margin: 0 auto 10px;
+}
+
+.margin {
+  30px;
 }
 
 .admin-del {
@@ -117,9 +130,19 @@ margin: auto 30px auto 30px;
   margin: 0 10px;
 }
 
+.btn-medium {
+  margin: 30px;
+  width: 180px; 
+}
+
 .btn-small {
   margin: 15px;
   width: 180px; 
+}
+
+.btn-smaller {
+  margin: 15px;
+  width: 150px; 
 }
 
 /* reg_log  */
@@ -159,9 +182,13 @@ margin: auto 30px auto 30px;
   background-color: rgb(255, 255, 255, .2);
 }
 
-#slideshow-button {
-padding-bottom: 28px;
-margin-bottom: 20px;
+#reposition-btn {
+  padding-left: 7px;
+}
+
+.speed-control {
+  transform: translateX(30%);
+  z-index: 3;
 }
 
 /* Radio buttons  */
@@ -189,7 +216,9 @@ margin-bottom: 20px;
 }
 
 #editing-buttons {
-  margin-bottom: 25px;
+  /* margin-bottom: 25px; */
+  width: 8%;
+
 }
 
 .card-fields {
@@ -228,6 +257,13 @@ margin-bottom: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* adjust as needed */
 }
 
+.hidden-visibility {
+  visibility: hidden;
+}
+.visible-visibility {
+  visibility: visible;
+}
+
 /* *** */
 /* Heading enhancements */
 .main-content h1 {
@@ -243,8 +279,6 @@ margin-bottom: 20px;
   gap: 16px;
   justify-content: center;
 }
-
-
 
 /* Making the image container square */
 .image-container {
@@ -263,8 +297,7 @@ margin-bottom: 20px;
   object-fit: contain; 
 }
  
-.reposition-arrow {
-  display: none;
+.reposition-arrow { 
   cursor: pointer;
   font-size: 1.5em; 
   position: absolute;

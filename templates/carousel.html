@@ -6,8 +6,8 @@
 <div id="list_id" data-list-id="{{ list_id }}"></div>
 
 <!-- Start Slideshow Button -->
-<a href="{{ url_for('list_routes.list_details', list_id=list_id) }}" id="list-details" class="btn btn-primary add-slrmargin btn-small controls">Back to List Details</a>
-<a href="{{ url_for('list_routes.slideshow', list_id=list_id) }}" id="startSlideshow" class="btn btn-primary add-slrmargin btn-small controls">Start Slideshow</a>
+<a href="{{ url_for('list_routes.list_details', list_id=list_id) }}" id="list-details" class="btn btn-primary add-slrmargin btn-small controls small-lead">Back to List Details</a>
+<a href="{{ url_for('list_routes.slideshow', list_id=list_id) }}" id="startSlideshow" class="btn btn-primary add-slrmargin btn-small controls small-lead">Start Slideshow</a>
 
 <h1 id="headerText" class="lead">Welcome to the slideshow page. After you click 'Start Slideshow', the images in your list will cycle through. You can click anywhere on the page to come back here once the slideshow has begun.</h1>
  
@@ -16,8 +16,8 @@
 
 <!-- Slideshow container -->
 <div class="row">
-    <div class="col-md-1">
-            <label for="slideshowSpeed" id="slideshowSpeedLabel" class="hidden">Choose Speed</label>
+    <div class="col-md-1 speed-control">
+            <label for="slideshowSpeed" id="slideshowSpeedLabel" class="hidden lead">Choose Speed:</label>
             <select id="slideshowSpeed" class="form-control hidden">
                 {% for num in range(1, 21) %}
                     <option value="{{ num * 1000 }}">{{ num }}</option>

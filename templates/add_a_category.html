@@ -30,10 +30,10 @@
                     <input type="text" class="form-control add-stbmargin" id="new_category" name="new_category" aria-describedby="new_category_label">
                 </div>
 
-                <button type="submit" id="saveButton" class="btn btn-primary btn-block limited-width add-stbmargin" data-list-id="{{ list_id }}">Save Category?</button> 
+                <button type="submit" id="saveButton" class="btn btn-primary btn-block limited-width add-stbmargin small-lead" data-list-id="{{ list_id }}">Save Category</button> 
             </form>
 
-            <button class="btn btn-default btn-block mb-3 btn-primary limited-width" onclick="location.href='{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}'">Cancel</button>
+            <button class="btn btn-default btn-block mb-3 btn-primary limited-width small-lead" onclick="location.href='{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}'">Cancel</button>
         </div>
         <div class="col-md-3"></div>
     </div>

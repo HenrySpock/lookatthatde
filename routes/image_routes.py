@@ -1,3 +1,12 @@
+"""
+image_routes.py
+
+This module contains routes related to image functionalities, including
+fetching images from Flickr, editing images, updating and saving edits, 
+deleting images, and updating image positions in a list.
+"""
+
+# Necessary imports for Flask, Flask-WTF forms, database operations, and other utilities.
 from flask import Blueprint, redirect, url_for, render_template, session, flash, request, current_app, jsonify
 from flask_login import logout_user, login_user, current_user, login_required
 from forms import RegistrationForm, LoginForm, EditProfileForm, ChangePasswordForm, SupportForm
@@ -8,8 +17,10 @@ import re
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  # Load the .env file
+# Load environment variables from .env file
+load_dotenv()  
 
+# Get Flickr API key from environment variables
 FLICKR_API_KEY = os.getenv("FLICKR_API_KEY")
 
 def fetch_from_flickr(query):
@@ -21,7 +32,7 @@ def fetch_from_flickr(query):
         "text": query,
         "format": "json",
         "nojsoncallback": 1,  # To get a clean JSON response without the function wrapper
-        "per_page": 32,  # You can adjust this to get more or fewer images
+        "per_page": 32,  # Number of images returned from search
     }
 
     response = requests.get(FLICKR_API_URL, params=params)
@@ -40,15 +51,17 @@ def fetch_from_flickr(query):
     return images
 
 
-# Routes 
+# Blueprint definition for image routes
 image_routes = Blueprint('image_routes', __name__) 
 
+# Error handler for unexpected exceptions in image routes
 @image_routes.app_errorhandler(Exception)
 def handle_exception(e):
     # Log the error for debugging
     print(str(e))
     return str(e), 500
 
+# Route to search for images based on a given list ID
 @image_routes.route('/image_search/<int:list_id>', methods=['GET'])
 def image_search(list_id):
     image_list = ImageList.query.get_or_404(list_id)
@@ -62,6 +75,7 @@ def image_search(list_id):
         
     return render_template('image_search.html', image_list=image_list, list_id=list_id, search_performed=False)
 
+# Route to display fetched images based on a search query or a manual URL
 @image_routes.route('/image_response/<int:list_id>', methods=['GET'])
 def image_response(list_id):
     query = request.args.get('search_query')
@@ -88,6 +102,7 @@ def image_response(list_id):
         flash("Please enter a valid search term or a valid image URL.")
         return redirect(url_for('image_routes.image_search', list_id=list_id))
 
+# Route to edit a specific image from a list
 @image_routes.route('/edit_image/<int:list_id>/<int:image_id>', methods=['GET'])
 def edit_image(list_id, image_id):
     # Directly fetch the image using the image_id
@@ -101,6 +116,7 @@ def edit_image(list_id, image_id):
 
     return render_template('edit_image.html', image=image, fields=fields, field_values=field_values, list_id=list_id, image_id=image_id)
 
+# Route to save an image to a specific list
 @image_routes.route('/save_image/<int:list_id>', methods=['POST'])
 def save_image(list_id):
     data = request.json
@@ -127,6 +143,7 @@ def save_image(list_id):
     flash("Image saved successfully!")
     return jsonify(success=True)
 
+# Route to update a specific image
 @image_routes.route('/update_image/<int:image_id>', methods=['GET', 'POST'])
 @login_required
 def update_image(image_id):
@@ -164,6 +181,7 @@ def update_image(image_id):
     # For a GET request, just display the form with current data
     return render_template('update_image.html', image=image, fields=fields)
 
+# Route to save edits of a specific image
 @image_routes.route('/save_edits/<int:list_id>/<int:image_id>', methods=['POST'])
 def save_edits(list_id, image_id):
     print("save_edits form: ", request.form)
@@ -207,6 +225,7 @@ def save_edits(list_id, image_id):
     
     return redirect(url_for('list_routes.list_details', list_id=list_id))
 
+# Route to delete a specific image from a list
 @image_routes.route('/delete_image/<int:list_id>/<int:image_id>', methods=['GET'])
 @login_required
 def delete_image(list_id, image_id):
@@ -244,8 +263,7 @@ def delete_image(list_id, image_id):
 
     return redirect(url_for('list_routes.list_details', list_id=list_id))
 
-# 1
-# Updating the image positions on list_details display. 
+# Route to update image positions in a specific list
 @image_routes.route('/update_image_positions', methods=['POST'])
 def update_image_positions():
     print('Attempting to update route.')
@@ -269,7 +287,7 @@ def update_image_positions():
         db.session.rollback()
         return jsonify(success=False, error=str(e)), 500
 
-# View full image 
+# Route to view a single image.
 @image_routes.route('/view_full_image/<int:image_id>')
 def view_full_image(image_id):
     image = Image.query.get(image_id)

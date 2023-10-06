@@ -1,12 +1,16 @@
+# Import required libraries and modules for database operations, user authentication, and password hashing.
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey, Integer, String, Column
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin
 import bcrypt 
 
+# Initialize SQLAlchemy object
 db = SQLAlchemy()
 
 class Users(db.Model, UserMixin):
+    """Database model for registered users."""
+    # Define the database columns for the Users model.
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(120), nullable=False)
@@ -16,20 +20,25 @@ class Users(db.Model, UserMixin):
     last_name = db.Column(db.String(80), nullable=True)
     lists_created = db.relationship('ImageList', backref='creator', lazy=True)
 
+    # Helper method to set user password by hashing
     def set_password(self, password):
         self.password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
+    # Helper method to check if provided password matches the hashed password
     def check_password(self, password):
         return bcrypt.checkpw(password.encode('utf-8'), self.password_hash.encode('utf-8'))
 
 class ListCategory(db.Model):
+    """Database model for image list categories."""
+    # Define the database columns for the ListCategory model.
     category_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     description = db.Column(db.Text, nullable=True)
     image_lists = db.relationship('ImageList', backref='category', lazy=True)
 
-# Here is where we are 
+# Model for storing the position of images in a list
 class ImagePosition(db.Model):
+    # Define columns and relationships for ImagePosition table
     __tablename__ = 'image_position'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -47,6 +56,7 @@ class ImagePosition(db.Model):
         self.position = position
          
 class ImageList(db.Model):
+    """Database model to keep track of image positions within a list."""
     list_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     description = db.Column(db.Text, nullable=True)
@@ -59,6 +69,7 @@ class ImageList(db.Model):
     fields = db.relationship('Field', backref='image_list', lazy=True, cascade="all, delete-orphan")
 
 class Image(db.Model):
+    """Database model for lists of images."""
     image_id = db.Column(db.Integer, primary_key=True)
     list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id'), nullable=False)
     image_url = db.Column(db.String(255), nullable=False)
@@ -67,6 +78,7 @@ class Image(db.Model):
     image_positions = db.relationship('ImagePosition', backref='image', cascade="all, delete-orphan")
     
 class UserImage(db.Model):
+    """Database model for images uploaded or customized by users."""
     user_image_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     image_id = db.Column(db.Integer, db.ForeignKey('image.image_id'), nullable=False)
@@ -75,6 +87,7 @@ class UserImage(db.Model):
     is_custom_added = db.Column(db.Boolean, nullable=False)
 
 class Feedback(db.Model):
+    """Database model for feedback or reports by users - the routes handle the difference."""
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user_email = db.Column(db.String(100), nullable=False)
@@ -84,6 +97,7 @@ class Feedback(db.Model):
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 class Field(db.Model):
+    """Database model for user defined fields describing images in desired ways."""
     __tablename__ = 'fields'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -92,6 +106,7 @@ class Field(db.Model):
     list_id = db.Column(db.Integer, db.ForeignKey('image_list.list_id', ondelete='CASCADE'))
       
 class FieldData(db.Model):
+    """Database model field data associated with the Field model."""
     id = db.Column(db.Integer, primary_key=True)
     # field_id = db.Column(db.Integer, db.ForeignKey('fields.id'), nullable=False)
     field_id = db.Column(db.Integer, db.ForeignKey('fields.id', ondelete='CASCADE'), nullable=False)  

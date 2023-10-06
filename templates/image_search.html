@@ -16,9 +16,9 @@
                 <form id="searchForm" class="limited-width imsmargin">
                     <input type="hidden" name="csrf_token" id="csrfToken" value="{{ csrf_token() }}">
                     
-                        <input type="text" class="form-control limited-width imsmargin" id="searchQuery" placeholder="Search for an image on Flickr">
+                        <input type="text" class="form-control limited-width imsmargin small-lead" id="searchQuery" placeholder="Search for an image on Flickr">
                         <div class="input-group-append">
-                            <button class="btn btn-primary btn-block limited-width imsmargin" type="submit">Search</button>
+                            <button class="btn btn-primary btn-block limited-width imsmargin small-lead" type="submit">Search</button>
                         </div>
                     
                 </form>
@@ -27,13 +27,13 @@
                 <form id="manualInputForm" onsubmit="event.preventDefault(); openImageNameModal();" class="limited-width imsmargin">
                     <input type="hidden" name="csrf_token" id="csrfToken" value="{{ csrf_token() }}">
                     
-                        <input type="url" class="form-control limited-width imsmargin" id="manualImageUrl" placeholder="Enter an image URL directly">
+                        <input type="url" class="form-control limited-width imsmargin small-lead" id="manualImageUrl" placeholder="Enter an image URL directly">
                         <div class="input-group-append">
-                            <button class="btn btn-primary btn-block limited-width imsmargin" type="submit">Submit URL</button>
+                            <button class="btn btn-primary btn-block limited-width imsmargin small-lead" type="submit">Submit URL</button>
                         </div>
                 </form>
 
-                <button class="btn btn-default btn-block mb-3 btn-primary limited-width imsmargin" onclick="location.href='{{ url_for('list_routes.list_details', list_id=list_id) }}'">Cancel</button>
+                <button class="btn btn-default btn-block mb-3 btn-primary limited-width imsmargin small-lead" onclick="location.href='{{ url_for('list_routes.list_details', list_id=list_id) }}'">Cancel</button>
 
                 <!-- Image Name Modal -->
                 <div id="imageNameModal" class="modal">
