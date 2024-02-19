@@ -61,7 +61,7 @@ class ImageList(db.Model):
     name = db.Column(db.String(80), nullable=False)
     description = db.Column(db.Text, nullable=True)
     creator_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('list_category.category_id'), nullable=True)  
+    category_id = db.Column(db.Integer, db.ForeignKey('list_category.category_id', ondelete='SET NULL'), nullable=True)
     core_list = db.Column(db.Boolean, default=False)
     images = db.relationship('Image', backref='image_list', lazy=True, cascade="all, delete-orphan")
     

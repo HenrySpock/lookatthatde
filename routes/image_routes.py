@@ -181,7 +181,7 @@ def update_image(image_id):
     # For a GET request, just display the form with current data
     return render_template('update_image.html', image=image, fields=fields)
 
-# Route to save edits of a specific image
+# # Route to save edits of a specific image
 @image_routes.route('/save_edits/<int:list_id>/<int:image_id>', methods=['POST'])
 def save_edits(list_id, image_id):
     print("save_edits form: ", request.form)
@@ -221,7 +221,6 @@ def save_edits(list_id, image_id):
         db.session.rollback()
         print(e)  # print full traceback for debugging
         flash(f"Error saving edits: {str(e)}", "error")
-
     
     return redirect(url_for('list_routes.list_details', list_id=list_id))
 

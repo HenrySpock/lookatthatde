@@ -50,7 +50,7 @@
     {% for image_list in your_lists %}
         {% if image_list.images|length == 0 %}
             
-                <div class="listbox-display row">
+                <div class="row add-mintbmargin">
                     <div class="col-md-2"></div>
                     <a href="{{ url_for('list_routes.list_details', list_id=image_list.list_id) }}" class="list-card btn btn-primary col-md-3 truncate-text">
                         {{ image_list.name }}<br>

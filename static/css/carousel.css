@@ -21,11 +21,20 @@
   background-color: rgb(255, 255, 255); 
 }
 
-.slideshow-container img {
+/* .slideshow-container img {
   max-width: 90%;
   max-height: 90%;  
+  min-width: 80%; 
   margin: auto;
   z-index: 2;
   transform: translate(0, 35px);
-} 
+}  */
  
+
+.slideshow-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* This property will maintain aspect ratio and cover the entire container */
+  z-index: 2;
+  /* transform: translate(0, 35px); */
+}

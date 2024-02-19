@@ -89,6 +89,10 @@ body {
 }
 
 /* top and bottom */
+.add-mintbmargin {
+  margin: 2px auto 2px;
+}
+
 .add-ttbmargin {
   margin: 6px auto 6px;
 }
