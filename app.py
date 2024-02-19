@@ -9,7 +9,7 @@ import logging
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_debugtoolbar import DebugToolbarExtension
+# from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager, login_user, logout_user, current_user
 from flask_mail import Mail, Message
 from flask_cors import CORS
