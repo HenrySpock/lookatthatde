@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 14.9 (Ubuntu 14.9-0ubuntu0.22.04.1)
--- Dumped by pg_dump version 14.9 (Ubuntu 14.9-0ubuntu0.22.04.1)
+-- Dumped from database version 14.10 (Ubuntu 14.10-0ubuntu0.22.04.1)
+-- Dumped by pg_dump version 14.10 (Ubuntu 14.10-0ubuntu0.22.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -431,7 +431,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 COPY public.alembic_version (version_num) FROM stdin;
-42e8ae52f987
+036cce8f3007
 \.
 
 
@@ -452,6 +452,9 @@ COPY public.feedback (id, user_id, user_email, content, list_id, creator_id) FRO
 10	1	testuser1@testuser1.com	blah	4	2
 11	3	admin1@admin1.com	blah	4	2
 12	3	admin1@admin1.com	blah	4	2
+13	3	admin1@admin1.com	Another test.	\N	\N
+14	3	admin1@admin1.com	Testing .env	\N	\N
+15	3	admin1@admin1.com	Testing.env with report	4	2
 \.
 
 
@@ -464,6 +467,9 @@ COPY public.field_data (id, field_id, image_id, value) FROM stdin;
 3	4	14	Spotted
 4	7	14	
 5	9	14	
+6	4	25	
+7	7	25	
+8	9	25	
 \.
 
 
@@ -504,7 +510,6 @@ COPY public.image (image_id, list_id, image_url, name) FROM stdin;
 21	14	https://farm66.staticflickr.com/65535/53233405165_7b1fb66b7b.jpg	SDFADSFADSF
 23	16	https://farm66.staticflickr.com/65535/53231724657_3bc0fb5ee1.jpg	asdf
 24	17	https://farm66.staticflickr.com/65535/53233405769_ff82e70833.jpg	asdf
-25	3	https://farm66.staticflickr.com/65535/53234895660_4cf81677e0.jpg	leopard
 5	3	https://farm66.staticflickr.com/65535/53200619296_91500606db.jpg	Pumaz
 26	3	https://live.staticflickr.com/5596/14307815484_87d075481a_b.jpg	Elephant
 27	19	https://farm66.staticflickr.com/65535/53233474959_7e623cffe4.jpg	Shuttle
@@ -513,6 +518,21 @@ COPY public.image (image_id, list_id, image_url, name) FROM stdin;
 30	20	https://farm66.staticflickr.com/65535/53232781046_bebb168286.jpg	Bullet Train
 31	20	https://farm66.staticflickr.com/65535/52258444751_16e0efa941.jpg	Maglev Train
 32	20	https://farm66.staticflickr.com/65535/53177109970_f70526a873.jpg	Red Diesel Engine
+33	22	https://farm66.staticflickr.com/65535/53235100859_7ee3dbb696.jpg	Octopus
+34	17	https://farm66.staticflickr.com/65535/53234774212_2343c726c0.jpg	asdf
+35	23	https://farm66.staticflickr.com/65535/52763497160_ffbefca950.jpg	Santa Claus Train
+36	16	https://farm66.staticflickr.com/65535/53237135440_d68fc9a998.jpg	asdf
+37	29	https://farm66.staticflickr.com/65535/53232307510_245efd7b6f.jpg	Scoot Scoot
+25	3	https://live.staticflickr.com/7065/6854959630_8bd5693aa7_b.jpg	leopard
+38	36	https://live.staticflickr.com/65535/53237043987_2b950f161a_m.jpg	a
+39	36	https://live.staticflickr.com/65535/53238471170_5b3e2a68c7_m.jpg	about
+40	36	https://live.staticflickr.com/65535/53237133202_88cb9e1d7a_m.jpg	all
+42	21	https://farm66.staticflickr.com/65535/53238118506_8984c9846f.jpg	test
+44	21	https://farm66.staticflickr.com/65535/53238609815_cc0f05f280.jpg	test
+43	21	https://farm66.staticflickr.com/65535/53238609815_cc0f05f280.jpg	test
+45	21	https://live.staticflickr.com/65535/53219751786_4837bdff77_h.jpg	test
+46	21	https://farm66.staticflickr.com/65535/53238684914_fc8309c420.jpg	test
+47	21	https://live.staticflickr.com/65535/53219751786_4837bdff77_h.jpg	test
 \.
 
 
@@ -527,15 +547,25 @@ COPY public.image_list (list_id, name, description, creator_id, category_id, cor
 5	Test 1 no core	\N	3	3	f
 6	Test 2 core	\N	3	3	t
 7	Bubble Gummers	\N	6	\N	f
-9	coretest	\N	3	1	t
 13	Onemoretime2	\N	3	5	t
 14	test 1 no core test 1 no core test 1 no core 	\N	3	1	f
 16	More giraffes	\N	3	\N	f
-17	Boogedy2	\N	3	\N	t
 19	Another List	\N	1	\N	f
 3	Zooniebabas	Various animals you might find in a zoo.	1	\N	f
 20	Trains for Sebastien	\N	1	\N	f
 21	MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM	\N	3	\N	f
+22	Sea Creatures	\N	3	\N	f
+23	Hohoho	\N	3	7	t
+17	Boogedy2	\N	3	\N	t
+29	Scooters	\N	1	2	f
+9	coretest	\N	3	\N	t
+30	Pre-K Word List (Dolch)	\N	3	8	t
+31	Kindergarten Word List (Dolch)	\N	3	8	t
+32	First Grade Word List (Dolch)	\N	3	8	t
+33	Second Grade Word List (Dolch)	\N	3	8	f
+34	Third Grade Word List (Dolch)	\N	3	8	t
+35	Noun Dolch Word List (Dolch)	\N	3	8	t
+36	1st 100 Fry Sight Words	\N	3	9	t
 \.
 
 
@@ -553,26 +583,40 @@ COPY public.image_position (id, image_id, list_id, "position") FROM stdin;
 19	19	9	1
 20	20	13	1
 21	21	14	1
+37	37	29	1
 24	24	17	1
-23	23	16	1
+27	27	19	1
+5	5	3	4
+8	8	3	2
+14	14	3	3
+25	25	3	1
 9	9	5	1
 10	10	6	1
-27	27	19	1
-5	5	3	2
-13	13	4	2
-8	8	3	1
-14	14	3	4
-25	25	3	3
 26	26	3	5
 28	28	3	6
+38	38	36	1
+39	39	36	2
+40	40	36	3
+42	42	21	1
+43	43	21	2
+44	44	21	3
+45	45	21	4
+46	46	21	5
+47	47	21	6
+13	13	4	2
 29	29	20	1
 30	30	20	2
 31	31	20	3
 32	32	20	4
-1	1	1	4
-2	2	1	2
-7	7	1	1
-11	11	1	3
+33	33	22	1
+1	1	1	3
+2	2	1	4
+7	7	1	2
+11	11	1	1
+34	34	17	2
+35	35	23	1
+23	23	16	1
+36	36	16	2
 \.
 
 
@@ -586,7 +630,9 @@ COPY public.list_category (category_id, name, description) FROM stdin;
 3	Groovy	\N
 4	Onemoretime	\N
 5	Onemoretime2	\N
-6	-- choose existing category --	\N
+7	Christmas	\N
+8	Dolch sight words lists	\N
+9	Fry sight words lists	\N
 \.
 
 
@@ -615,14 +661,14 @@ COPY public.users (id, username, password_hash, email, is_admin, first_name, las
 -- Name: feedback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kodai
 --
 
-SELECT pg_catalog.setval('public.feedback_id_seq', 12, true);
+SELECT pg_catalog.setval('public.feedback_id_seq', 15, true);
 
 
 --
 -- Name: field_data_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kodai
 --
 
-SELECT pg_catalog.setval('public.field_data_id_seq', 5, true);
+SELECT pg_catalog.setval('public.field_data_id_seq', 8, true);
 
 
 --
@@ -636,28 +682,28 @@ SELECT pg_catalog.setval('public.fields_id_seq', 9, true);
 -- Name: image_image_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kodai
 --
 
-SELECT pg_catalog.setval('public.image_image_id_seq', 32, true);
+SELECT pg_catalog.setval('public.image_image_id_seq', 47, true);
 
 
 --
 -- Name: image_list_list_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kodai
 --
 
-SELECT pg_catalog.setval('public.image_list_list_id_seq', 21, true);
+SELECT pg_catalog.setval('public.image_list_list_id_seq', 36, true);
 
 
 --
 -- Name: image_position_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kodai
 --
 
-SELECT pg_catalog.setval('public.image_position_id_seq', 32, true);
+SELECT pg_catalog.setval('public.image_position_id_seq', 47, true);
 
 
 --
 -- Name: list_category_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kodai
 --
 
-SELECT pg_catalog.setval('public.list_category_category_id_seq', 6, true);
+SELECT pg_catalog.setval('public.list_category_category_id_seq', 9, true);
 
 
 --
@@ -823,7 +869,7 @@ ALTER TABLE ONLY public.fields
 --
 
 ALTER TABLE ONLY public.image_list
-    ADD CONSTRAINT image_list_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.list_category(category_id);
+    ADD CONSTRAINT image_list_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.list_category(category_id) ON DELETE SET NULL;
 
 
 --
