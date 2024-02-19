@@ -18,7 +18,7 @@ import os
 # from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()  
+# load_dotenv()  
 
 # Get Flickr API key from environment variables
 FLICKR_API_KEY = os.getenv("FLICKR_API_KEY")
