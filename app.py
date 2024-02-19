@@ -14,7 +14,7 @@ from flask_login import LoginManager, login_user, logout_user, current_user
 from flask_mail import Mail, Message
 from flask_cors import CORS
 from flask_wtf.csrf import CSRFProtect
-from dotenv import load_dotenv  # To load environment variables from .env file
+# from dotenv import load_dotenv  # To load environment variables from .env file
 
 # Application Modules
 from models import db, Users, ImageList  # Database models
@@ -24,7 +24,7 @@ from routes.image_routes import image_routes  # Image-related routes
 from flickr_service import fetch_images  # Service for fetching images from Flickr
 
 # Load environment variables
-load_dotenv()
+# load_dotenv()
 
 # Configure logging to output debug-level logs
 logging.basicConfig(level=logging.DEBUG)
@@ -51,7 +51,7 @@ login_manager = LoginManager(app)
 login_manager.login_view = 'reg_log'  # Route to redirect to if user needs to login
 
 # Setup debug toolbar
-toolbar = DebugToolbarExtension(app)
+# toolbar = DebugToolbarExtension(app)
 
 # Constants
 API_KEY = os.environ.get("FLICKR_API_KEY")  # Fetch the API key for Flickr from environment
