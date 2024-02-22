@@ -1,0 +1,87 @@
+
+I used Flickr as an external API for image selection. The app is based on creating lists of connected images, and Flickr has an easy to use api for searching images.
+
+Schema:
+ 
+        Class Name: Users (The class for the logged in user that relates to the user's images.)
+        Fields:
+            id 
+            username 
+            password_hash  
+            email  
+            is_admin  
+            first_name  
+            last_name  
+        Relationships:
+            lists_created: One-to-Many with ImageList
+ 
+        Class Name: ListCategory (The parent class for groups of lists.)
+        Fields:
+            category_id  
+            name  
+            description  
+        Relationships:
+            image_lists: One-to-Many with ImageList
+ 
+        Class Name: ImagePosition (A relation table that helps show images in order, modifiable by the user.)
+        Fields:
+            id  
+            image_id  
+            list_id  
+            position  
+        Relationships:
+            list: Many-to-One with ImageList
+ 
+        Class Name: ImageList (The parent class for groups of images.)
+        Fields:
+            list_id  
+            name  
+            description  
+            creator_id  
+            category_id  
+            core_list  
+        Relationships:
+            images: One-to-Many with Image
+            fields: One-to-Many with Field
+ 
+        Class Name: Image (The class for storing the image_url, either from Flickr or user defined, that will be used in a list.)
+        Fields:
+            image_id  
+            list_id  
+            image_url  
+            name  
+        Relationships:
+            field_data: One-to-Many with FieldData
+            image_positions: One-to-Many with ImagePosition
+ 
+        Class Name: UserImage (The relation table between users and their images.)
+        Fields:
+            user_image_id  
+            user_id  
+            image_id  
+            name  
+            description  
+            is_custom_added  
+ 
+        Class Name: Feedback (The table for storing feedback provided from users to the admin (ie, me.))
+        Fields:
+            id  
+            user_id  
+            user_email  
+            content  
+            list_id  
+            creator_id  
+ 
+        Class Name: Field (Table for adding user-defined metadata to an image.)
+        Fields:
+            id  
+            name  
+            type  
+            list_id  
+ 
+        Class Name: FieldData (Relation table between image and field.)
+        Fields:
+            id  
+            field_id  
+            image_id  
+            value  

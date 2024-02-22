@@ -1,0 +1,52 @@
+LookAtThat!
+
+App title:
+lookatthat
+Render URL:
+https://lookatthat.onrender.com/
+
+Is an app geared towards parents or tutors who want to have access to lists of images for teaching the curious about various things, whether flora, fauna, vehicles, computers - anything that may have an associated list.
+
+I chose to integrate the Flickr api because of it's ease of use. The app itself offers the option of using a Flickr search or providing one's own image urls.
+
+When you log in to the website, you have the option to either:
+Look at existing lists
+Create your own
+
+In creating your own lists, you may assign them to categories if you wish. First you create a list, then you go to edit the list by adding images.
+
+There is very little user to user interaction in this project because it seemed like more than I needed to include. I took on a much more 'social media' bent for the second capstone. In this app, you basically have the ability to create your own lists of images, use the lists created by others, and provide basic feedback to the admin. This doesn't go so far as to involve a 'reporting of content' mechanism, my chief goal in including feedback was exploring how to send emails from the app to myself (the admin.)
+
+Site Flow:
+When you go to the homepage, you are shown jpegs representing the lists as craeted in newest to oldest fashion. If you click on one, it sends you to the register/login page.
+There is an About page that describes the site. 
+You can contact support (ie, send a message to me, the admin.)
+
+Register or Login:
+Here, a new user enters their first and last name, a username, an email, and double enters a password. I did not include email verification here as it seemed one step farther than I wanted to deal with, I did include it on Capstone 2.
+
+After registering, entering the username and password allows one to log in.
+
+On login, the navbar changes:
+There is now an option for the user to Create List, or to Go To Lists and see other's lists, to see the user's own Profile, or to Logout.
+If a user selects Go To Lists, they can see their own lists, lists provided by the admin(s), or all lists available from other users.
+
+In Creating a List, a user simply enters a name and then chooses or creates a category (if they wish.) After creating a list, the user is sent to the Go To Lists page which initially shows the user's created lists, where they can click on a list to edit it (add images to it) or delete it. On going to a specific list, a user is able to:
+
+Remove/Add Category
+Edit List name
+Edit Fields (The user can define which fields they want to appear on the images on the list - for instances, a list of dogs may include name, age, weight, breed, a list of cars
+may include make, model, year introduced, year discontinued, etc.)
+Add Image
+Reposition Images (clicking an arrow to adjust placement in list)
+View slideshow of the images
+Hide/Show Fields so that the user determines whether they see the fields when viewing the images.
+
+I stopped short of providing a 'report feature' and decided at that point I was done elaborating on this app and would include a list of things I did not do here in capstone 2 - specifically, admin functionality and user interaction.
+
+Tech:
+This is a Python/Flask app.
+The ORM is Flask-SQLAlchemy.
+Encryption is bcrypt.
+Templates are written with Jinja2.
+Gunicorn starts the app on Render. 

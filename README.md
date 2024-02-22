@@ -1,4 +1,4 @@
-# 29_CP1 Core Fucntionality
+# 29_CP1 Core Functionality
 
 # DOCUMENTATION 
 
